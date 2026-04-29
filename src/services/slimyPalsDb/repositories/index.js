@@ -1,0 +1,5 @@
+export { foodFactoryStockRepository } from './foodFactoryStockRepository'
+export { friendshipsRepository } from './friendshipsRepository'
+export { interactionLogsRepository } from './interactionLogsRepository'
+export { slimesRepository } from './slimesRepository'
+export { usersRepository } from './usersRepository'

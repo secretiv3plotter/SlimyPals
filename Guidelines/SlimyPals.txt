@@ -1,0 +1,62 @@
+Slimy Pals by J4M 
+
+Concept:
+Users raise slime pets.
+When friends are online, you can see their domain with their own pets and interact with them. 
+Interactions: 
+    poke (triggers slime bounce or color contrast change)
+    feed (friends can help feed your slimes and vice versa)
+A user can only have 4 friends.
+
+To raise slime pets you have to:
+Summon baby slimes from the summoning ground 
+    Different rarities of slimes can be summoned
+        Common (3 types) - 60% (20% each)
+        Rare (3 types) - 35% (11.66% each)
+        Mythical (3 types) - 5% (1.66% each)
+	Each slime summoned also has assigned random color (because the default slime sprite is in grayscale)
+Users can only summon 9 slimes every day. 
+Users can only have 25 max slimes in their domain.
+Users can remove a slime.
+Make slime food only once every day (reset at 12 AM).
+    There is a slime food factory.
+    The factory can only produce as much as the amount of current slimes in the domain.
+    Food can be stacked if not used.
+	Max food stock is 100.
+Raise the slimes by feeding them slime food.
+    Feeding will be required every 6 hours (last time fed) until max level.
+    1 slime food = 1 feed
+Feeding increases their level
+    Level 1 - baby
+    Level 2 - teen
+    Level 3 - adult (max)
+
+Core Features:
+Summon slimes
+Make slime food
+Feed slimes
+Add 4 friends and see their yards if you all are online
+Interact with your friends’ slimes by poking or feeding them
+
+System Architecture and Tech Stack:
+	Frontend
+		Vercel (for CDN as well)
+		React + Vite
+		IndexedDB
+		Tailwind CSS
+	Backend
+		Railway
+		Node.js + Express
+		JWT authentication
+		bcrypt
+		cors
+		dotenv
+		express-rate-limit
+	Database
+		Neon
+		PostgreSQL
+		pgcrypto
+	Real-time Layer
+		native ws
+	Background Jobs
+		node-cron
