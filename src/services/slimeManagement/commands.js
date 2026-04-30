@@ -12,6 +12,7 @@ import { assertRule } from './slimeManagementError'
 import {
   canFeedSlime,
   canProduceSlimeFood,
+  canRemoveSlime,
   canSummonSlime,
   createInteractionLogDraft,
   createSummonedSlimeDraft,
@@ -20,18 +21,6 @@ import {
 } from './rules'
 
 export async function summonSlime(userId, options = {}) {
-  // Pseudocode:
-  // 1. Load the user record by userId.
-  // 2. Load all active slimes owned by the user.
-  // 3. Check summoning rules:
-  //    - user must exist and not be soft-deleted.
-  //    - daily_summons_left must be greater than 0.
-  //    - active slime count must be below max_slime_capacity.
-  // 4. Roll a rarity from the configured weighted summon table.
-  // 5. Pick one of the three slime types for that rarity.
-  // 6. Create a level 1 baby slime in IndexedDB.
-  // 7. Decrement daily_summons_left by 1.
-  // 8. Return the created slime and updated user state for the UI.
   return withTransaction([STORES.USER, STORES.SLIME], 'rw', async () => {
     const user = await usersRepository.getById(userId)
     const activeSlimes = await slimesRepository.listByUserId(userId)
@@ -54,20 +43,6 @@ export async function summonSlime(userId, options = {}) {
 }
 
 export async function produceSlimeFood(userId, options = {}) {
-  // Pseudocode:
-  // 1. Load the user, active slimes, and existing food stock.
-  // 2. Check food production rules:
-  //    - user must exist and not be soft-deleted.
-  //    - at least one active slime must exist.
-  //    - factory must not have produced already today.
-  //    - food stock must be below max capacity.
-  // 3. Production amount equals the current active slime count, capped by remaining food stock space.
-  // 4. If the stock row exists:
-  //    - add produced food to the current stack.
-  //    - update last_produced_at.
-  // 5. If the stock row does not exist:
-  //    - create it with quantity equal to produced food.
-  // 6. Return the updated stock and produced amount.
   return withTransaction([STORES.FOOD_FACTORY_STOCK, STORES.SLIME, STORES.USER], 'rw', async () => {
     const now = options.now ?? new Date()
     const [user, activeSlimes, existingStock] = await Promise.all([
@@ -107,12 +82,6 @@ export async function produceSlimeFood(userId, options = {}) {
 }
 
 export async function resetDailySummons(userId) {
-  // Pseudocode:
-  // 1. Run this from the future daily reset workflow or from app startup reconciliation.
-  // 2. Load the user record.
-  // 3. If the user is missing or soft-deleted, do not mutate game state.
-  // 4. Restore daily_summons_left to the configured daily limit of 9.
-  // 5. Return the updated user so the UI can refresh summon counters.
   const user = await usersRepository.getById(userId)
 
   if (!user || user.deleted_at) {
@@ -129,19 +98,6 @@ export async function resetDailySummons(userId) {
 }
 
 export async function feedSlime({ slimeId, ownerUserId, feederUserId = ownerUserId, options = {} }) {
-  // Pseudocode:
-  // 1. Load the target slime.
-  // 2. Load the owner's food stock because food belongs to the slime owner domain.
-  // 3. Check feeding rules:
-  //    - slime must exist and not be soft-deleted.
-  //    - slime must be below adult level.
-  //    - food quantity must be at least 1.
-  //    - slime must be outside the 6-hour cooldown window.
-  // 4. Consume exactly one slime food from the owner's stock.
-  // 5. Increase slime level by one, capped at adult.
-  // 6. Set last_fed_at to the current timestamp.
-  // 7. Write an interaction log so friend feeds and owner feeds share one history trail.
-  // 8. Return the updated slime, updated stock, and interaction log.
   return withTransaction(
     [STORES.FOOD_FACTORY_STOCK, STORES.INTERACTION_LOG, STORES.SLIME],
     'rw',
@@ -180,12 +136,18 @@ export async function feedSlime({ slimeId, ownerUserId, feederUserId = ownerUser
   )
 }
 
+export async function removeSlime({ slimeId, userId }) {
+  return withTransaction(STORES.SLIME, 'rw', async () => {
+    const slime = await slimesRepository.getById(slimeId)
+    const rule = canRemoveSlime({ slime, userId })
+
+    assertRule(rule)
+
+    return slimesRepository.softDelete(slimeId)
+  })
+}
+
 export async function pokeSlime({ slimeId, senderId, options = {} }) {
-  // Pseudocode:
-  // 1. Load the target slime to ensure the interaction points at an active slime.
-  // 2. If the slime is missing or soft-deleted, fail before logging anything.
-  // 3. Create an interaction log with action_type "poke".
-  // 4. Return the log; the UI can use it to animate bounce/color contrast locally.
   return withTransaction([STORES.INTERACTION_LOG, STORES.SLIME], 'rw', async () => {
     const now = options.now ?? new Date()
     const slime = await slimesRepository.getById(slimeId)

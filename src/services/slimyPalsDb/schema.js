@@ -2,7 +2,7 @@ import { STORES } from './constants'
 
 export const DB_SCHEMA = Object.freeze({
   [STORES.USER]: {
-    dexieSchema: 'id,&username,deleted_at,last_login',
+    storeSchema: 'id,&username,deleted_at,last_login',
     columns: {
       id: 'uuid primary key',
       username: 'varchar unique',
@@ -15,7 +15,7 @@ export const DB_SCHEMA = Object.freeze({
     },
   },
   [STORES.FOOD_FACTORY_STOCK]: {
-    dexieSchema: 'id,&user_id,last_produced_at,deleted_at',
+    storeSchema: 'id,&user_id,last_produced_at,deleted_at',
     columns: {
       id: 'uuid primary key',
       user_id: 'uuid foreign key users.id unique',
@@ -26,7 +26,7 @@ export const DB_SCHEMA = Object.freeze({
     },
   },
   [STORES.FRIENDSHIP]: {
-    dexieSchema: 'id,user_id,friend_user_id,&[user_id+friend_user_id],status,deleted_at',
+    storeSchema: 'id,user_id,friend_user_id,&[user_id+friend_user_id],status,deleted_at',
     columns: {
       id: 'uuid primary key',
       user_id: 'uuid foreign key users.id',
@@ -37,13 +37,13 @@ export const DB_SCHEMA = Object.freeze({
     },
   },
   [STORES.SLIME]: {
-    dexieSchema: 'id,user_id,rarity,type,level,last_fed_at,deleted_at',
+    storeSchema: 'id,user_id,rarity,type,level,last_fed_at,deleted_at',
     columns: {
       id: 'uuid primary key',
       user_id: 'uuid foreign key users.id',
       rarity: 'varchar Common|Rare|Mythical',
-      type: 'varchar 3 types per rarity',
-      color: 'varchar hex sprite tint',
+      type: 'varchar asset type or common color name',
+      color: 'varchar hex sprite tint for grayscale common slime',
       level: 'int 1 baby|2 teen|3 adult',
       last_fed_at: 'timestamp',
       created_at: 'timestamp',
@@ -51,7 +51,7 @@ export const DB_SCHEMA = Object.freeze({
     },
   },
   [STORES.INTERACTION_LOG]: {
-    dexieSchema: 'id,sender_id,target_slime_id,action_type,created_at',
+    storeSchema: 'id,sender_id,target_slime_id,action_type,created_at',
     columns: {
       id: 'uuid primary key',
       sender_id: 'uuid foreign key users.id',

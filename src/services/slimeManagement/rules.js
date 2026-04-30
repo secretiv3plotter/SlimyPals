@@ -9,15 +9,25 @@ export const FEED_COOLDOWN_HOURS = 6
 export const FEED_COOLDOWN_MS = FEED_COOLDOWN_HOURS * 60 * 60 * 1000
 
 export const SLIME_TYPES_BY_RARITY = Object.freeze({
-  [SLIME_RARITIES.COMMON]: ['dewdrop', 'mosslet', 'bubblegum'],
-  [SLIME_RARITIES.RARE]: ['moonmelt', 'embergel', 'frostdrop'],
-  [SLIME_RARITIES.MYTHICAL]: ['starplasm', 'aurorashift', 'dreamglob'],
+  [SLIME_RARITIES.COMMON]: ['simple'],
+  [SLIME_RARITIES.RARE]: ['baseball', 'beanie', 'fedora'],
+  [SLIME_RARITIES.MYTHICAL]: ['demon', 'king', 'witch'],
 })
 
 export const SUMMON_RARITY_TABLE = Object.freeze([
   { rarity: SLIME_RARITIES.COMMON, weight: 60 },
   { rarity: SLIME_RARITIES.RARE, weight: 35 },
   { rarity: SLIME_RARITIES.MYTHICAL, weight: 5 },
+])
+
+export const COMMON_SLIME_COLORS = Object.freeze([
+  { name: 'red', hex: '#d94b4b' },
+  { name: 'orange', hex: '#e48a3a' },
+  { name: 'yellow', hex: '#e2c84a' },
+  { name: 'green', hex: '#58b56b' },
+  { name: 'blue', hex: '#4d8fd9' },
+  { name: 'purple', hex: '#9661c7' },
+  { name: 'pink', hex: '#d96aa4' },
 ])
 
 export function canSummonSlime({ user, activeSlimeCount }) {
@@ -40,13 +50,16 @@ export function canSummonSlime({ user, activeSlimeCount }) {
 
 export function createSummonedSlimeDraft({ userId, random = Math.random, now = new Date() }) {
   const rarity = pickWeightedRarity(random)
-  const type = pickSlimeType(rarity, random)
+  const slimeColor = pickSlimeColor(random)
+  const type = rarity === SLIME_RARITIES.COMMON
+    ? slimeColor.name
+    : pickSlimeType(rarity, random)
 
   return {
     user_id: userId,
     rarity,
     type,
-    color: createRandomSlimeColor(random),
+    color: slimeColor.hex,
     level: SLIME_LEVELS.BABY,
     last_fed_at: null,
     created_at: now.toISOString(),
@@ -69,6 +82,18 @@ export function canFeedSlime({ slime, foodStock, now = new Date() }) {
 
   if (!isFeedWindowOpen(slime, now)) {
     return failedRule('FEED_COOLDOWN_ACTIVE', 'This slime must wait for its next 6-hour feeding window.')
+  }
+
+  return passedRule()
+}
+
+export function canRemoveSlime({ slime, userId }) {
+  if (!slime || slime.deleted_at) {
+    return failedRule('SLIME_UNAVAILABLE', 'Only an active slime can be removed.')
+  }
+
+  if (slime.user_id !== userId) {
+    return failedRule('SLIME_OWNER_MISMATCH', 'Only the owner can remove this slime.')
   }
 
   return passedRule()
@@ -149,13 +174,16 @@ function pickWeightedRarity(random) {
 
 function pickSlimeType(rarity, random) {
   const types = SLIME_TYPES_BY_RARITY[rarity]
-  const index = Math.floor(random() * types.length)
+  const index = Math.min(Math.floor(random() * types.length), types.length - 1)
   return types[index]
 }
 
-function createRandomSlimeColor(random) {
-  const value = Math.floor(random() * 0xffffff)
-  return `#${value.toString(16).padStart(6, '0')}`
+function pickSlimeColor(random) {
+  const index = Math.min(
+    Math.floor(random() * COMMON_SLIME_COLORS.length),
+    COMMON_SLIME_COLORS.length - 1,
+  )
+  return COMMON_SLIME_COLORS[index]
 }
 
 function isSameLocalDay(leftDate, rightDate) {

@@ -1,0 +1,876 @@
+[2m4:52:08 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:12:1 [38;5;246m][0m
+    [38;5;246m│[0m
+ [38;5;246m12 │[0m const[38;5;249m [0m[38;5;249mS[0m[38;5;249mU[0m[38;5;249mM[0m[38;5;249mM[0m[38;5;249mO[0m[38;5;249mN[0m[38;5;249mI[0m[38;5;249mN[0m[38;5;249mG[0m[38;5;249m_[0m[38;5;249mG[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mU[0m[38;5;249mN[0m[38;5;249mD[0m[38;5;249m_[0m[38;5;249mF[0m[38;5;249mR[0m[38;5;249mA[0m[38;5;249mM[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mC[0m[38;5;249mO[0m[38;5;249mU[0m[38;5;249mN[0m[38;5;249mT[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m0[0m
+ [38;5;240m   │[0m ──┬──  
+ [38;5;240m   │[0m   ╰──── 
+[38;5;246m────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:52:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m4:52:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:12:1 [38;5;246m][0m
+    [38;5;246m│[0m
+ [38;5;246m12 │[0m const[38;5;249m [0m[38;5;249mS[0m[38;5;249mU[0m[38;5;249mM[0m[38;5;249mM[0m[38;5;249mO[0m[38;5;249mN[0m[38;5;249mI[0m[38;5;249mN[0m[38;5;249mG[0m[38;5;249m_[0m[38;5;249mG[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mU[0m[38;5;249mN[0m[38;5;249mD[0m[38;5;249m_[0m[38;5;249mF[0m[38;5;249mR[0m[38;5;249mA[0m[38;5;249mM[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mC[0m[38;5;249mO[0m[38;5;249mU[0m[38;5;249mN[0m[38;5;249mT[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m0[0m
+ [38;5;240m   │[0m ──┬──  
+ [38;5;240m   │[0m   ╰──── 
+[38;5;246m────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m4:52:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:12:1 [38;5;246m][0m
+    [38;5;246m│[0m
+ [38;5;246m12 │[0m const[38;5;249m [0m[38;5;249mS[0m[38;5;249mU[0m[38;5;249mM[0m[38;5;249mM[0m[38;5;249mO[0m[38;5;249mN[0m[38;5;249mI[0m[38;5;249mN[0m[38;5;249mG[0m[38;5;249m_[0m[38;5;249mG[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mU[0m[38;5;249mN[0m[38;5;249mD[0m[38;5;249m_[0m[38;5;249mF[0m[38;5;249mR[0m[38;5;249mA[0m[38;5;249mM[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mC[0m[38;5;249mO[0m[38;5;249mU[0m[38;5;249mN[0m[38;5;249mT[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m0[0m
+ [38;5;240m   │[0m ──┬──  
+ [38;5;240m   │[0m   ╰──── 
+[38;5;246m────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m4:52:08 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+    [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:12:1 [38;5;246m][0m
+    [38;5;246m│[0m
+ [38;5;246m12 │[0m const[38;5;249m [0m[38;5;249mS[0m[38;5;249mU[0m[38;5;249mM[0m[38;5;249mM[0m[38;5;249mO[0m[38;5;249mN[0m[38;5;249mI[0m[38;5;249mN[0m[38;5;249mG[0m[38;5;249m_[0m[38;5;249mG[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mU[0m[38;5;249mN[0m[38;5;249mD[0m[38;5;249m_[0m[38;5;249mF[0m[38;5;249mR[0m[38;5;249mA[0m[38;5;249mM[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mC[0m[38;5;249mO[0m[38;5;249mU[0m[38;5;249mN[0m[38;5;249mT[0m[38;5;249m [0m[38;5;249m=[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m0[0m
+ [38;5;240m   │[0m ──┬──  
+ [38;5;240m   │[0m   ╰──── 
+[38;5;246m────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:53:25 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:53:25 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m4:53:28 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:53:28 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m4:53:28 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m4:53:28 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:53:30 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m4:53:30 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m4:53:30 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:53:42 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:20 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249mF[0m[38;5;249mE[0m[38;5;249mN[0m[38;5;249mC[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mW[0m[38;5;249mS[0m[38;5;249m/[0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m                    ┬  
+ [38;5;240m    │[0m                    ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:53:42 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m4:53:42 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:20 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249mF[0m[38;5;249mE[0m[38;5;249mN[0m[38;5;249mC[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mW[0m[38;5;249mS[0m[38;5;249m/[0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m                    ┬  
+ [38;5;240m    │[0m                    ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m4:53:42 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:20 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249mF[0m[38;5;249mE[0m[38;5;249mN[0m[38;5;249mC[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mW[0m[38;5;249mS[0m[38;5;249m/[0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m                    ┬  
+ [38;5;240m    │[0m                    ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m4:53:42 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:20 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249mF[0m[38;5;249mE[0m[38;5;249mN[0m[38;5;249mC[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mW[0m[38;5;249mS[0m[38;5;249m/[0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m                    ┬  
+ [38;5;240m    │[0m                    ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:53:51 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Expected `,` or `}` but found `)`
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:57 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m175 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249mr[0m[38;5;249me[0m[38;5;249mt[0m[38;5;249mu[0m[38;5;249mr[0m[38;5;249mn[0m[38;5;249m [0m{
+ [38;5;240m    │[0m          ┬  
+ [38;5;240m    │[0m          ╰── Opened here
+ [38;5;240m    │[0m 
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249mF[0m[38;5;249mE[0m[38;5;249mN[0m[38;5;249mC[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mW[0m[38;5;249mS[0m[38;5;249m/[0m[38;5;249m2[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m)[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m                                                         ┬  
+ [38;5;240m    │[0m                                                         ╰── `,` or `}` expected
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:53:51 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m4:53:59 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Expected `,` or `}` but found `)`
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:59 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m175 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249mr[0m[38;5;249me[0m[38;5;249mt[0m[38;5;249mu[0m[38;5;249mr[0m[38;5;249mn[0m[38;5;249m [0m{
+ [38;5;240m    │[0m          ┬  
+ [38;5;240m    │[0m          ╰── Opened here
+ [38;5;240m    │[0m 
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m([0m[38;5;249mF[0m[38;5;249mE[0m[38;5;249mN[0m[38;5;249mC[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mW[0m[38;5;249mS[0m[38;5;249m/[0m[38;5;249m2[0m[38;5;249m)[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m)[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m                                                           ┬  
+ [38;5;240m    │[0m                                                           ╰── `,` or `}` expected
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:53:59 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m4:54:08 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:24 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m([0m[38;5;249m([0m[38;5;249mF[0m[38;5;249mE[0m[38;5;249mN[0m[38;5;249mC[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mW[0m[38;5;249mS[0m[38;5;249m/[0m[38;5;249m2[0m[38;5;249m)[0m[38;5;249m-[0m)[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m                        ┬  
+ [38;5;240m    │[0m                        ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:54:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m4:54:08 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:24 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m([0m[38;5;249m([0m[38;5;249mF[0m[38;5;249mE[0m[38;5;249mN[0m[38;5;249mC[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mW[0m[38;5;249mS[0m[38;5;249m/[0m[38;5;249m2[0m[38;5;249m)[0m[38;5;249m-[0m)[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m                        ┬  
+ [38;5;240m    │[0m                        ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m4:54:08 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:24 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m([0m[38;5;249m([0m[38;5;249mF[0m[38;5;249mE[0m[38;5;249mN[0m[38;5;249mC[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mR[0m[38;5;249mO[0m[38;5;249mW[0m[38;5;249mS[0m[38;5;249m/[0m[38;5;249m2[0m[38;5;249m)[0m[38;5;249m-[0m)[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m                        ┬  
+ [38;5;240m    │[0m                        ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:54:40 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:182:3 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m182 │[0m [38;5;249m [0m[38;5;249m [0m}
+ [38;5;240m    │[0m   ┬  
+ [38;5;240m    │[0m   ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m4:54:40 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m5:01:54 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "./assets/sprites/summoningground.png" from "src/App.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m:4:34
+[33m  2  |  import fenceColumnTile from "./assets/sprites/fencecolumn.png";
+  3  |  import fenceRowTile from "./assets/sprites/fencerow.png";
+  4  |  import summoningGroundSprite from "./assets/sprites/summoningground.png";
+     |                                     ^
+  5  |  var _jsxFileName = "C:/Users/msi/Desktop/SlimyPals/src/App.jsx";
+  6  |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+[2m5:01:54 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "./assets/sprites/summoningground.png" from "src/App.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m:4:34
+[33m  2  |  import fenceColumnTile from "./assets/sprites/fencecolumn.png";
+  3  |  import fenceRowTile from "./assets/sprites/fencerow.png";
+  4  |  import summoningGroundSprite from "./assets/sprites/summoningground.png";
+     |                                     ^
+  5  |  var _jsxFileName = "C:/Users/msi/Desktop/SlimyPals/src/App.jsx";
+  6  |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";[39m
+      at TransformPluginContext._formatLog (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30375:39)
+      at TransformPluginContext.error (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30372:14)
+      at normalizeUrl (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:27654:18)
+      at async file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:27717:30
+      at async Promise.all (index 8)
+      at async TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:27685:4)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:14)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+[2m5:01:54 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m5:05:42 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:05:42 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m5:05:42 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:05:42 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:05:43 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:05:43 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:05:46 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:05:46 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m5:05:46 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:05:46 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:05:46 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:05:46 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:181:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m181 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:18:30 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:187:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m187 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:18:30 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m5:18:30 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:187:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m187 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:18:30 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:187:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m187 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:18:30 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:187:9 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m187 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m([0m[38;5;249m [0m*[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m[38;5;249ms[0m[38;5;249mu[0m[38;5;249mm[0m[38;5;249mm[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249mi[0m[38;5;249mn[0m[38;5;249mg[0m[38;5;249mG[0m[38;5;249mr[0m[38;5;249mo[0m[38;5;249mu[0m[38;5;249mn[0m[38;5;249md[0m[38;5;249mH[0m[38;5;249me[0m[38;5;249mi[0m[38;5;249mg[0m[38;5;249mh[0m[38;5;249mt[0m[38;5;249m)[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m[38;5;249m2[0m[38;5;249m,[0m
+ [38;5;240m    │[0m         ┬  
+ [38;5;240m    │[0m         ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:33:16 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:211:26 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m211 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249mx[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249mx[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                          ┬  
+ [38;5;240m    │[0m                          ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:33:16 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m5:33:27 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:211:26 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m211 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249mx[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249mx[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                          ┬  
+ [38;5;240m    │[0m                          ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:33:27 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m5:33:27 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:211:26 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m211 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249mx[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249mx[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                          ┬  
+ [38;5;240m    │[0m                          ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:33:27 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:211:26 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m211 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249mx[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249mx[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                          ┬  
+ [38;5;240m    │[0m                          ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:33:27 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:211:26 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m211 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249mx[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249mx[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                          ┬  
+ [38;5;240m    │[0m                          ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:33:27 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:211:26 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m211 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249mx[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249mx[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                          ┬  
+ [38;5;240m    │[0m                          ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:33:32 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:211:26 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m211 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249mx[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249mx[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                          ┬  
+ [38;5;240m    │[0m                          ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:33:32 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:211:26 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m211 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249mx[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249mx[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                          ┬  
+ [38;5;240m    │[0m                          ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:33:32 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:211:26 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m211 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249mx[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249mx[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                          ┬  
+ [38;5;240m    │[0m                          ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:33:32 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:211:26 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m211 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249mx[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249mx[0m[38;5;249m [0m[38;5;249m-[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                          ┬  
+ [38;5;240m    │[0m                          ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:35:43 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:212:38 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m212 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249my[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249my[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                                      ┬  
+ [38;5;240m    │[0m                                      ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:35:43 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m5:35:43 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:212:38 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m212 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249my[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249my[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                                      ┬  
+ [38;5;240m    │[0m                                      ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:35:44 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:212:38 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m212 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249my[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249my[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                                      ┬  
+ [38;5;240m    │[0m                                      ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:35:44 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:212:38 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m212 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249my[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249my[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                                      ┬  
+ [38;5;240m    │[0m                                      ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:36:09 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:212:38 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m212 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249my[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249my[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m/[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                                      ┬  
+ [38;5;240m    │[0m                                      ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:36:09 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m5:37:40 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:212:38 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m212 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249my[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249my[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                                      ┬  
+ [38;5;240m    │[0m                                      ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:37:40 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/App.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m5:37:40 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:212:38 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m212 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249my[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249my[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                                      ┬  
+ [38;5;240m    │[0m                                      ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:37:40 AM[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:212:38 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m212 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249my[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249my[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                                      ┬  
+ [38;5;240m    │[0m                                      ╰── 
+[38;5;246m─────╯[0m
+
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+[2m5:37:40 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:212:38 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m212 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249my[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249my[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                                      ┬  
+ [38;5;240m    │[0m                                      ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
+[2m5:37:40 AM[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+
+[31m[PARSE_ERROR] Error:[0m Unexpected token
+     [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m src/App.jsx:212:38 [38;5;246m][0m
+     [38;5;246m│[0m
+ [38;5;246m212 │[0m [38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249m [0m[38;5;249my[0m[38;5;249m:[0m[38;5;249m [0m[38;5;249mf[0m[38;5;249me[0m[38;5;249mn[0m[38;5;249mc[0m[38;5;249me[0m[38;5;249mP[0m[38;5;249mo[0m[38;5;249ms[0m[38;5;249mi[0m[38;5;249mt[0m[38;5;249mi[0m[38;5;249mo[0m[38;5;249mn[0m[38;5;249m.[0m[38;5;249my[0m[38;5;249m [0m[38;5;249m+[0m[38;5;249m [0m[38;5;249mT[0m[38;5;249mI[0m[38;5;249mL[0m[38;5;249mE[0m[38;5;249m_[0m[38;5;249mS[0m[38;5;249mI[0m[38;5;249mZ[0m[38;5;249mE[0m[38;5;249m [0m[38;5;249m*[0m[38;5;249m [0m,
+ [38;5;240m    │[0m                                      ┬  
+ [38;5;240m    │[0m                                      ╰── 
+[38;5;246m─────╯[0m
+[39m
+  Plugin: [35mvite:oxc[39m
+  File: [36mC:/Users/msi/Desktop/SlimyPals/src/App.jsx[39m
+      at transformWithOxc (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3343:19)
+      at TransformPluginContext.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:3411:26)
+      at EnvironmentPluginContainer.transform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:30164:51)
+      at async loadAndTransform (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24512:26)
+      at async viteTransformMiddleware (file:///C:/Users/msi/Desktop/SlimyPals/node_modules/vite/dist/node/chunks/node.js:24306:20)
