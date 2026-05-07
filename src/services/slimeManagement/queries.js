@@ -1,16 +1,18 @@
 import {
   foodFactoryStockRepository,
+  GAME_LIMITS,
   getUserDomainSnapshot,
   slimesRepository,
 } from '../slimyPalsDb'
-import { canFeedSlime, canSummonSlime, getNextFeedAt } from './rules'
+import {
+  canFeedSlime,
+  canProduceSlimeFood,
+  canSummonSlime,
+  getFoodProductionAmount,
+  getNextFeedAt,
+} from './rules'
 
 export async function getSummonReadiness(userId) {
-  // Pseudocode:
-  // 1. Load the user's domain snapshot from IndexedDB.
-  // 2. Count only active slimes because soft-deleted slimes no longer occupy capacity.
-  // 3. Run the pure summon rule against the user and active slime count.
-  // 4. Return both the rule result and enough UI data to render a disabled/enabled summon button.
   const snapshot = await getUserDomainSnapshot(userId)
   const activeSlimeCount = snapshot.slimes.length
   const rule = canSummonSlime({ user: snapshot.user, activeSlimeCount })
@@ -23,17 +25,39 @@ export async function getSummonReadiness(userId) {
   }
 }
 
-export async function getSlimeFeedReadiness(slimeId, userId) {
-  // Pseudocode:
-  // 1. Load the target slime.
-  // 2. Load the owner's food stock, because one food item is consumed per feed.
-  // 3. Run the pure feed rule against slime state, food quantity, and current time.
-  // 4. Include nextFeedAt so the UI can show a countdown when the 6-hour window is closed.
+export async function getFoodProductionReadiness(userId, options = {}) {
+  const now = options.now ?? new Date()
+  const snapshot = await getUserDomainSnapshot(userId)
+  const activeSlimeCount = snapshot.slimes.length
+  const currentFoodQuantity = snapshot.foodFactoryStock?.quantity ?? 0
+  const producedQuantity = getFoodProductionAmount(activeSlimeCount, currentFoodQuantity)
+  const rule = canProduceSlimeFood({
+    user: snapshot.user,
+    foodStock: snapshot.foodFactoryStock,
+    activeSlimeCount,
+    now,
+  })
+
+  return {
+    ...rule,
+    activeSlimeCount,
+    currentFoodQuantity,
+    maxFoodStock: GAME_LIMITS.MAX_FOOD_STOCK,
+    producedQuantity: rule.allowed ? producedQuantity : 0,
+    foodFactoryStock: snapshot.foodFactoryStock,
+  }
+}
+
+export async function getSlimeFeedReadiness(slimeId, userId, options = {}) {
   const [slime, foodStock] = await Promise.all([
     slimesRepository.getById(slimeId),
     foodFactoryStockRepository.getByUserId(userId),
   ])
-  const rule = canFeedSlime({ slime, foodStock })
+  const rule = canFeedSlime({
+    slime,
+    foodStock,
+    now: options.now ?? new Date(),
+  })
 
   return {
     ...rule,

@@ -11,7 +11,7 @@ class SlimyPalsDexie extends Dexie {
       Object.fromEntries(
         Object.entries(DB_SCHEMA).map(([storeName, definition]) => [
           storeName,
-          definition.dexieSchema,
+          definition.storeSchema,
         ]),
       ),
     )
