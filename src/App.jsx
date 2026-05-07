@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import menuButtonSprite from './assets/sprites/menu button.png'
 import GameMenu from './components/GameMenu'
+import AuthScreen from './components/auth/AuthScreen'
 import WorldView from './components/WorldView'
 import { getOrCreateOfflineUser } from './game/offlineUser'
 import { getMaximizedWorldView, getScreenViewSize } from './game/worldLayout'
@@ -12,6 +13,7 @@ function App() {
   const [foodFactoryAnimationRun, setFoodFactoryAnimationRun] = useState(0)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuMode, setMenuMode] = useState('main')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [offlineUser, setOfflineUser] = useState(null)
   const [slimes, setSlimes] = useState([])
   const [summoningOrbAnimationRun, setSummoningOrbAnimationRun] = useState(0)
@@ -19,6 +21,10 @@ function App() {
   const displayedSlimes = slimes.slice(0, 25)
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      return undefined
+    }
+
     let isCancelled = false
 
     async function loadOfflineDomain() {
@@ -36,7 +42,7 @@ function App() {
     return () => {
       isCancelled = true
     }
-  }, [])
+  }, [isAuthenticated])
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -90,6 +96,19 @@ function App() {
   function handleFoodFactoryClick(event) {
     event.stopPropagation()
     setFoodFactoryAnimationRun((run) => run + 1)
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <AuthScreen
+        onLogin={async () => {
+          setIsAuthenticated(true)
+        }}
+        onRegister={async () => {
+          setIsAuthenticated(true)
+        }}
+      />
+    )
   }
 
   return (
