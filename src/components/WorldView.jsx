@@ -3,12 +3,19 @@ import { DEFAULT_VIEWPORT } from '../game/worldConstants'
 import { clampOffset, getCenteredOffset } from '../game/worldLayout'
 import WorldMap from './WorldMap'
 
+const FOOD_DRAG_EDGE_SIZE = 72
+const FOOD_DRAG_MAX_PAN_SPEED = 8
+
 function WorldView({
+  canProduceFood,
   canSummon,
   displayedSlimes,
   foodFactoryAnimationRun,
+  foodQuantity,
   onFoodFactoryAnimationEnd,
   onFoodFactoryClick,
+  onFeedSlime,
+  onRemoveSlime,
   onSlimeSummon,
   onSummoningOrbAnimationEnd,
   summoningOrbAnimationRun,
@@ -16,6 +23,9 @@ function WorldView({
 }) {
   const worldViewRef = useRef(null)
   const dragRef = useRef(null)
+  const foodDragPointRef = useRef(null)
+  const visibleOffsetRef = useRef(null)
+  const viewportSizeRef = useRef(DEFAULT_VIEWPORT)
   const [viewportSize, setViewportSize] = useState(DEFAULT_VIEWPORT)
   const [offset, setOffset] = useState(null)
   const visibleOffset = clampOffset(
@@ -44,6 +54,49 @@ function WorldView({
 
     return () => observer.disconnect()
   }, [])
+
+  useEffect(() => {
+    visibleOffsetRef.current = visibleOffset
+  }, [visibleOffset])
+
+  useEffect(() => {
+    viewportSizeRef.current = viewportSize
+  }, [viewportSize])
+
+  useEffect(() => {
+    let animationFrameId = 0
+
+    function panTowardFoodDragEdge() {
+      const point = foodDragPointRef.current
+      const worldViewElement = worldViewRef.current
+
+      if (point && worldViewElement) {
+        const rect = worldViewElement.getBoundingClientRect()
+        const pan = getFoodDragEdgePan(point, rect)
+
+        if (pan.x !== 0 || pan.y !== 0) {
+          setOffset((currentOffset) => {
+            const baseOffset = currentOffset ?? visibleOffsetRef.current
+
+            return clampOffset(
+              {
+                x: baseOffset.x + pan.x,
+                y: baseOffset.y + pan.y,
+              },
+              viewportSizeRef.current,
+              worldView,
+            )
+          })
+        }
+      }
+
+      animationFrameId = window.requestAnimationFrame(panTowardFoodDragEdge)
+    }
+
+    animationFrameId = window.requestAnimationFrame(panTowardFoodDragEdge)
+
+    return () => window.cancelAnimationFrame(animationFrameId)
+  }, [worldView])
 
   function handlePointerDown(event) {
     event.currentTarget.setPointerCapture(event.pointerId)
@@ -90,6 +143,14 @@ function WorldView({
     event.stopPropagation()
   }
 
+  function handleFoodDragMove(point) {
+    foodDragPointRef.current = point
+  }
+
+  function handleFoodDragEnd() {
+    foodDragPointRef.current = null
+  }
+
   return (
     <section
       ref={worldViewRef}
@@ -107,11 +168,17 @@ function WorldView({
         }}
       >
         <WorldMap
+          canProduceFood={canProduceFood}
           canSummon={canSummon}
           displayedSlimes={displayedSlimes}
           foodFactoryAnimationRun={foodFactoryAnimationRun}
+          foodQuantity={foodQuantity}
           onFoodFactoryAnimationEnd={onFoodFactoryAnimationEnd}
           onFoodFactoryClick={onFoodFactoryClick}
+          onFoodDragEnd={handleFoodDragEnd}
+          onFoodDragMove={handleFoodDragMove}
+          onFeedSlime={onFeedSlime}
+          onRemoveSlime={onRemoveSlime}
           onSlimeSummon={onSlimeSummon}
           onSpritePointerDown={handleSpriteButtonPointerDown}
           onSpritePointerUp={handleSpriteButtonPointerUp}
@@ -122,6 +189,30 @@ function WorldView({
       </div>
     </section>
   )
+}
+
+function getFoodDragEdgePan(point, rect) {
+  const x = point.x - rect.left
+  const y = point.y - rect.top
+
+  return {
+    x:
+      getAxisEdgePan(x, rect.width, 1) +
+      getAxisEdgePan(rect.width - x, rect.width, -1),
+    y:
+      getAxisEdgePan(y, rect.height, 1) +
+      getAxisEdgePan(rect.height - y, rect.height, -1),
+  }
+}
+
+function getAxisEdgePan(distanceFromEdge, size, direction) {
+  if (size <= 0 || distanceFromEdge >= FOOD_DRAG_EDGE_SIZE) {
+    return 0
+  }
+
+  const strength = 1 - Math.max(0, distanceFromEdge) / FOOD_DRAG_EDGE_SIZE
+
+  return direction * FOOD_DRAG_MAX_PAN_SPEED * strength
 }
 
 export default WorldView

@@ -8,18 +8,22 @@ import {
 
 function FoodFactory({
   animationRun,
+  canProduce,
   foodFactoryPosition,
   onAnimationEnd,
   onClick,
   onSpritePointerDown,
   onSpritePointerUp,
 }) {
+  const isAnimating = animationRun > 0
+
   return (
     <button
       key={`food-factory-${animationRun}`}
-      className={`food-factory${animationRun > 0 ? ' food-factory--active' : ''}`}
+      className={`food-factory${isAnimating ? ' food-factory--active' : ''}${!canProduce && !isAnimating ? ' food-factory--disabled' : ''}`}
       type="button"
       aria-label="Produce slime food"
+      disabled={!canProduce || isAnimating}
       onAnimationEnd={onAnimationEnd}
       onClick={onClick}
       onPointerCancel={onSpritePointerUp}

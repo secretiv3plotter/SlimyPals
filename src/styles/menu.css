@@ -195,3 +195,58 @@
   justify-content: center;
   gap: 18px;
 }
+
+.slime-delete-modal {
+  min-height: 390px;
+}
+
+.slime-delete-panel {
+  width: min(78vw, 390px);
+}
+
+.slime-delete-details {
+  display: grid;
+  width: 100%;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--pixel-font);
+}
+
+.slime-delete-details div {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: center;
+  min-height: 40px;
+  border: 4px solid #000000;
+  background: #7d6686;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.slime-delete-details dt,
+.slime-delete-details dd {
+  margin: 0;
+  color: #111111;
+  font-size: 0.62rem;
+  line-height: 1.1;
+}
+
+.slime-delete-details dt {
+  padding-left: 8px;
+}
+
+.slime-delete-details dd {
+  overflow: hidden;
+  padding-right: 8px;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.slime-delete-confirm {
+  background: #cf473f;
+}
+
+.slime-delete-confirm:hover,
+.slime-delete-confirm:focus-visible {
+  background: #e0544b;
+}

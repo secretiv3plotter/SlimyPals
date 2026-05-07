@@ -22,10 +22,19 @@
   cursor: pointer;
 }
 
+.food-factory:disabled {
+  opacity: 1;
+}
+
 .food-factory--active {
   animation:
     food-factory-play var(--food-factory-speed)
     steps(var(--food-factory-frame-count));
+}
+
+.food-factory--disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.7) brightness(1);
 }
 
 .food-overlay {
@@ -35,6 +44,50 @@
   z-index: 16;
   image-rendering: pixelated;
   pointer-events: none;
+}
+
+.food-overlay--draggable {
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.food-overlay--draggable:active {
+  cursor: grabbing;
+}
+
+.food-drag-preview {
+  position: fixed;
+  z-index: 1000;
+  width: 16px;
+  height: 16px;
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.34));
+  image-rendering: pixelated;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.food-count-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 17;
+  min-width: 16px;
+  padding: 3px 5px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.42) 0%,
+    rgba(0, 0, 0, 0.24) 45%,
+    rgba(0, 0, 0, 0) 78%
+  );
+  color: #111111;
+  font-family: var(--pixel-font);
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  pointer-events: none;
+  transform: translate(var(--food-count-x), var(--food-count-y)) translate(-50%, -100%);
+  animation: food-count-pop 260ms ease-out;
 }
 
 .summoning-ground,
@@ -70,7 +123,7 @@
 
 .summoning-ground--disabled {
   cursor: not-allowed;
-  filter: grayscale(0.35) brightness(0.82);
+  filter: grayscale(0.7) brightness(0.82);
 }
 
 .summoning-orb {
