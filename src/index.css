@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "./styles/base.css";
-@import "./styles/auth.css";
+@import "./styles/auth-layout.css";
+@import "./styles/auth-components.css";
+@import "./styles/auth-responsive.css";
 @import "./styles/menu.css";
 @import "./styles/world.css";
 @import "./styles/slimes.css";
