@@ -1,0 +1,45 @@
+.yard-slime {
+  --slime-wander-speed: 28s;
+
+  position: absolute;
+  width: calc(var(--slime-frame-width) * var(--slime-scale));
+  height: calc(var(--slime-frame-height) * var(--slime-scale));
+  animation:
+    slime-wander var(--slime-wander-speed)
+    linear var(--slime-wander-delay) infinite;
+  image-rendering: pixelated;
+}
+
+.yard-slime-facing {
+  position: absolute;
+  inset: 0;
+  transform-origin: center;
+  animation:
+    slime-face var(--slime-wander-speed)
+    linear var(--slime-wander-delay) infinite;
+}
+
+.yard-slime-base,
+.yard-slime-overlay {
+  --slime-idle-speed: 1.3s;
+
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-size:
+    calc(var(--slime-frame-width) * var(--slime-frame-count) * var(--slime-scale))
+    calc(var(--slime-frame-height) * var(--slime-scale));
+  animation:
+    slime-idle var(--slime-idle-speed)
+    steps(var(--slime-frame-count)) infinite;
+  image-rendering: pixelated;
+}
+
+.yard-slime-base {
+  background-image: var(--slime-base-sprite);
+  filter: var(--slime-filter);
+}
+
+.yard-slime-overlay {
+  z-index: 1;
+}
