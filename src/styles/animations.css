@@ -1,0 +1,79 @@
+@keyframes summoning-ground-play {
+  to {
+    background-position-x:
+      calc(
+        var(--summoning-ground-frame-width) *
+        var(--summoning-ground-frame-count) *
+        var(--summoning-ground-scale) *
+        -1
+      );
+  }
+}
+
+@keyframes food-factory-play {
+  to {
+    background-position-x:
+      calc(
+        var(--food-factory-frame-width) *
+        var(--food-factory-frame-count) *
+        var(--food-factory-scale) *
+        -1
+      );
+  }
+}
+
+@keyframes slime-idle {
+  to {
+    background-position-x:
+      calc(
+        var(--slime-frame-width) *
+        var(--slime-frame-count) *
+        var(--slime-scale) *
+        -1
+      );
+  }
+}
+
+@keyframes slime-wander {
+  0% {
+    transform: translate(var(--slime-x-0), var(--slime-y-0));
+  }
+
+  25% {
+    transform: translate(var(--slime-x-1), var(--slime-y-1));
+  }
+
+  50% {
+    transform: translate(var(--slime-x-2), var(--slime-y-2));
+  }
+
+  75% {
+    transform: translate(var(--slime-x-3), var(--slime-y-3));
+  }
+
+  100% {
+    transform: translate(var(--slime-x-0), var(--slime-y-0));
+  }
+}
+
+@keyframes slime-face {
+  0%,
+  24.99% {
+    transform: scaleX(var(--slime-face-0));
+  }
+
+  25%,
+  49.99% {
+    transform: scaleX(var(--slime-face-1));
+  }
+
+  50%,
+  74.99% {
+    transform: scaleX(var(--slime-face-2));
+  }
+
+  75%,
+  100% {
+    transform: scaleX(var(--slime-face-3));
+  }
+}
