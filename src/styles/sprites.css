@@ -1,0 +1,86 @@
+.food-factory {
+  --food-factory-speed: 4s;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--food-factory-frame-width) * var(--food-factory-scale));
+  height: calc(var(--food-factory-frame-height) * var(--food-factory-scale));
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size:
+    calc(
+      var(--food-factory-frame-width) *
+      var(--food-factory-frame-count) *
+      var(--food-factory-scale)
+    )
+    calc(var(--food-factory-frame-height) * var(--food-factory-scale));
+  image-rendering: pixelated;
+  z-index: 15;
+  cursor: pointer;
+}
+
+.food-factory--active {
+  animation:
+    food-factory-play var(--food-factory-speed)
+    steps(var(--food-factory-frame-count));
+}
+
+.food-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 16;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.summoning-ground,
+.summoning-orb {
+  --summoning-ground-speed: 4s;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--summoning-ground-frame-width) * var(--summoning-ground-scale));
+  height: calc(var(--summoning-ground-frame-height) * var(--summoning-ground-scale));
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size:
+    calc(
+      var(--summoning-ground-frame-width) *
+      var(--summoning-ground-frame-count) *
+      var(--summoning-ground-scale)
+    )
+    calc(var(--summoning-ground-frame-height) * var(--summoning-ground-scale));
+  image-rendering: pixelated;
+}
+
+.summoning-ground {
+  z-index: 15;
+  cursor: pointer;
+  animation:
+    summoning-ground-play var(--summoning-ground-speed)
+    steps(var(--summoning-ground-frame-count)) infinite;
+}
+
+.summoning-ground--disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.35) brightness(0.82);
+}
+
+.summoning-orb {
+  display: block;
+  z-index: 16;
+  pointer-events: none;
+}
+
+.summoning-orb--active {
+  animation:
+    summoning-ground-play var(--summoning-ground-speed)
+    steps(var(--summoning-ground-frame-count));
+}
