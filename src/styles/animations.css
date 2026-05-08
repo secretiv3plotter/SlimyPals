@@ -22,6 +22,32 @@
   }
 }
 
+@keyframes food-count-pop {
+  0% {
+    opacity: 0;
+    transform:
+      translate(var(--food-count-x, 0), var(--food-count-y, 0))
+      translate(-50%, -100%)
+      scale(0.65);
+  }
+
+  70% {
+    opacity: 1;
+    transform:
+      translate(var(--food-count-x, 0), var(--food-count-y, 0))
+      translate(-50%, -100%)
+      scale(1.18);
+  }
+
+  100% {
+    opacity: 1;
+    transform:
+      translate(var(--food-count-x, 0), var(--food-count-y, 0))
+      translate(-50%, -100%)
+      scale(1);
+  }
+}
+
 @keyframes slime-idle {
   to {
     background-position-x:
@@ -31,6 +57,21 @@
         var(--slime-scale) *
         -1
       );
+  }
+}
+
+@keyframes slime-jump {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  35% {
+    transform: translateY(-12px);
+  }
+
+  68% {
+    transform: translateY(2px);
   }
 }
 

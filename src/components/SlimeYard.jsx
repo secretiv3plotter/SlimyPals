@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import {
   SLIME_FRAME_HEIGHT,
   SLIME_FRAME_WIDTH,
@@ -10,7 +11,7 @@ import { getGridSizeStyle } from '../game/mapTiles'
 import { getSlimeColorFilter, getSlimeMotionPath } from '../game/slimePresentation'
 import { simpleSlimeSprite, slimeOverlaySprites } from '../game/slimeSprites'
 
-function SlimeYard({ displayedSlimes, slimeYardPosition }) {
+function SlimeYard({ displayedSlimes, onRemoveSlime, slimeYardPosition }) {
   return (
     <>
       <div
@@ -37,20 +38,49 @@ function SlimeYard({ displayedSlimes, slimeYardPosition }) {
         }}
       >
         {displayedSlimes.map((slime, index) => (
-          <YardSlime key={slime.id} index={index} slime={slime} />
+          <YardSlime
+            key={slime.id}
+            index={index}
+            onRemoveSlime={onRemoveSlime}
+            slime={slime}
+          />
         ))}
       </div>
     </>
   )
 }
 
-function YardSlime({ index, slime }) {
+function YardSlime({ index, onRemoveSlime, slime }) {
+  const levelTimerRef = useRef(null)
+  const [jumpRun, setJumpRun] = useState(0)
+  const [isLevelPinned, setIsLevelPinned] = useState(false)
   const slimeMotionPath = getSlimeMotionPath(slime, index)
   const overlaySprite = slimeOverlaySprites[slime.rarity]?.[slime.type]
+
+  useEffect(() => {
+    return () => window.clearTimeout(levelTimerRef.current)
+  }, [])
+
+  function handlePointerDown(event) {
+    event.stopPropagation()
+    setJumpRun((run) => run + 1)
+    setIsLevelPinned(true)
+    window.clearTimeout(levelTimerRef.current)
+    levelTimerRef.current = window.setTimeout(() => {
+      setIsLevelPinned(false)
+    }, 5000)
+  }
+
+  function handleKillClick(event) {
+    event.stopPropagation()
+    onRemoveSlime(slime)
+  }
 
   return (
     <div
       className="yard-slime"
+      data-slime-id={slime.id}
+      onPointerDown={handlePointerDown}
       style={{
         '--slime-frame-count': 4,
         '--slime-frame-height': `${SLIME_FRAME_HEIGHT}px`,
@@ -71,22 +101,39 @@ function YardSlime({ index, slime }) {
         '--slime-wander-delay': `${index * -1.7}s`,
       }}
     >
-      <div className="yard-slime-facing">
-        <div
-          className="yard-slime-base"
-          style={{
-            '--slime-base-sprite': `url(${simpleSlimeSprite})`,
-            '--slime-filter': getSlimeColorFilter(slime.color),
-          }}
-        />
-        {overlaySprite && (
+      <div
+        key={jumpRun}
+        className={`yard-slime-jump${jumpRun > 0 ? ' yard-slime-jump--active' : ''}`}
+      >
+        <div className="yard-slime-facing">
           <div
-            className="yard-slime-overlay"
+            className="yard-slime-base"
             style={{
-              backgroundImage: `url(${overlaySprite})`,
+              '--slime-base-sprite': `url(${simpleSlimeSprite})`,
+              '--slime-filter': getSlimeColorFilter(slime.color),
             }}
           />
-        )}
+          {overlaySprite && (
+            <div
+              className="yard-slime-overlay"
+              style={{
+                backgroundImage: `url(${overlaySprite})`,
+              }}
+            />
+          )}
+        </div>
+      </div>
+      <div className={`yard-slime-level${isLevelPinned ? ' yard-slime-level--pinned' : ''}`}>
+        <span>Level {slime.level}</span>
+        <button
+          className="yard-slime-kill"
+          type="button"
+          aria-label={`Kill level ${slime.level} slime`}
+          onClick={handleKillClick}
+          onPointerDown={(event) => event.stopPropagation()}
+        >
+          KILL
+        </button>
       </div>
     </div>
   )

@@ -8,6 +8,7 @@
     slime-wander var(--slime-wander-speed)
     linear var(--slime-wander-delay) infinite;
   image-rendering: pixelated;
+  pointer-events: auto;
 }
 
 .yard-slime-facing {
@@ -17,6 +18,15 @@
   animation:
     slime-face var(--slime-wander-speed)
     linear var(--slime-wander-delay) infinite;
+}
+
+.yard-slime-jump {
+  position: absolute;
+  inset: 0;
+}
+
+.yard-slime-jump--active {
+  animation: slime-jump 2000ms ease-out;
 }
 
 .yard-slime-base,
@@ -42,4 +52,58 @@
 
 .yard-slime-overlay {
   z-index: 1;
+}
+
+.yard-slime-level {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% - 19px);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 5px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.46) 0%,
+    rgba(0, 0, 0, 0.26) 48%,
+    rgba(0, 0, 0, 0) 82%
+  );
+  color: #111111;
+  font-family: var(--pixel-font);
+  font-size: 0.5rem;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(2px);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+  white-space: nowrap;
+}
+
+.yard-slime:hover .yard-slime-level,
+.yard-slime:focus-visible .yard-slime-level,
+.yard-slime-level--pinned {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.yard-slime-kill {
+  padding: 2px 4px;
+  border: 2px solid #111111;
+  background: rgba(207, 71, 63, 0.8);
+  color: #111111;
+  cursor: pointer;
+  font-family: var(--pixel-font);
+  font-size: 0.45rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.yard-slime-kill:hover,
+.yard-slime-kill:focus-visible {
+  background: rgba(224, 84, 75, 0.95);
 }

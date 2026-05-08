@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import foodSprite from '../assets/sprites/food.png'
 import { createFenceTiles, createTileGrid, getGridSizeStyle } from '../game/mapTiles'
 import {
@@ -19,11 +20,17 @@ import SlimeYard from './SlimeYard'
 import SummoningGround from './SummoningGround'
 
 function WorldMap({
+  canProduceFood,
   canSummon,
   displayedSlimes,
   foodFactoryAnimationRun,
+  foodQuantity,
   onFoodFactoryAnimationEnd,
   onFoodFactoryClick,
+  onFoodDragEnd,
+  onFoodDragMove,
+  onFeedSlime,
+  onRemoveSlime,
   onSlimeSummon,
   onSpritePointerDown,
   onSpritePointerUp,
@@ -31,6 +38,7 @@ function WorldMap({
   summoningOrbAnimationRun,
   worldView,
 }) {
+  const [draggedFood, setDraggedFood] = useState(null)
   const worldTiles = useMemo(
     () => createTileGrid({ columns: worldView.columns, rows: worldView.rows }),
     [worldView.columns, worldView.rows],
@@ -41,6 +49,63 @@ function WorldMap({
   const foodOverlayPosition = getFoodOverlayPosition(fencePosition)
   const slimeYardPosition = getSlimeYardPosition(fencePosition)
   const summoningGroundPosition = getSummoningGroundPosition(fencePosition)
+  const canDragFood = foodQuantity > 0
+
+  function handleFoodPointerDown(event) {
+    if (!canDragFood) {
+      return
+    }
+
+    event.stopPropagation()
+    event.currentTarget.setPointerCapture(event.pointerId)
+    setDraggedFood({
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+    })
+    onFoodDragMove({ x: event.clientX, y: event.clientY })
+  }
+
+  function handleFoodPointerMove(event) {
+    if (draggedFood?.pointerId !== event.pointerId) {
+      return
+    }
+
+    event.stopPropagation()
+    onFoodDragMove({ x: event.clientX, y: event.clientY })
+    setDraggedFood((currentFood) => (
+      currentFood
+        ? {
+            ...currentFood,
+            x: event.clientX,
+            y: event.clientY,
+          }
+        : currentFood
+    ))
+  }
+
+  async function handleFoodPointerUp(event) {
+    if (draggedFood?.pointerId !== event.pointerId) {
+      return
+    }
+
+    event.stopPropagation()
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+
+    const slimeTarget = document
+      .elementFromPoint(event.clientX, event.clientY)
+      ?.closest('[data-slime-id]')
+
+    setDraggedFood(null)
+    onFoodDragEnd()
+
+    if (slimeTarget) {
+      await onFeedSlime(slimeTarget.dataset.slimeId)
+    }
+  }
 
   return (
     <div
@@ -63,11 +128,13 @@ function WorldMap({
       ))}
       <SlimeYard
         displayedSlimes={displayedSlimes}
+        onRemoveSlime={onRemoveSlime}
         slimeYardPosition={slimeYardPosition}
       />
       <FenceOverlay fencePosition={fencePosition} fenceTiles={fenceTiles} />
       <FoodFactory
         animationRun={foodFactoryAnimationRun}
+        canProduce={canProduceFood}
         foodFactoryPosition={foodFactoryPosition}
         onAnimationEnd={onFoodFactoryAnimationEnd}
         onClick={onFoodFactoryClick}
@@ -84,17 +151,47 @@ function WorldMap({
         summoningOrbAnimationRun={summoningOrbAnimationRun}
       />
       <img
-        className="food-overlay"
+        className={`food-overlay${canDragFood ? ' food-overlay--draggable' : ''}`}
         src={foodSprite}
-        alt=""
-        aria-hidden="true"
+        alt="Slime food"
+        role="button"
+        aria-disabled={!canDragFood}
         draggable="false"
+        onPointerCancel={handleFoodPointerUp}
+        onPointerDown={handleFoodPointerDown}
+        onPointerMove={handleFoodPointerMove}
+        onPointerUp={handleFoodPointerUp}
         style={{
           width: FOOD_OVERLAY_WIDTH,
           height: FOOD_OVERLAY_HEIGHT,
           transform: `translate(${foodOverlayPosition.x}px, ${foodOverlayPosition.y}px)`,
         }}
       />
+      <span
+        key={`food-count-${foodQuantity}`}
+        className="food-count-badge"
+        aria-label={`${foodQuantity} slime food available`}
+        style={{
+          '--food-count-x': `${foodOverlayPosition.x + FOOD_OVERLAY_WIDTH / 2}px`,
+          '--food-count-y': `${foodOverlayPosition.y + 2}px`,
+        }}
+      >
+        {foodQuantity}
+      </span>
+      {draggedFood && createPortal(
+        <img
+          className="food-drag-preview"
+          src={foodSprite}
+          alt=""
+          aria-hidden="true"
+          draggable="false"
+          style={{
+            left: draggedFood.x,
+            top: draggedFood.y,
+          }}
+        />,
+        document.body,
+      )}
     </div>
   )
 }
