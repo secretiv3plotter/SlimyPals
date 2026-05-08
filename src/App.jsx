@@ -3,6 +3,9 @@ import menuButtonSprite from './assets/sprites/menu button.png'
 import GameMenu from './components/GameMenu'
 import SlimeDeleteConfirm from './components/SlimeDeleteConfirm'
 import WorldView from './components/WorldView'
+import audioManager from './audio/audioManager'
+import { SOUND_KEYS } from './audio/soundFiles'
+import { useBackgroundMusic } from './audio/useBackgroundMusic'
 import { getOrCreateOfflineUser } from './game/offlineUser'
 import { getMaximizedWorldView, getScreenViewSize } from './game/worldLayout'
 import {
@@ -21,6 +24,8 @@ async function getFoodProductionAllowed(userId) {
 }
 
 function App() {
+  useBackgroundMusic(SOUND_KEYS.BGM_LOOP, [SOUND_KEYS.SUMMON_1])
+
   const [worldView] = useState(() => getMaximizedWorldView(getScreenViewSize()))
   const [foodFactoryAnimationRun, setFoodFactoryAnimationRun] = useState(0)
   const [canProduceFood, setCanProduceFood] = useState(false)
@@ -105,6 +110,7 @@ function App() {
 
   async function handleSummonSlime(event) {
     event.stopPropagation()
+    audioManager.playSfx(SOUND_KEYS.SUMMON_2)
 
     if (!offlineUser) {
       return
@@ -125,6 +131,7 @@ function App() {
 
   async function handleFoodFactoryClick(event) {
     event.stopPropagation()
+    audioManager.playSfx(SOUND_KEYS.FACTORY)
 
     if (!offlineUser || !canProduceFood || foodFactoryAnimationRun > 0) {
       return
@@ -152,11 +159,14 @@ function App() {
       return
     }
 
+    const previousSlime = slimes.find((currentSlime) => currentSlime.id === slimeId)
+
     try {
       const { foodFactoryStock, slime } = await feedSlime({
         slimeId,
         ownerUserId: offlineUser.id,
       })
+      audioManager.playSfx(SOUND_KEYS.EATING)
 
       setFoodQuantity(foodFactoryStock.quantity)
       setSlimes((currentSlimes) => (
@@ -164,6 +174,9 @@ function App() {
           currentSlime.id === slime.id ? slime : currentSlime
         ))
       ))
+      if (previousSlime && slime.level > previousSlime.level) {
+        audioManager.playSfx(SOUND_KEYS.LEVEL_UP)
+      }
       await refreshFoodProductionReadiness(offlineUser.id)
     } catch (error) {
       console.warn('Unable to feed slime:', error)
@@ -174,6 +187,8 @@ function App() {
     if (!offlineUser) {
       return
     }
+
+    audioManager.playSfx(SOUND_KEYS.KILL)
 
     try {
       await removeSlime({ slimeId, userId: offlineUser.id })
