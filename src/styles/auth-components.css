@@ -135,7 +135,6 @@
 
 .auth-check input { width: 15px; height: 15px; margin: 0; accent-color: #ccb0ed; }
 
-/* --- Buttons --- */
 .auth-actions {
   display: grid;
   gap: 5px;

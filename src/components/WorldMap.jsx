@@ -61,6 +61,7 @@ function WorldMap({
           draggable="false"
         />
       ))}
+      <div className="map-tint-layer" />
       <SlimeYard
         displayedSlimes={displayedSlimes}
         slimeYardPosition={slimeYardPosition}

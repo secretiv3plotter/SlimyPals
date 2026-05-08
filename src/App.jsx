@@ -13,9 +13,12 @@ function App() {
   const [foodFactoryAnimationRun, setFoodFactoryAnimationRun] = useState(0)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuMode, setMenuMode] = useState('main')
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(true)
   const [offlineUser, setOfflineUser] = useState(null)
   const [slimes, setSlimes] = useState([])
+  const [friends, setFriends] = useState([])
+  const [friendName, setFriendName] = useState('')
+  const [selectedFriend, setSelectedFriend] = useState(null)
   const [summoningOrbAnimationRun, setSummoningOrbAnimationRun] = useState(0)
   const canSummonFromGround = (offlineUser?.daily_summons_left ?? 0) > 0
   const displayedSlimes = slimes.slice(0, 25)
@@ -98,6 +101,31 @@ function App() {
     setFoodFactoryAnimationRun((run) => run + 1)
   }
 
+  function handleAddFriend() {
+    if (!friendName.trim()) return
+
+    const newFriend = {
+      id: Date.now(),
+      name: friendName,
+
+      // temp status
+      online: Math.random() > 0.5,
+    }
+
+    setFriends((currentFriends) => [
+      ...currentFriends,
+      newFriend,
+    ])
+
+    setFriendName('')
+  }
+
+  function handleRemoveFriend(friendId) {
+    setFriends((currentFriends) =>
+      currentFriends.filter((friend) => friend.id !== friendId)
+    )
+  }
+
   if (!isAuthenticated) {
     return (
       <AuthScreen
@@ -128,6 +156,13 @@ function App() {
         onClose={closeMenu}
         onConfirmLogout={confirmLogout}
         onSetMenuMode={setMenuMode}
+        friends={friends}
+        friendName={friendName}
+        setFriendName={setFriendName}
+        handleAddFriend={handleAddFriend}
+        handleRemoveFriend={handleRemoveFriend}
+        selectedFriend={selectedFriend}
+        setSelectedFriend={setSelectedFriend}
       />
       <WorldView
         canSummon={canSummonFromGround}
