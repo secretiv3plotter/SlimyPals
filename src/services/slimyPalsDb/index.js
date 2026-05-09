@@ -13,6 +13,7 @@ export {
   foodFactoryStockRepository,
   friendshipsRepository,
   interactionLogsRepository,
+  pendingSyncActionsRepository,
   slimesRepository,
   usersRepository,
 } from './repositories'
@@ -37,6 +38,7 @@ import {
   foodFactoryStockRepository,
   friendshipsRepository,
   interactionLogsRepository,
+  pendingSyncActionsRepository,
   slimesRepository,
   usersRepository,
 } from './repositories'
@@ -68,6 +70,7 @@ export const slimyPalsDb = Object.freeze({
   friendships: friendshipsRepository,
   slimes: slimesRepository,
   interactionLogs: interactionLogsRepository,
+  pendingSyncActions: pendingSyncActionsRepository,
 })
 
 export default slimyPalsDb

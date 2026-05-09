@@ -1,21 +1,23 @@
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import foodSprite from '../assets/sprites/food.png'
-import { createFenceTiles, createTileGrid, getGridSizeStyle } from '../game/mapTiles'
+import foodSprite from '../../../assets/sprites/food.png'
+import { runtimeConfig } from '../../../config'
+import { createFenceTiles, createTileGrid, getGridSizeStyle } from '../../../game/mapTiles'
 import {
   FOOD_OVERLAY_HEIGHT,
   FOOD_OVERLAY_WIDTH,
   TILE_SIZE,
-} from '../game/worldConstants'
+} from '../../../game/worldConstants'
 import {
   getFencePosition,
   getFoodFactoryPosition,
   getFoodOverlayPosition,
   getSlimeYardPosition,
   getSummoningGroundPosition,
-} from '../game/worldLayout'
+} from '../../../game/worldLayout'
 import FenceOverlay from './FenceOverlay'
 import FoodFactory from './FoodFactory'
+import FriendYardPlaceholders from './FriendYardPlaceholders'
 import SlimeYard from './SlimeYard'
 import SummoningGround from './SummoningGround'
 
@@ -29,6 +31,7 @@ function WorldMap({
   onFoodFactoryClick,
   onFoodDragEnd,
   onFoodDragMove,
+  onFeedFriendSlime,
   onFeedSlime,
   onRemoveSlime,
   onSlimeSummon,
@@ -102,6 +105,18 @@ function WorldMap({
     setDraggedFood(null)
     onFoodDragEnd()
 
+    if (slimeTarget?.dataset.feedTargetType === 'friend') {
+      onFeedFriendSlime({
+        friendUserId: slimeTarget.dataset.feedTargetOwnerId,
+        friendUsername: slimeTarget.dataset.feedTargetOwner,
+        lastFedAt: slimeTarget.dataset.slimeLastFedAt,
+        slimeId: slimeTarget.dataset.slimeId,
+        slimeLevel: Number(slimeTarget.dataset.slimeLevel),
+        slimeName: slimeTarget.dataset.slimeName,
+      })
+      return
+    }
+
     if (slimeTarget) {
       await onFeedSlime(slimeTarget.dataset.slimeId)
     }
@@ -126,6 +141,13 @@ function WorldMap({
           draggable="false"
         />
       ))}
+      {runtimeConfig.enableMockFriends && (
+        <FriendYardPlaceholders
+          fencePosition={fencePosition}
+          fenceTiles={fenceTiles}
+        />
+      )}
+      <div className="map-tint-layer" />
       <SlimeYard
         displayedSlimes={displayedSlimes}
         onRemoveSlime={onRemoveSlime}

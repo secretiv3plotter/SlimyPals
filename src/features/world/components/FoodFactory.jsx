@@ -1,10 +1,10 @@
-import foodFactorySprite from '../assets/sprites/foodfactory.png'
+import foodFactorySprite from '../../../assets/sprites/foodfactory.png'
 import {
   FOOD_FACTORY_FRAME_COUNT,
   FOOD_FACTORY_FRAME_HEIGHT,
   FOOD_FACTORY_FRAME_WIDTH,
   FOOD_FACTORY_SCALE,
-} from '../game/worldConstants'
+} from '../../../game/worldConstants'
 
 function FoodFactory({
   animationRun,
@@ -23,7 +23,8 @@ function FoodFactory({
       className={`food-factory${isAnimating ? ' food-factory--active' : ''}${!canProduce && !isAnimating ? ' food-factory--disabled' : ''}`}
       type="button"
       aria-label="Produce slime food"
-      disabled={!canProduce || isAnimating}
+      aria-disabled={!canProduce}
+      disabled={isAnimating}
       onAnimationEnd={onAnimationEnd}
       onClick={onClick}
       onPointerCancel={onSpritePointerUp}

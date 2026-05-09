@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { DEFAULT_VIEWPORT } from '../game/worldConstants'
-import { clampOffset, getCenteredOffset } from '../game/worldLayout'
+import { DEFAULT_VIEWPORT } from '../../../game/worldConstants'
+import { clampOffset, getCenteredOffset } from '../../../game/worldLayout'
 import WorldMap from './WorldMap'
 
 const FOOD_DRAG_EDGE_SIZE = 72
@@ -14,6 +14,7 @@ function WorldView({
   foodQuantity,
   onFoodFactoryAnimationEnd,
   onFoodFactoryClick,
+  onFeedFriendSlime,
   onFeedSlime,
   onRemoveSlime,
   onSlimeSummon,
@@ -177,6 +178,7 @@ function WorldView({
           onFoodFactoryClick={onFoodFactoryClick}
           onFoodDragEnd={handleFoodDragEnd}
           onFoodDragMove={handleFoodDragMove}
+          onFeedFriendSlime={onFeedFriendSlime}
           onFeedSlime={onFeedSlime}
           onRemoveSlime={onRemoveSlime}
           onSlimeSummon={onSlimeSummon}

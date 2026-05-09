@@ -1,11 +1,11 @@
-import summoningGroundSprite from '../assets/sprites/summoningground.png'
-import summoningOrbSprite from '../assets/sprites/summoningorb.png'
+import summoningGroundSprite from '../../../assets/sprites/summoningground.png'
+import summoningOrbSprite from '../../../assets/sprites/summoningorb.png'
 import {
   SUMMONING_GROUND_FRAME_COUNT,
   SUMMONING_GROUND_FRAME_HEIGHT,
   SUMMONING_GROUND_FRAME_WIDTH,
   SUMMONING_GROUND_SCALE,
-} from '../game/worldConstants'
+} from '../../../game/worldConstants'
 
 function SummoningGround({
   canSummon,
@@ -21,7 +21,7 @@ function SummoningGround({
       className={`summoning-ground${canSummon ? '' : ' summoning-ground--disabled'}`}
       type="button"
       aria-label="Summon slime"
-      disabled={!canSummon}
+      aria-disabled={!canSummon}
       onClick={onClick}
       onPointerCancel={onSpritePointerUp}
       onPointerDown={onSpritePointerDown}

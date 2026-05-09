@@ -1,27 +1,25 @@
 import { useEffect, useState } from 'react'
 import menuButtonSprite from './assets/sprites/menu button.png'
-import GameMenu from './components/GameMenu'
-import SlimeDeleteConfirm from './components/SlimeDeleteConfirm'
-import WorldView from './components/WorldView'
 import audioManager from './audio/audioManager'
 import { SOUND_KEYS } from './audio/soundFiles'
 import { useBackgroundMusic } from './audio/useBackgroundMusic'
-import { getOrCreateOfflineUser } from './game/offlineUser'
+import { AuthScreen, useAuthSession } from './features/auth'
+import { useDomainHydration } from './features/domain'
+import { GameMenu, SlimeDeleteConfirm, useFriendMenuState } from './features/menu'
+import { AppNotificationLayer } from './features/notifications'
+import { WorldView } from './features/world'
+import { getSlimeDisplayName } from './game/slimeText'
 import { getMaximizedWorldView, getScreenViewSize } from './game/worldLayout'
+import { loginAuthSession, logoutAuthSession, registerAuthSession } from './services/authSession'
 import {
-  feedSlime,
-  getFoodProductionReadiness,
-  produceSlimeFood,
-  removeSlime,
-  summonSlime,
-} from './services/slimeManagement'
-import { foodFactoryStockRepository, slimesRepository } from './services/slimyPalsDb'
-
-async function getFoodProductionAllowed(userId) {
-  const readiness = await getFoodProductionReadiness(userId)
-
-  return readiness.allowed
-}
+  feedOwnedSlime,
+  getFoodProductionAllowed,
+  getMockFriendFeedResult,
+  produceOwnedFood,
+  removeOwnedSlime,
+  summonOwnedSlime,
+} from './services/slimyPalsDomain'
+import { queueFeedFriendSlime } from './services/offlineSync'
 
 function App() {
   useBackgroundMusic(SOUND_KEYS.BGM_LOOP, [SOUND_KEYS.SUMMON_1])
@@ -32,37 +30,24 @@ function App() {
   const [foodQuantity, setFoodQuantity] = useState(0)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [menuMode, setMenuMode] = useState('main')
+  const [notifications, setNotifications] = useState([])
   const [offlineUser, setOfflineUser] = useState(null)
   const [pendingDeleteSlime, setPendingDeleteSlime] = useState(null)
   const [slimes, setSlimes] = useState([])
   const [summoningOrbAnimationRun, setSummoningOrbAnimationRun] = useState(0)
+  const friendMenu = useFriendMenuState()
+  const { isAuthenticated } = useAuthSession()
   const canSummonFromGround = (offlineUser?.daily_summons_left ?? 0) > 0
   const displayedSlimes = slimes.slice(0, 25)
+  const offlineUserId = offlineUser?.id
 
-  useEffect(() => {
-    let isCancelled = false
-
-    async function loadOfflineDomain() {
-      const user = await getOrCreateOfflineUser()
-      const [activeSlimes, foodFactoryStock] = await Promise.all([
-        slimesRepository.listByUserId(user.id),
-        foodFactoryStockRepository.getByUserId(user.id),
-      ])
-
-      if (!isCancelled) {
-        setOfflineUser(user)
-        setSlimes(activeSlimes)
-        setFoodQuantity(foodFactoryStock?.quantity ?? 0)
-        setCanProduceFood(await getFoodProductionAllowed(user.id))
-      }
-    }
-
-    loadOfflineDomain()
-
-    return () => {
-      isCancelled = true
-    }
-  }, [])
+  useDomainHydration({
+    offlineUserId,
+    setCanProduceFood,
+    setFoodQuantity,
+    setOfflineUser,
+    setSlimes,
+  })
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -90,8 +75,30 @@ function App() {
     setMenuMode('main')
   }
 
-  function confirmLogout() {
+  async function confirmLogout() {
+    await logoutAuthSession()
     setMenuMode('logged-out')
+  }
+
+  function addNotification(message) {
+    setNotifications((currentNotifications) => [
+      ...currentNotifications,
+      {
+        id: crypto.randomUUID(),
+        message,
+      },
+    ].slice(-3))
+  }
+
+  function dismissNotification(notificationId) {
+    setNotifications((currentNotifications) => (
+      currentNotifications.filter((notification) => notification.id !== notificationId)
+    ))
+  }
+
+  function notifyActionFailure(message, error) {
+    console.warn(message, error)
+    addNotification(message)
   }
 
   async function refreshFoodProductionReadiness(userId = offlineUser?.id) {
@@ -116,16 +123,19 @@ function App() {
       return
     }
 
-    setSummoningOrbAnimationRun((run) => run + 1)
+    if (canSummonFromGround) {
+      setSummoningOrbAnimationRun((run) => run + 1)
+    }
 
     try {
-      const { slime, user } = await summonSlime(offlineUser.id)
+      const { slime, user } = await summonOwnedSlime(offlineUser.id)
 
       setOfflineUser(user)
       setSlimes((currentSlimes) => [...currentSlimes, slime])
+      addNotification(`You summoned a ${getSlimeDisplayName(slime)} slime.`)
       await refreshFoodProductionReadiness(user.id)
     } catch (error) {
-      console.warn('Unable to summon slime:', error)
+      notifyActionFailure('Unable to summon slime.', error)
     }
   }
 
@@ -133,18 +143,21 @@ function App() {
     event.stopPropagation()
     audioManager.playSfx(SOUND_KEYS.FACTORY)
 
-    if (!offlineUser || !canProduceFood || foodFactoryAnimationRun > 0) {
+    if (!offlineUser || foodFactoryAnimationRun > 0) {
       return
     }
 
-    setFoodFactoryAnimationRun((run) => run + 1)
+    if (canProduceFood) {
+      setFoodFactoryAnimationRun((run) => run + 1)
+    }
 
     try {
-      const { foodFactoryStock } = await produceSlimeFood(offlineUser.id)
+      const { foodFactoryStock, producedQuantity } = await produceOwnedFood(offlineUser.id)
 
       setFoodQuantity(foodFactoryStock.quantity)
+      addNotification(`Your factory produced ${producedQuantity} food.`)
     } catch (error) {
-      console.warn('Unable to produce slime food:', error)
+      notifyActionFailure('Unable to produce slime food.', error)
       await refreshFoodProductionReadiness(offlineUser.id)
     }
   }
@@ -156,15 +169,16 @@ function App() {
 
   async function handleFeedSlime(slimeId) {
     if (!offlineUser || foodQuantity <= 0) {
+      addNotification('No slime food available.')
       return
     }
 
     const previousSlime = slimes.find((currentSlime) => currentSlime.id === slimeId)
 
     try {
-      const { foodFactoryStock, slime } = await feedSlime({
+      const { foodFactoryStock, slime } = await feedOwnedSlime({
         slimeId,
-        ownerUserId: offlineUser.id,
+        userId: offlineUser.id,
       })
       audioManager.playSfx(SOUND_KEYS.EATING)
 
@@ -177,10 +191,38 @@ function App() {
       if (previousSlime && slime.level > previousSlime.level) {
         audioManager.playSfx(SOUND_KEYS.LEVEL_UP)
       }
+      addNotification(
+        `You fed your ${getSlimeDisplayName(slime)} slime.`,
+      )
       await refreshFoodProductionReadiness(offlineUser.id)
     } catch (error) {
-      console.warn('Unable to feed slime:', error)
+      notifyActionFailure('Unable to feed slime.', error)
     }
+  }
+
+  async function handleFeedFriendSlime({ friendUserId, friendUsername, lastFedAt, slimeId, slimeLevel, slimeName }) {
+    if (!offlineUser || foodQuantity <= 0) {
+      addNotification('No slime food available.')
+      return
+    }
+    const result = getMockFriendFeedResult({ foodQuantity, lastFedAt, slimeLevel })
+
+    if (result.reason === 'SLIME_ALREADY_ADULT') {
+      addNotification(`Unable to feed ${friendUsername}'s ${slimeName} slime.`)
+      return
+    }
+    if (result.reason === 'FEED_COOLDOWN_ACTIVE') {
+      addNotification(`${friendUsername}'s ${slimeName} slime is not hungry yet.`)
+      return
+    }
+    setFoodQuantity((currentQuantity) => Math.max(0, currentQuantity - 1))
+    await queueFriendFeedAction({
+      friendUserId,
+      slimeId,
+      userId: offlineUser.id,
+    })
+    console.info(`Friend POV notification: ${offlineUser.username} fed your ${slimeName} slime.`)
+    console.info(`Mock fed ${friendUsername}'s ${slimeName} slime.`)
   }
 
   async function handleRemoveSlime(slimeId) {
@@ -191,15 +233,43 @@ function App() {
     audioManager.playSfx(SOUND_KEYS.KILL)
 
     try {
-      await removeSlime({ slimeId, userId: offlineUser.id })
+      await removeOwnedSlime({ slimeId, userId: offlineUser.id })
       setSlimes((currentSlimes) => (
         currentSlimes.filter((currentSlime) => currentSlime.id !== slimeId)
       ))
       setPendingDeleteSlime(null)
       await refreshFoodProductionReadiness(offlineUser.id)
     } catch (error) {
-      console.warn('Unable to remove slime:', error)
+      notifyActionFailure('Unable to remove slime.', error)
     }
+  }
+
+  async function queueFriendFeedAction({ friendUserId, slimeId, userId }) {
+    try {
+      await queueFeedFriendSlime({ friendUserId, slimeId, userId })
+    } catch (error) {
+      console.warn('Unable to queue friend feed action:', error)
+    }
+  }
+
+  function handleLogin(credentials) {
+    return loginAuthSession({
+      password: credentials.password,
+      username: credentials.identifier,
+    })
+  }
+
+  function handleRegister(credentials) {
+    return registerAuthSession(credentials)
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <AuthScreen
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+      />
+    )
   }
 
   return (
@@ -216,12 +286,18 @@ function App() {
       <output className="sr-only" aria-live="polite">
         {foodQuantity} slime food available
       </output>
+      <AppNotificationLayer
+        notifications={notifications}
+        onDismiss={dismissNotification}
+        setNotifications={setNotifications}
+      />
       <GameMenu
         isOpen={isMenuOpen}
         menuMode={menuMode}
         onClose={closeMenu}
         onConfirmLogout={confirmLogout}
         onSetMenuMode={setMenuMode}
+        {...friendMenu}
       />
       <SlimeDeleteConfirm
         slime={pendingDeleteSlime}
@@ -236,6 +312,7 @@ function App() {
         foodQuantity={foodQuantity}
         onFoodFactoryAnimationEnd={handleFoodFactoryAnimationEnd}
         onFoodFactoryClick={handleFoodFactoryClick}
+        onFeedFriendSlime={handleFeedFriendSlime}
         onFeedSlime={handleFeedSlime}
         onRemoveSlime={setPendingDeleteSlime}
         onSlimeSummon={handleSummonSlime}
