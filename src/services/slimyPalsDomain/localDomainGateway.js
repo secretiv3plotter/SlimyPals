@@ -5,7 +5,6 @@ import {
 import { getOrCreateOfflineUser } from '../../game/offlineUser'
 import {
   feedSlime,
-  FEED_COOLDOWN_MS,
   getFoodProductionReadiness,
   produceSlimeFood,
   removeSlime,
@@ -88,17 +87,13 @@ export async function removeOwnedSlime({ slimeId, userId }) {
   return result
 }
 
-export function getMockFriendFeedResult({ foodQuantity, lastFedAt, slimeLevel }) {
+export function getMockFriendFeedResult({ foodQuantity, slimeLevel }) {
   if (foodQuantity <= 0) {
     return { allowed: false, reason: 'NO_FOOD_AVAILABLE' }
   }
 
   if (slimeLevel >= 3) {
     return { allowed: false, reason: 'SLIME_ALREADY_ADULT' }
-  }
-
-  if (lastFedAt && Date.now() - new Date(lastFedAt).getTime() < FEED_COOLDOWN_MS) {
-    return { allowed: false, reason: 'FEED_COOLDOWN_ACTIVE' }
   }
 
   return { allowed: true, reason: null }

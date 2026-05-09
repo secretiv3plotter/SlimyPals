@@ -31,18 +31,15 @@ export function createFenceTiles() {
   return Array.from({ length: FENCE_ROWS * FENCE_COLUMNS }, (_, index) => {
     const x = index % FENCE_COLUMNS
     const y = Math.floor(index / FENCE_COLUMNS)
-    const isTopOrBottom = y === 0 || y === FENCE_ROWS - 1
-    const isLeftColumn = x === 0 && !isTopOrBottom
-    const isRightColumn = x === FENCE_COLUMNS - 1 && !isTopOrBottom
-    const hasBottomColumnOverlay =
-      y === FENCE_ROWS - 1 && (x === 0 || x === FENCE_COLUMNS - 1)
+    const isHorizontalEdge = y === 0 || y === FENCE_ROWS - 1
+    const isVerticalEdge = x === 0 || x === FENCE_COLUMNS - 1
     const layers = []
 
-    if (isTopOrBottom) {
+    if (isHorizontalEdge) {
       layers.push({ id: 'row', src: fenceRowTile })
     }
 
-    if (isLeftColumn || isRightColumn || hasBottomColumnOverlay) {
+    if (isVerticalEdge) {
       layers.push({
         id: 'column',
         isRightColumn: x === FENCE_COLUMNS - 1,

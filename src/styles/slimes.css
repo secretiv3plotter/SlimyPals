@@ -1,14 +1,16 @@
 .yard-slime {
   --slime-wander-speed: 28s;
+  --slime-level-scale: 1;
 
   position: absolute;
-  width: calc(var(--slime-frame-width) * var(--slime-scale));
-  height: calc(var(--slime-frame-height) * var(--slime-scale));
+  width: calc(var(--slime-frame-width) * var(--slime-scale) * var(--slime-level-scale));
+  height: calc(var(--slime-frame-height) * var(--slime-scale) * var(--slime-level-scale));
   animation:
     slime-wander var(--slime-wander-speed)
     linear var(--slime-wander-delay) infinite;
   image-rendering: pixelated;
   pointer-events: auto;
+  filter: var(--slime-shadow-effect, drop-shadow(0 2px 2px rgba(0, 0, 0, 0.24)));
 }
 
 .yard-slime-facing {
@@ -30,28 +32,57 @@
 }
 
 .yard-slime-base,
-.yard-slime-overlay {
+.yard-slime-shadow,
+.yard-slime-overlay,
+.yard-slime-overlay-shadow,
+.yard-slime-blackhole {
   --slime-idle-speed: 1.3s;
 
   position: absolute;
   inset: 0;
   background-repeat: no-repeat;
+  background-position: 0 0;
+  image-rendering: pixelated;
+}
+
+.yard-slime-shadow,
+.yard-slime-base,
+.yard-slime-overlay,
+.yard-slime-overlay-shadow,
+.yard-slime-blackhole {
   background-size:
-    calc(var(--slime-frame-width) * var(--slime-frame-count) * var(--slime-scale))
-    calc(var(--slime-frame-height) * var(--slime-scale));
+    calc(var(--slime-frame-width) * var(--slime-frame-count) * var(--slime-scale) * var(--slime-level-scale))
+    calc(var(--slime-frame-height) * var(--slime-scale) * var(--slime-level-scale));
   animation:
     slime-idle var(--slime-idle-speed)
     steps(var(--slime-frame-count)) infinite;
-  image-rendering: pixelated;
+}
+
+.yard-slime-shadow {
+  z-index: 0;
 }
 
 .yard-slime-base {
   background-image: var(--slime-base-sprite);
   filter: var(--slime-filter);
+  z-index: 1;
+}
+
+.yard-slime-overlay-shadow {
+  z-index: 2;
 }
 
 .yard-slime-overlay {
-  z-index: 1;
+  z-index: 3;
+}
+
+.yard-slime-blackhole {
+  --slime-frame-count: 13;
+
+  z-index: 4;
+  animation:
+    blackhole-play 620ms
+    steps(var(--slime-frame-count)) forwards;
 }
 
 .yard-slime-level {
@@ -71,7 +102,7 @@
   );
   color: #111111;
   font-family: var(--pixel-font);
-  font-size: 0.5rem;
+  font-size: 0.3rem;
   font-weight: 700;
   line-height: 1;
   opacity: 0;
@@ -93,12 +124,12 @@
 
 .yard-slime-kill {
   padding: 2px 4px;
-  border: 2px solid #111111;
+  border: 1px solid #111111;
   background: rgba(207, 71, 63, 0.8);
   color: #111111;
   cursor: pointer;
   font-family: var(--pixel-font);
-  font-size: 0.45rem;
+  font-size: 0.2rem;
   font-weight: 700;
   line-height: 1;
 }

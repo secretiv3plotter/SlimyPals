@@ -23,12 +23,14 @@ import {
   TILE_SIZE,
 } from './worldConstants'
 
+const DEFAULT_WORLD_ZOOM = 0.7
+
 export function getMaximizedWorldView({ height, width }) {
   if (height <= 0 || width <= 0) {
     return DEFAULT_VIEW
   }
 
-  const scale = height / PLAYABLE_PIXEL_HEIGHT
+  const scale = (height / PLAYABLE_PIXEL_HEIGHT) * DEFAULT_WORLD_ZOOM
   const tileViewSize = TILE_SIZE * scale
   const paddingColumns = Math.ceil(width / tileViewSize)
   const paddingRows = Math.ceil(height / tileViewSize)

@@ -9,6 +9,7 @@ const FOOD_DRAG_MAX_PAN_SPEED = 8
 function WorldView({
   canProduceFood,
   canSummon,
+  deletingSlimeIds,
   displayedSlimes,
   foodFactoryAnimationRun,
   foodQuantity,
@@ -171,6 +172,7 @@ function WorldView({
         <WorldMap
           canProduceFood={canProduceFood}
           canSummon={canSummon}
+          deletingSlimeIds={deletingSlimeIds}
           displayedSlimes={displayedSlimes}
           foodFactoryAnimationRun={foodFactoryAnimationRun}
           foodQuantity={foodQuantity}

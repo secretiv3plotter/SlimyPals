@@ -5,8 +5,8 @@ import {
   SLIME_RARITIES,
 } from '../slimyPalsDb'
 
-export const FEED_COOLDOWN_HOURS = 6
-export const FEED_COOLDOWN_MS = FEED_COOLDOWN_HOURS * 60 * 60 * 1000
+export const FEED_COOLDOWN_HOURS = 0
+export const FEED_COOLDOWN_MS = 0
 
 export const SLIME_TYPES_BY_RARITY = Object.freeze({
   [SLIME_RARITIES.COMMON]: ['simple'],
@@ -67,7 +67,7 @@ export function createSummonedSlimeDraft({ userId, random = Math.random, now = n
   }
 }
 
-export function canFeedSlime({ slime, foodStock, now = new Date() }) {
+export function canFeedSlime({ slime, foodStock }) {
   if (!slime || slime.deleted_at) {
     return failedRule('SLIME_UNAVAILABLE', 'Only an active slime can be fed.')
   }
@@ -78,10 +78,6 @@ export function canFeedSlime({ slime, foodStock, now = new Date() }) {
 
   if (!foodStock || foodStock.deleted_at || foodStock.quantity <= 0) {
     return failedRule('NO_FOOD_AVAILABLE', 'Feeding requires at least one slime food.')
-  }
-
-  if (!isFeedWindowOpen(slime, now)) {
-    return failedRule('FEED_COOLDOWN_ACTIVE', 'This slime must wait for its next 6-hour feeding window.')
   }
 
   return passedRule()
@@ -131,12 +127,8 @@ export function isFeedWindowOpen(slime, now = new Date()) {
   return new Date(now).getTime() - new Date(slime.last_fed_at).getTime() >= FEED_COOLDOWN_MS
 }
 
-export function getNextFeedAt(slime) {
-  if (!slime.last_fed_at || slime.level >= SLIME_LEVELS.ADULT) {
-    return null
-  }
-
-  return new Date(new Date(slime.last_fed_at).getTime() + FEED_COOLDOWN_MS).toISOString()
+export function getNextFeedAt() {
+  return null
 }
 
 export function getFoodProductionAmount(activeSlimeCount, currentFoodQuantity = 0) {

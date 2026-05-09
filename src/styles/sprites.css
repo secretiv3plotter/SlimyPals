@@ -1,5 +1,5 @@
 .food-factory {
-  --food-factory-speed: 4s;
+  --food-factory-speed: 1s;
 
   position: absolute;
   top: 0;
@@ -10,6 +10,7 @@
   border: 0;
   background-color: transparent;
   background-repeat: no-repeat;
+  background-position: 0 0;
   background-size:
     calc(
       var(--food-factory-frame-width) *
@@ -18,6 +19,7 @@
     )
     calc(var(--food-factory-frame-height) * var(--food-factory-scale));
   image-rendering: pixelated;
+  overflow: hidden;
   z-index: 15;
   cursor: pointer;
 }
@@ -91,8 +93,8 @@
 }
 
 .summoning-ground,
-.summoning-orb {
-  --summoning-ground-speed: 4s;
+.summoning-layer {
+  --summoning-ground-speed: 1s;
 
   position: absolute;
   top: 0;
@@ -102,7 +104,15 @@
   padding: 0;
   border: 0;
   background-color: transparent;
+  image-rendering: pixelated;
+  overflow: hidden;
+}
+
+.summoning-layer {
+  display: block;
+  pointer-events: none;
   background-repeat: no-repeat;
+  background-position: 0 0;
   background-size:
     calc(
       var(--summoning-ground-frame-width) *
@@ -110,15 +120,15 @@
       var(--summoning-ground-scale)
     )
     calc(var(--summoning-ground-frame-height) * var(--summoning-ground-scale));
-  image-rendering: pixelated;
-}
-
-.summoning-ground {
-  z-index: 15;
-  cursor: pointer;
   animation:
     summoning-ground-play var(--summoning-ground-speed)
     steps(var(--summoning-ground-frame-count)) infinite;
+}
+
+.summoning-ground {
+  position: absolute;
+  z-index: 15;
+  cursor: pointer;
 }
 
 .summoning-ground--disabled {
@@ -126,10 +136,24 @@
   filter: grayscale(0.7) brightness(0.82);
 }
 
-.summoning-orb {
-  display: block;
-  z-index: 16;
-  pointer-events: none;
+.summoning-layer--ground-shadow {
+  z-index: 0;
+}
+
+.summoning-layer--ground {
+  z-index: 1;
+}
+
+.summoning-layer--fire {
+  z-index: 2;
+}
+
+.summoning-layer--orb-shadow {
+  z-index: 3;
+}
+
+.summoning-layer--orb {
+  z-index: 4;
 }
 
 .summoning-orb--active {

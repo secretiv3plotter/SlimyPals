@@ -28,6 +28,7 @@ function App() {
   const [notifications, setNotifications] = useState([])
   const [offlineUser, setOfflineUser] = useState(null)
   const [pendingDeleteSlime, setPendingDeleteSlime] = useState(null)
+  const [deletingSlimeIds, setDeletingSlimeIds] = useState([])
   const [slimes, setSlimes] = useState([])
   const [summoningOrbAnimationRun, setSummoningOrbAnimationRun] = useState(0)
   const friendMenu = useFriendMenuState()
@@ -187,19 +188,15 @@ function App() {
     }
   }
 
-  async function handleFeedFriendSlime({ friendUserId, friendUsername, lastFedAt, slimeId, slimeLevel, slimeName }) {
+  async function handleFeedFriendSlime({ friendUserId, friendUsername, slimeId, slimeLevel, slimeName }) {
     if (!offlineUser || foodQuantity <= 0) {
       addNotification('No slime food available.')
       return
     }
-    const result = getMockFriendFeedResult({ foodQuantity, lastFedAt, slimeLevel })
+    const result = getMockFriendFeedResult({ foodQuantity, slimeLevel })
 
     if (result.reason === 'SLIME_ALREADY_ADULT') {
       addNotification(`Unable to feed ${friendUsername}'s ${slimeName} slime.`)
-      return
-    }
-    if (result.reason === 'FEED_COOLDOWN_ACTIVE') {
-      addNotification(`${friendUsername}'s ${slimeName} slime is not hungry yet.`)
       return
     }
     setFoodQuantity((currentQuantity) => Math.max(0, currentQuantity - 1))
@@ -217,15 +214,24 @@ function App() {
       return
     }
 
+    setDeletingSlimeIds((currentIds) => (
+      currentIds.includes(slimeId) ? currentIds : [...currentIds, slimeId]
+    ))
+    setPendingDeleteSlime(null)
+    await new Promise((resolve) => {
+      window.setTimeout(resolve, 620)
+    })
+
     try {
       await removeOwnedSlime({ slimeId, userId: offlineUser.id })
       setSlimes((currentSlimes) => (
         currentSlimes.filter((currentSlime) => currentSlime.id !== slimeId)
       ))
-      setPendingDeleteSlime(null)
       await refreshFoodProductionReadiness(offlineUser.id)
     } catch (error) {
       notifyActionFailure('Unable to remove slime.', error)
+    } finally {
+      setDeletingSlimeIds((currentIds) => currentIds.filter((currentId) => currentId !== slimeId))
     }
   }
 
@@ -292,6 +298,7 @@ function App() {
       <WorldView
         canProduceFood={canProduceFood}
         canSummon={canSummonFromGround}
+        deletingSlimeIds={deletingSlimeIds}
         displayedSlimes={displayedSlimes}
         foodFactoryAnimationRun={foodFactoryAnimationRun}
         foodQuantity={foodQuantity}

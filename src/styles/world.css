@@ -78,6 +78,10 @@
   filter: none;
 }
 
+.fence-tile--right {
+  transform: scaleX(-1);
+}
+
 .friend-yard-label {
   position: absolute;
   top: 0;

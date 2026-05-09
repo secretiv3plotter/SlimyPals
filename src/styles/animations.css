@@ -48,6 +48,19 @@
   }
 }
 
+@keyframes blackhole-play {
+  to {
+    background-position-x:
+      calc(
+        var(--slime-frame-width) *
+        var(--slime-frame-count) *
+        var(--slime-scale) *
+        var(--slime-level-scale) *
+        -1
+      );
+  }
+}
+
 @keyframes slime-idle {
   to {
     background-position-x:
@@ -55,6 +68,7 @@
         var(--slime-frame-width) *
         var(--slime-frame-count) *
         var(--slime-scale) *
+        var(--slime-level-scale) *
         -1
       );
   }

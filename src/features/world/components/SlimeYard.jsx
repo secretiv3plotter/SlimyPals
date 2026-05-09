@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import blackholeSprite from '../../../assets/slimes/blackhole.png'
 import {
   SLIME_FRAME_HEIGHT,
   SLIME_FRAME_WIDTH,
@@ -8,12 +9,24 @@ import {
   TILE_SIZE,
 } from '../../../game/worldConstants'
 import { getGridSizeStyle } from '../../../game/mapTiles'
-import { getSlimeColorFilter, getSlimeMotionPath } from '../../../game/slimePresentation'
-import { simpleSlimeSprite, slimeOverlaySprites } from '../../../game/slimeSprites'
+import {
+  getSlimeColorFilter,
+  getSlimeFrameCount,
+  getSlimeLevelScale,
+  getSlimeMotionPath,
+  getSlimeShadowEffect,
+} from '../../../game/slimePresentation'
+import {
+  getSlimeBaseSprite,
+  getSlimeOverlayShadowSprite,
+  getSlimeOverlaySprite,
+  getSlimeShadowSprite,
+} from '../../../game/slimeSprites'
 import { getSlimeDisplayName } from '../../../game/slimeText'
 
 function SlimeYard({
   canRemoveSlimes = true,
+  deletingSlimeIds = [],
   displayedSlimes,
   feedTargetOwner = null,
   feedTargetOwnerId = null,
@@ -51,6 +64,7 @@ function SlimeYard({
           <YardSlime
             key={slime.id}
             canRemoveSlimes={canRemoveSlimes}
+            isDeleting={deletingSlimeIds.includes(slime.id)}
             feedTargetOwner={feedTargetOwner}
             feedTargetOwnerId={feedTargetOwnerId}
             feedTargetType={feedTargetType}
@@ -67,6 +81,7 @@ function SlimeYard({
 
 function YardSlime({
   canRemoveSlimes,
+  isDeleting,
   feedTargetOwner,
   feedTargetOwnerId,
   feedTargetType,
@@ -79,7 +94,13 @@ function YardSlime({
   const [jumpRun, setJumpRun] = useState(0)
   const [isLevelPinned, setIsLevelPinned] = useState(false)
   const slimeMotionPath = getSlimeMotionPath(slime, index)
-  const overlaySprite = slimeOverlaySprites[slime.rarity]?.[slime.type]
+  const baseSprite = getSlimeBaseSprite(slime.level)
+  const shadowSprite = getSlimeShadowSprite(slime.level)
+  const overlaySprite = getSlimeOverlaySprite(slime.rarity, slime.type, slime.level)
+  const overlayShadowSprite = getSlimeOverlayShadowSprite(slime.rarity, slime.type, slime.level)
+  const frameCount = getSlimeFrameCount(slime.level)
+  const levelScale = getSlimeLevelScale(slime.level)
+  const shadowEffect = getSlimeShadowEffect(slime.level)
 
   useEffect(() => {
     return () => window.clearTimeout(levelTimerRef.current)
@@ -97,25 +118,30 @@ function YardSlime({
 
   function handleKillClick(event) {
     event.stopPropagation()
+    if (isDeleting) {
+      return
+    }
+
     onRemoveSlime?.(slime)
   }
 
   return (
     <div
       className="yard-slime"
-      data-feed-target-owner={isFeedTarget ? feedTargetOwner : undefined}
-      data-feed-target-owner-id={isFeedTarget ? feedTargetOwnerId : undefined}
-      data-feed-target-type={isFeedTarget ? feedTargetType : undefined}
-      data-slime-id={isFeedTarget ? slime.id : undefined}
-      data-slime-last-fed-at={isFeedTarget ? slime.last_fed_at : undefined}
-      data-slime-level={isFeedTarget ? slime.level : undefined}
-      data-slime-name={isFeedTarget ? getSlimeDisplayName(slime) : undefined}
+      data-feed-target-owner={isFeedTarget && !isDeleting ? feedTargetOwner : undefined}
+      data-feed-target-owner-id={isFeedTarget && !isDeleting ? feedTargetOwnerId : undefined}
+      data-feed-target-type={isFeedTarget && !isDeleting ? feedTargetType : undefined}
+      data-slime-id={isFeedTarget && !isDeleting ? slime.id : undefined}
+      data-slime-last-fed-at={isFeedTarget && !isDeleting ? slime.last_fed_at : undefined}
+      data-slime-level={isFeedTarget && !isDeleting ? slime.level : undefined}
+      data-slime-name={isFeedTarget && !isDeleting ? getSlimeDisplayName(slime) : undefined}
       onPointerDown={handlePointerDown}
       style={{
-        '--slime-frame-count': 4,
+        '--slime-frame-count': frameCount,
         '--slime-frame-height': `${SLIME_FRAME_HEIGHT}px`,
         '--slime-frame-width': `${SLIME_FRAME_WIDTH}px`,
         '--slime-scale': SLIME_SCALE,
+        '--slime-level-scale': levelScale,
         '--slime-x-0': `${slimeMotionPath.points[0].x}px`,
         '--slime-y-0': `${slimeMotionPath.points[0].y}px`,
         '--slime-x-1': `${slimeMotionPath.points[1].x}px`,
@@ -129,6 +155,7 @@ function YardSlime({
         '--slime-face-2': slimeMotionPath.faces[2],
         '--slime-face-3': slimeMotionPath.faces[3],
         '--slime-wander-delay': `${index * -1.7}s`,
+        '--slime-shadow-effect': shadowEffect,
       }}
     >
       <div
@@ -137,17 +164,40 @@ function YardSlime({
       >
         <div className="yard-slime-facing">
           <div
+            className="yard-slime-shadow"
+            style={{
+              backgroundImage: `url(${shadowSprite})`,
+            }}
+          />
+          <div
             className="yard-slime-base"
             style={{
-              '--slime-base-sprite': `url(${simpleSlimeSprite})`,
+              '--slime-base-sprite': `url(${baseSprite})`,
               '--slime-filter': getSlimeColorFilter(slime.color),
             }}
           />
+          {overlayShadowSprite && (
+            <div
+              className="yard-slime-overlay-shadow"
+              style={{
+                backgroundImage: `url(${overlayShadowSprite})`,
+              }}
+            />
+          )}
           {overlaySprite && (
             <div
               className="yard-slime-overlay"
               style={{
                 backgroundImage: `url(${overlaySprite})`,
+              }}
+            />
+          )}
+          {isDeleting && (
+            <div
+              className="yard-slime-blackhole"
+              aria-hidden="true"
+              style={{
+                backgroundImage: `url(${blackholeSprite})`,
               }}
             />
           )}
@@ -160,6 +210,7 @@ function YardSlime({
             className="yard-slime-kill"
             type="button"
             aria-label={`Kill level ${slime.level} slime`}
+            disabled={isDeleting}
             onClick={handleKillClick}
             onPointerDown={(event) => event.stopPropagation()}
           >

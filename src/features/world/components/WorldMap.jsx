@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import foodSprite from '../../../assets/sprites/food.png'
 import { runtimeConfig } from '../../../config'
@@ -24,6 +24,7 @@ import SummoningGround from './SummoningGround'
 function WorldMap({
   canProduceFood,
   canSummon,
+  deletingSlimeIds,
   displayedSlimes,
   foodFactoryAnimationRun,
   foodQuantity,
@@ -54,11 +55,38 @@ function WorldMap({
   const summoningGroundPosition = getSummoningGroundPosition(fencePosition)
   const canDragFood = foodQuantity > 0
 
+  useEffect(() => {
+    function clearFoodDrag() {
+      if (!draggedFood) {
+        return
+      }
+
+      setDraggedFood(null)
+      onFoodDragEnd()
+    }
+
+    window.addEventListener('pointercancel', clearFoodDrag)
+    window.addEventListener('pointerup', clearFoodDrag)
+    window.addEventListener('blur', clearFoodDrag)
+
+    return () => {
+      window.removeEventListener('pointercancel', clearFoodDrag)
+      window.removeEventListener('pointerup', clearFoodDrag)
+      window.removeEventListener('blur', clearFoodDrag)
+    }
+  }, [draggedFood, onFoodDragEnd])
+
+  function clearCurrentFoodDrag() {
+    setDraggedFood(null)
+    onFoodDragEnd()
+  }
+
   function handleFoodPointerDown(event) {
     if (!canDragFood) {
       return
     }
 
+    event.preventDefault()
     event.stopPropagation()
     event.currentTarget.setPointerCapture(event.pointerId)
     setDraggedFood({
@@ -102,8 +130,7 @@ function WorldMap({
       .elementFromPoint(event.clientX, event.clientY)
       ?.closest('[data-slime-id]')
 
-    setDraggedFood(null)
-    onFoodDragEnd()
+    clearCurrentFoodDrag()
 
     if (slimeTarget?.dataset.feedTargetType === 'friend') {
       onFeedFriendSlime({
@@ -149,6 +176,7 @@ function WorldMap({
       )}
       <div className="map-tint-layer" />
       <SlimeYard
+        deletingSlimeIds={deletingSlimeIds}
         displayedSlimes={displayedSlimes}
         onRemoveSlime={onRemoveSlime}
         slimeYardPosition={slimeYardPosition}
@@ -179,6 +207,7 @@ function WorldMap({
         role="button"
         aria-disabled={!canDragFood}
         draggable="false"
+        onDragStart={(event) => event.preventDefault()}
         onPointerCancel={handleFoodPointerUp}
         onPointerDown={handleFoodPointerDown}
         onPointerMove={handleFoodPointerMove}
@@ -207,6 +236,7 @@ function WorldMap({
           alt=""
           aria-hidden="true"
           draggable="false"
+          onDragStart={(event) => event.preventDefault()}
           style={{
             left: draggedFood.x,
             top: draggedFood.y,

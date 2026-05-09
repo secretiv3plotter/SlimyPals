@@ -1,4 +1,4 @@
-import foodFactorySprite from '../../../assets/sprites/foodfactory.png'
+import foodFactorySprite from '../../../assets/sprites/food_factory.png'
 import {
   FOOD_FACTORY_FRAME_COUNT,
   FOOD_FACTORY_FRAME_HEIGHT,
