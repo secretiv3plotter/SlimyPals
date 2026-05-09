@@ -33,7 +33,6 @@ function GameMenu({
             aria-modal="true"
             onClick={(event) => event.stopPropagation()}
           >
-            {menuMode !== 'friends' && (
               <button
                 className="menu-modal-close"
                 type="button"
@@ -42,7 +41,6 @@ function GameMenu({
               >
                 <span aria-hidden="true" />
               </button>
-            )}
             {menuMode === 'main' && (
               <div className="menu-main-actions">
                 <button
@@ -122,9 +120,9 @@ function GameMenu({
                 <button
                   className="menu-modal-action menu-modal-action--small"
                   type="button"
-                  onClick={() => onSetMenuMode('main')}
+                  onClick={() => onSetMenuMode('friend-requests')}
                 >
-                  BACK
+                  VIEW FRIEND REQUESTS
                 </button>
               </div>
             )}
