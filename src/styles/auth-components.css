@@ -1,0 +1,173 @@
+.auth-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.auth-tab {
+  min-height: 48px;
+  border: 3px solid #07110b;
+  background: #d9c0ef;
+  color: #170d1b;
+  font-family: var(--pixel-font);
+  font-size: clamp(0.62rem, 1.1vw, 0.72rem);
+  cursor: pointer;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.18);
+  transition: transform 120ms ease, background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+
+.auth-tab:hover,
+.auth-tab:focus-visible {
+  transform: translateY(-4px) scale(1.02);
+  background: #8f67c3;
+  box-shadow: 7px 7px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+.auth-tab--active {
+  background: #7f5ab6;
+  color: #170d1b;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+.auth-card--login .auth-tab--active { background: #7cbf84; color: #0f2314; }
+.auth-card--register .auth-tab--active { background: #67b274; color: #0f2314; }
+.auth-card--login .auth-tab:hover,
+.auth-card--login .auth-tab:focus-visible { background: #88c892; }
+.auth-card--register .auth-tab:hover,
+.auth-card--register .auth-tab:focus-visible { background: #76ba7c; }
+
+/* --- Status Messages --- */
+.auth-status {
+  margin: 6px 0 0;
+  padding: 7px 9px;
+  border: 3px solid #07110b;
+  font-size: clamp(0.74rem, 1.3vw, 0.84rem);
+  line-height: 1.45;
+  background: rgba(232, 218, 247, 0.88);
+  color: #22172d;
+}
+
+.auth-status--error { background: #efb1ad; color: #561815; }
+.auth-status--success { background: #d6e7b9; color: #27411f; }
+
+/* --- Form & Fields --- */
+.auth-form {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  gap: clamp(1px, 0.35vw, 2px);
+}
+
+.auth-field {
+  display: grid;
+  gap: clamp(1px, 0.35vw, 2px);
+}
+
+.auth-field-label {
+  color: #edf3dd;
+  font-family: var(--pixel-font);
+  font-size: clamp(0.58rem, 1.15vw, 0.9rem);
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+}
+
+.auth-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+/* --- Inputs --- */
+.auth-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 3px solid #07110b;
+  background: #f7f6ef;
+  color: #233327;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.14);
+  font-size: clamp(0.82rem, 1.35vw, 0.98rem);
+}
+
+.auth-input::placeholder { color: #829084; }
+
+.auth-input:focus {
+  outline: none;
+  border-color: #ddb8f3;
+  box-shadow: 0 0 0 4px rgba(221, 184, 243, 0.18), 4px 4px 0 rgba(0, 0, 0, 0.14);
+}
+
+.auth-password-control { position: relative; }
+.auth-password-input { padding-right: 48px; }
+
+.auth-password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: #233327;
+  cursor: pointer;
+  line-height: 0;
+  transform: translateY(-25px);
+  padding: 0;
+}
+
+.auth-password-toggle svg { width: 18px; height: 18px; display: block; transform: translateY(-1px); }
+.auth-password-toggle:hover,
+.auth-password-toggle:focus-visible { color: #7f5ab6; outline: none; }
+.auth-password-toggle:disabled { cursor: not-allowed; opacity: 0.45; }
+
+/* --- Checkbox --- */
+.auth-check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #eef4df;
+  font-size: clamp(0.72rem, 1.2vw, 0.88rem);
+  line-height: 1.35;
+}
+
+.auth-check input { width: 15px; height: 15px; margin: 0; accent-color: #ccb0ed; }
+
+.auth-actions {
+  display: grid;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.auth-primary-button,
+.auth-secondary-button {
+  min-height: 42px;
+  border: 3px solid #07110b;
+  font-family: var(--pixel-font);
+  font-size: clamp(0.58rem, 1vw, 0.68rem);
+  cursor: pointer;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.14);
+  transition: transform 120ms ease, filter 120ms ease, background-color 120ms ease, box-shadow 120ms ease;
+}
+
+.auth-primary-button { background: #c9a4e7; color: #170d1b; }
+.auth-secondary-button { background: #b78dd9; color: #170d1b; }
+
+.auth-primary-button:hover,
+.auth-primary-button:focus-visible,
+.auth-secondary-button:hover,
+.auth-secondary-button:focus-visible {
+  background: #8f67c3;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 7px 7px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  filter: brightness(1.02);
+}
+
+.auth-primary-button:disabled,
+.auth-secondary-button:disabled,
+.auth-tab:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}

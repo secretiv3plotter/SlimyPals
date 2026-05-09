@@ -6,6 +6,13 @@ function GameMenu({
   onClose,
   onConfirmLogout,
   onSetMenuMode,
+  friends,
+  friendName,
+  setFriendName,
+  handleAddFriend,
+  handleRemoveFriend,
+  selectedFriend,
+  setSelectedFriend,
 }) {
   return (
     <>
@@ -16,7 +23,11 @@ function GameMenu({
           onClick={onClose}
         >
           <section
-            className="menu-modal"
+              className={
+                menuMode === 'unfriend-confirm'
+                  ? 'unfriend-popup'
+                  : 'menu-modal'
+              }
             role="dialog"
             aria-label="Game menu"
             aria-modal="true"
@@ -53,12 +64,60 @@ function GameMenu({
             {menuMode === 'friends' && (
               <div className="menu-panel">
                 <h2 className="menu-panel-title">FRIENDS</h2>
+                <div className="friend-input-row">
+                  <input
+                    type="text"
+                    value={friendName}
+                    onChange={(event) => setFriendName(event.target.value)}
+                    placeholder="Friend name"
+                    className="friend-input"
+                  />
+
+                  <button
+                    className="menu-modal-action menu-modal-action--small"
+                    type="button"
+                    onClick={handleAddFriend}
+                  >
+                    ADD FRIEND
+                  </button>
+                </div>
+
                 <div className="friend-slots" aria-label="Friend slots">
-                  {Array.from({ length: FRIEND_SLOTS }, (_, index) => (
-                    <div className="friend-slot" key={index}>
-                      EMPTY SLOT
-                    </div>
-                  ))}
+                  {friends.length === 0 ? (
+                    Array.from({ length: FRIEND_SLOTS }, (_, index) => (
+                      <div className="friend-slot" key={index}>
+                        EMPTY SLOT
+                      </div>
+                    ))
+                  ) : (
+                    friends.map((friend) => (
+                      <div className="friend-slot friend-slot-filled" key={friend.id}>
+                        <div className="friend-info">
+                          <div
+                            className={
+                              friend.online
+                                ? 'friend-status online'
+                                : 'friend-status offline'
+                            }
+                          />
+
+                          <span className="friend-name">
+                            {friend.name}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          className="friend-remove-button"
+                          onClick={() => {
+                            setSelectedFriend(friend)
+                            onSetMenuMode('unfriend-confirm')
+                          }}
+                        >
+                          X
+                        </button>
+                      </div>
+                    ))
+                  )}
                 </div>
                 <button
                   className="menu-modal-action menu-modal-action--small"
@@ -67,6 +126,38 @@ function GameMenu({
                 >
                   BACK
                 </button>
+              </div>
+            )}
+            {menuMode === 'unfriend-confirm' && (
+              <div className="menu-panel">
+                <h2 className="menu-panel-title">
+                  UNFRIEND {selectedFriend?.name}?
+                </h2>
+
+                <div className="menu-confirm-actions">
+                  <button
+                    className="menu-modal-action menu-modal-action--small"
+                    type="button"
+                    onClick={() => {
+                      handleRemoveFriend(selectedFriend.id)
+                      setSelectedFriend(null)
+                      onSetMenuMode('friends')
+                    }}
+                  >
+                    YES
+                  </button>
+
+                  <button
+                    className="menu-modal-action menu-modal-action--small"
+                    type="button"
+                    onClick={() => {
+                      setSelectedFriend(null)
+                      onSetMenuMode('friends')
+                    }}
+                  >
+                    NO
+                  </button>
+                </div>
               </div>
             )}
             {menuMode === 'logout' && (

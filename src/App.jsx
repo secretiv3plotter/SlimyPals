@@ -29,6 +29,9 @@ function App() {
   const [offlineUser, setOfflineUser] = useState(null)
   const [pendingDeleteSlime, setPendingDeleteSlime] = useState(null)
   const [slimes, setSlimes] = useState([])
+  const [friends, setFriends] = useState([])
+  const [friendName, setFriendName] = useState('')
+  const [selectedFriend, setSelectedFriend] = useState(null)
   const [summoningOrbAnimationRun, setSummoningOrbAnimationRun] = useState(0)
   const canSummonFromGround = (offlineUser?.daily_summons_left ?? 0) > 0
   const displayedSlimes = slimes.slice(0, 25)
@@ -235,6 +238,44 @@ function App() {
     }
   }
 
+  function handleAddFriend() {
+    if (!friendName.trim()) return
+
+    const newFriend = {
+      id: Date.now(),
+      name: friendName,
+
+      // temp status
+      online: Math.random() > 0.5,
+    }
+
+    setFriends((currentFriends) => [
+      ...currentFriends,
+      newFriend,
+    ])
+
+    setFriendName('')
+  }
+
+  function handleRemoveFriend(friendId) {
+    setFriends((currentFriends) =>
+      currentFriends.filter((friend) => friend.id !== friendId)
+    )
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <AuthScreen
+        onLogin={async () => {
+          setIsAuthenticated(true)
+        }}
+        onRegister={async () => {
+          setIsAuthenticated(true)
+        }}
+      />
+    )
+  }
+
   return (
     <main className="relative h-svh w-screen overflow-hidden bg-[#547244]">
       <button
@@ -260,6 +301,18 @@ function App() {
         onClose={closeMenu}
         onConfirmLogout={confirmLogout}
         onSetMenuMode={setMenuMode}
+        friends={friends}
+        friendName={friendName}
+        setFriendName={setFriendName}
+        handleAddFriend={handleAddFriend}
+        handleRemoveFriend={handleRemoveFriend}
+        selectedFriend={selectedFriend}
+        setSelectedFriend={setSelectedFriend}
+      />
+      <SlimeDeleteConfirm
+        slime={pendingDeleteSlime}
+        onCancel={() => setPendingDeleteSlime(null)}
+        onConfirm={handleRemoveSlime}
       />
       <SlimeDeleteConfirm
         slime={pendingDeleteSlime}

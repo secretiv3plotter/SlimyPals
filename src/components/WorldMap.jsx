@@ -147,6 +147,7 @@ function WorldMap({
           fenceTiles={fenceTiles}
         />
       )}
+      <div className="map-tint-layer" />
       <SlimeYard
         displayedSlimes={displayedSlimes}
         onRemoveSlime={onRemoveSlime}
