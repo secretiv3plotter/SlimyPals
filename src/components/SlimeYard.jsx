@@ -10,8 +10,18 @@ import {
 import { getGridSizeStyle } from '../game/mapTiles'
 import { getSlimeColorFilter, getSlimeMotionPath } from '../game/slimePresentation'
 import { simpleSlimeSprite, slimeOverlaySprites } from '../game/slimeSprites'
+import { getSlimeDisplayName } from '../game/slimeText'
 
-function SlimeYard({ displayedSlimes, onRemoveSlime, slimeYardPosition }) {
+function SlimeYard({
+  canRemoveSlimes = true,
+  displayedSlimes,
+  feedTargetOwner = null,
+  feedTargetOwnerId = null,
+  feedTargetType = 'own',
+  isFeedTarget = true,
+  onRemoveSlime,
+  slimeYardPosition,
+}) {
   return (
     <>
       <div
@@ -40,7 +50,12 @@ function SlimeYard({ displayedSlimes, onRemoveSlime, slimeYardPosition }) {
         {displayedSlimes.map((slime, index) => (
           <YardSlime
             key={slime.id}
+            canRemoveSlimes={canRemoveSlimes}
+            feedTargetOwner={feedTargetOwner}
+            feedTargetOwnerId={feedTargetOwnerId}
+            feedTargetType={feedTargetType}
             index={index}
+            isFeedTarget={isFeedTarget}
             onRemoveSlime={onRemoveSlime}
             slime={slime}
           />
@@ -50,7 +65,16 @@ function SlimeYard({ displayedSlimes, onRemoveSlime, slimeYardPosition }) {
   )
 }
 
-function YardSlime({ index, onRemoveSlime, slime }) {
+function YardSlime({
+  canRemoveSlimes,
+  feedTargetOwner,
+  feedTargetOwnerId,
+  feedTargetType,
+  index,
+  isFeedTarget,
+  onRemoveSlime,
+  slime,
+}) {
   const levelTimerRef = useRef(null)
   const [jumpRun, setJumpRun] = useState(0)
   const [isLevelPinned, setIsLevelPinned] = useState(false)
@@ -73,13 +97,19 @@ function YardSlime({ index, onRemoveSlime, slime }) {
 
   function handleKillClick(event) {
     event.stopPropagation()
-    onRemoveSlime(slime)
+    onRemoveSlime?.(slime)
   }
 
   return (
     <div
       className="yard-slime"
-      data-slime-id={slime.id}
+      data-feed-target-owner={isFeedTarget ? feedTargetOwner : undefined}
+      data-feed-target-owner-id={isFeedTarget ? feedTargetOwnerId : undefined}
+      data-feed-target-type={isFeedTarget ? feedTargetType : undefined}
+      data-slime-id={isFeedTarget ? slime.id : undefined}
+      data-slime-last-fed-at={isFeedTarget ? slime.last_fed_at : undefined}
+      data-slime-level={isFeedTarget ? slime.level : undefined}
+      data-slime-name={isFeedTarget ? getSlimeDisplayName(slime) : undefined}
       onPointerDown={handlePointerDown}
       style={{
         '--slime-frame-count': 4,
@@ -125,15 +155,17 @@ function YardSlime({ index, onRemoveSlime, slime }) {
       </div>
       <div className={`yard-slime-level${isLevelPinned ? ' yard-slime-level--pinned' : ''}`}>
         <span>Level {slime.level}</span>
-        <button
-          className="yard-slime-kill"
-          type="button"
-          aria-label={`Kill level ${slime.level} slime`}
-          onClick={handleKillClick}
-          onPointerDown={(event) => event.stopPropagation()}
-        >
-          KILL
-        </button>
+        {canRemoveSlimes && (
+          <button
+            className="yard-slime-kill"
+            type="button"
+            aria-label={`Kill level ${slime.level} slime`}
+            onClick={handleKillClick}
+            onPointerDown={(event) => event.stopPropagation()}
+          >
+            KILL
+          </button>
+        )}
       </div>
     </div>
   )

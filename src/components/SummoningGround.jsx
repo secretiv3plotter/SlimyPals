@@ -21,7 +21,7 @@ function SummoningGround({
       className={`summoning-ground${canSummon ? '' : ' summoning-ground--disabled'}`}
       type="button"
       aria-label="Summon slime"
-      disabled={!canSummon}
+      aria-disabled={!canSummon}
       onClick={onClick}
       onPointerCancel={onSpritePointerUp}
       onPointerDown={onSpritePointerDown}

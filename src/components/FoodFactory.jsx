@@ -23,7 +23,8 @@ function FoodFactory({
       className={`food-factory${isAnimating ? ' food-factory--active' : ''}${!canProduce && !isAnimating ? ' food-factory--disabled' : ''}`}
       type="button"
       aria-label="Produce slime food"
-      disabled={!canProduce || isAnimating}
+      aria-disabled={!canProduce}
+      disabled={isAnimating}
       onAnimationEnd={onAnimationEnd}
       onClick={onClick}
       onPointerCancel={onSpritePointerUp}

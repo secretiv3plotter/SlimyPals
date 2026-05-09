@@ -65,6 +65,27 @@
   transform: scaleX(-1);
 }
 
+.friend-yard-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  padding: 4px 6px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.22) 48%,
+    rgba(0, 0, 0, 0) 82%
+  );
+  color: #111111;
+  font-family: var(--pixel-font);
+  font-size: 0.5rem;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
 .map-tile {
   width: 16px;
   height: 16px;

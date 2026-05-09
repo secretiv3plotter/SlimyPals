@@ -60,6 +60,20 @@ export const DB_SCHEMA = Object.freeze({
       created_at: 'timestamp',
     },
   },
+  [STORES.PENDING_SYNC_ACTION]: {
+    storeSchema: 'id,type,status,created_at,last_attempted_at',
+    columns: {
+      id: 'uuid client action id',
+      type: 'varchar backend action name',
+      payload: 'json action payload',
+      status: 'varchar pending|syncing|accepted|rejected',
+      attempt_count: 'int sync attempt count',
+      last_error_code: 'varchar last backend/client error code',
+      created_at: 'timestamp',
+      last_attempted_at: 'timestamp',
+      deleted_at: 'timestamp optional pruning marker',
+    },
+  },
 })
 
 export const INDEX_ALIASES = Object.freeze({
@@ -93,5 +107,11 @@ export const INDEX_ALIASES = Object.freeze({
     by_target_slime_id: 'target_slime_id',
     by_action_type: 'action_type',
     by_created_at: 'created_at',
+  },
+  [STORES.PENDING_SYNC_ACTION]: {
+    by_type: 'type',
+    by_status: 'status',
+    by_created_at: 'created_at',
+    by_last_attempted_at: 'last_attempted_at',
   },
 })

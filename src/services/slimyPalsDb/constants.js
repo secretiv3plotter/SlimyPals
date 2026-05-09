@@ -1,5 +1,5 @@
 export const DB_NAME = 'slimy-pals'
-export const DB_VERSION = 2
+export const DB_VERSION = 3
 
 export const STORES = Object.freeze({
   USER: 'user',
@@ -7,6 +7,7 @@ export const STORES = Object.freeze({
   FRIENDSHIP: 'friendship',
   SLIME: 'slime',
   INTERACTION_LOG: 'interaction_log',
+  PENDING_SYNC_ACTION: 'pending_sync_action',
 })
 
 export const GAME_LIMITS = Object.freeze({
@@ -36,4 +37,20 @@ export const FRIENDSHIP_STATUSES = Object.freeze({
 export const INTERACTION_TYPES = Object.freeze({
   POKE: 'poke',
   FEED: 'feed',
+})
+
+export const SYNC_ACTION_STATUSES = Object.freeze({
+  PENDING: 'pending',
+  SYNCING: 'syncing',
+  ACCEPTED: 'accepted',
+  REJECTED: 'rejected',
+})
+
+export const SYNC_ACTION_TYPES = Object.freeze({
+  SUMMON_SLIME: 'summonSlime',
+  PRODUCE_FOOD: 'produceFood',
+  FEED_OWN_SLIME: 'feedOwnSlime',
+  FEED_FRIEND_SLIME: 'feedFriendSlime',
+  POKE_FRIEND_SLIME: 'pokeFriendSlime',
+  DELETE_OWN_SLIME: 'deleteOwnSlime',
 })
