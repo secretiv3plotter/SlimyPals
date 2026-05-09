@@ -84,8 +84,6 @@ function RegisterForm({ isLoading, onSubmit, onSwitchMode }) {
           I ALREADY HAVE AN ACCOUNT
         </button>
       </div>
-
-      <p className="auth-footer">You can rename your slime empire later if you want.</p>
     </form>
   )
 }

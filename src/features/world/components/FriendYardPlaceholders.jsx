@@ -2,9 +2,9 @@ import {
   FENCE_COLUMNS,
   FENCE_ROWS,
   TILE_SIZE,
-} from '../game/worldConstants'
-import { mockOnlineFriends } from '../game/mockOnlineFriends'
-import { getSlimeYardPosition } from '../game/worldLayout'
+} from '../../../game/worldConstants'
+import { mockOnlineFriends } from '../../../game/mockOnlineFriends'
+import { getSlimeYardPosition } from '../../../game/worldLayout'
 import FenceOverlay from './FenceOverlay'
 import SlimeYard from './SlimeYard'
 

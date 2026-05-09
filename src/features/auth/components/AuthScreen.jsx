@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
+import AuthMapBackground from './AuthMapBackground'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
-import brandName from '../../assets/brand/brandname.png'
+import brandName from '../../../assets/brand/brandname.png'
 
 const AUTH_MODES = Object.freeze({
   LOGIN: 'login',
@@ -17,12 +18,11 @@ function AuthScreen({
   onRegister = async () => {},
 }) {
   const [mode, setMode] = useState(AUTH_MODES.LOGIN)
-  const [previewMode, setPreviewMode] = useState(null)
   const [status, setStatus] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [, forceRender] = useState(0)
+  const [dragPreview, setDragPreview] = useState(null)
   const dragRef = useRef(null)
-  const visibleMode = previewMode ?? mode
+  const visibleMode = mode
 
   async function runAction(action, successMessage) {
     setStatus(null)
@@ -50,7 +50,6 @@ function AuthScreen({
         onLogin({
           identifier: values.identifier.trim(),
           password: values.password,
-          rememberMe: values.rememberMe,
         }),
       'Welcome back. Loading your slime yard now.',
     )
@@ -83,9 +82,7 @@ function AuthScreen({
     return !target.closest('input, button, textarea, select, a, label')
   }
 
-  function getSliderTranslate() {
-    const drag = dragRef.current
-
+  function getSliderTranslate(drag) {
     if (!drag) {
       return visibleMode === AUTH_MODES.LOGIN ? SLIDE_MAX : SLIDE_MIN
     }
@@ -106,7 +103,7 @@ function AuthScreen({
     const rect = event.currentTarget.getBoundingClientRect()
 
     event.currentTarget.setPointerCapture(event.pointerId)
-    dragRef.current = {
+    const nextDrag = {
       currentX: event.clientX,
       mode: visibleMode,
       pointerId: event.pointerId,
@@ -114,7 +111,8 @@ function AuthScreen({
       width: Math.max(rect.width, 1),
     }
 
-    forceRender((value) => value + 1)
+    dragRef.current = nextDrag
+    setDragPreview(nextDrag)
   }
 
   function handlePointerMove(event) {
@@ -124,12 +122,13 @@ function AuthScreen({
       return
     }
 
-    dragRef.current = {
+    const nextDrag = {
       ...drag,
       currentX: event.clientX,
     }
 
-    forceRender((value) => value + 1)
+    dragRef.current = nextDrag
+    setDragPreview(nextDrag)
   }
 
   function finishDrag(event) {
@@ -154,18 +153,17 @@ function AuthScreen({
         : AUTH_MODES.LOGIN,
     )
 
-    setPreviewMode(null)
-
     dragRef.current = null
-    forceRender((value) => value + 1)
+    setDragPreview(null)
   }
 
-  const isDragging = Boolean(dragRef.current)
-  const sliderTranslate = getSliderTranslate()
+  const isDragging = Boolean(dragPreview)
+  const sliderTranslate = getSliderTranslate(dragPreview)
   const screenMode = visibleMode
 
   return (
     <main className={`auth-screen auth-screen--${screenMode}`}>
+      <AuthMapBackground />
       <section
         className="auth-stage"
         aria-label="Authentication"
@@ -189,9 +187,7 @@ function AuthScreen({
               onRegister={handleRegister}
               onCommitMode={(nextMode) => {
                 setMode(nextMode)
-                setPreviewMode(nextMode)
               }}
-              onPreviewMode={setPreviewMode}
               status={status}
               variant={AUTH_MODES.LOGIN}
             />
@@ -206,9 +202,7 @@ function AuthScreen({
               onRegister={handleRegister}
               onCommitMode={(nextMode) => {
                 setMode(nextMode)
-                setPreviewMode(nextMode)
               }}
-              onPreviewMode={setPreviewMode}
               status={status}
               variant={AUTH_MODES.REGISTER}
             />
@@ -226,12 +220,10 @@ function AuthCard({
   onLogin,
   onRegister,
   onCommitMode,
-  onPreviewMode,
   status,
   variant,
 }) {
   const isLoginCard = variant === AUTH_MODES.LOGIN
-  const isRegisterCard = variant === AUTH_MODES.REGISTER
 
   return (
     <section
@@ -250,10 +242,6 @@ function AuthCard({
           role="tab"
           aria-selected={mode === AUTH_MODES.LOGIN}
           aria-controls="auth-panel-login"
-          onMouseEnter={() => onPreviewMode(AUTH_MODES.LOGIN)}
-          onMouseLeave={() => onPreviewMode(null)}
-          onFocus={() => onPreviewMode(AUTH_MODES.LOGIN)}
-          onBlur={() => onPreviewMode(null)}
           onClick={() => onCommitMode(AUTH_MODES.LOGIN)}
         >
           LOG IN
@@ -266,10 +254,6 @@ function AuthCard({
           role="tab"
           aria-selected={mode === AUTH_MODES.REGISTER}
           aria-controls="auth-panel-register"
-          onMouseEnter={() => onPreviewMode(AUTH_MODES.REGISTER)}
-          onMouseLeave={() => onPreviewMode(null)}
-          onFocus={() => onPreviewMode(AUTH_MODES.REGISTER)}
-          onBlur={() => onPreviewMode(null)}
           onClick={() => onCommitMode(AUTH_MODES.REGISTER)}
         >
           CREATE ACCOUNT

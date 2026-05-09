@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getAuthSession, subscribeAuthSession } from '../services/authSession'
+import { getAuthSession, subscribeAuthSession } from '../../../services/authSession'
 
 export function useAuthSession() {
   const [authSession, setAuthSession] = useState(() => getAuthSession())

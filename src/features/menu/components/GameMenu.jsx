@@ -1,4 +1,4 @@
-import { FRIEND_SLOTS } from '../game/worldConstants'
+import { FRIEND_SLOTS } from '../../../game/worldConstants'
 
 function GameMenu({
   isOpen,

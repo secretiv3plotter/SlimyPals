@@ -6,11 +6,11 @@ import {
   SLIME_YARD_COLUMNS,
   SLIME_YARD_ROWS,
   TILE_SIZE,
-} from '../game/worldConstants'
-import { getGridSizeStyle } from '../game/mapTiles'
-import { getSlimeColorFilter, getSlimeMotionPath } from '../game/slimePresentation'
-import { simpleSlimeSprite, slimeOverlaySprites } from '../game/slimeSprites'
-import { getSlimeDisplayName } from '../game/slimeText'
+} from '../../../game/worldConstants'
+import { getGridSizeStyle } from '../../../game/mapTiles'
+import { getSlimeColorFilter, getSlimeMotionPath } from '../../../game/slimePresentation'
+import { simpleSlimeSprite, slimeOverlaySprites } from '../../../game/slimeSprites'
+import { getSlimeDisplayName } from '../../../game/slimeText'
 
 function SlimeYard({
   canRemoveSlimes = true,

@@ -1,5 +1,5 @@
-import { FENCE_COLUMNS, FENCE_ROWS, TILE_SIZE } from '../game/worldConstants'
-import { getGridSizeStyle } from '../game/mapTiles'
+import { FENCE_COLUMNS, FENCE_ROWS, TILE_SIZE } from '../../../game/worldConstants'
+import { getGridSizeStyle } from '../../../game/mapTiles'
 
 function FenceOverlay({ fencePosition, fenceTiles }) {
   return (

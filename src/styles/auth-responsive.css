@@ -7,7 +7,7 @@
   }
 
   .auth-card {
-    height: min(calc(100dvh - 24px), 540px);
+    max-height: calc(100dvh - 24px);
     padding: 8px 8px 10px;
   }
 
@@ -22,7 +22,7 @@
   .auth-tab { min-height: 44px; }
   .auth-input { min-height: 42px; }
   .auth-primary-button,
-  .auth-secondary-button { min-height: 40px; }
+  .auth-secondary-button { min-height: 52px; }
 }
 
 @media (max-height: 860px) {
@@ -34,8 +34,9 @@
   }
 
   .auth-card {
-    height: calc(100dvh - 150px);
+    max-height: calc(100dvh - 24px);
     padding: 8px;
+    --auth-form-gap: 10px;
   }
 
   .auth-header { min-height: 40px; }
@@ -47,9 +48,7 @@
 
   .auth-tabs { gap: 7px; margin-top: 4px; }
   .auth-tab { min-height: 44px; }
-  .auth-panel { margin-top: 2px; }
-  .auth-form { gap: 4px; }
-  .auth-field { gap: 1px; }
+  .auth-field { gap: 2px; }
   .auth-input { min-height: 40px; }
   .auth-actions { gap: 4px; }
 }
@@ -63,11 +62,7 @@
     right: 7px;
   }
 
-  .auth-password-toggle svg {
-    width: 16px;
-    height: 16px;
-    transform: translateY(2px);
-  }
+  .auth-password-toggle svg { width: 16px; height: 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { runtimeConfig } from '../config'
+import { runtimeConfig } from '../../../config'
 import MockFriendOnlineNotifications from './MockFriendOnlineNotifications'
 import NetworkStatusNotifier from './NetworkStatusNotifier'
 import NotificationStack from './NotificationStack'

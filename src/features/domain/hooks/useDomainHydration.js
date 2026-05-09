@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { getMsUntilNextLocalMidnight } from '../game/dailyTimers'
-import { subscribeToNetworkStatus } from '../services/networkStatus'
-import { hydrateDomain, refreshDailyTimers as refreshDomainDailyTimers } from '../services/slimyPalsDomain'
+import { getMsUntilNextLocalMidnight } from '../../../game/dailyTimers'
+import { subscribeToNetworkStatus } from '../../../services/networkStatus'
+import { hydrateDomain, refreshDailyTimers as refreshDomainDailyTimers } from '../../../services/slimyPalsDomain'
 
 export function useDomainHydration({
   offlineUserId,

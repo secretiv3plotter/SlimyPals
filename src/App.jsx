@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import menuButtonSprite from './assets/sprites/menu button.png'
-import AppNotificationLayer from './components/AppNotificationLayer'
-import GameMenu from './components/GameMenu'
-import SlimeDeleteConfirm from './components/SlimeDeleteConfirm'
-import WorldView from './components/WorldView'
-import { useDomainHydration } from './hooks/useDomainHydration'
+import { AuthScreen, useAuthSession } from './features/auth'
+import { useDomainHydration } from './features/domain'
+import { GameMenu, SlimeDeleteConfirm, useFriendMenuState } from './features/menu'
+import { AppNotificationLayer } from './features/notifications'
+import { WorldView } from './features/world'
 import { getSlimeDisplayName } from './game/slimeText'
 import { getMaximizedWorldView, getScreenViewSize } from './game/worldLayout'
-import { logoutAuthSession } from './services/authSession'
+import { loginAuthSession, logoutAuthSession, registerAuthSession } from './services/authSession'
 import {
   feedOwnedSlime,
   getFoodProductionAllowed,
@@ -29,10 +29,9 @@ function App() {
   const [offlineUser, setOfflineUser] = useState(null)
   const [pendingDeleteSlime, setPendingDeleteSlime] = useState(null)
   const [slimes, setSlimes] = useState([])
-  const [friends, setFriends] = useState([])
-  const [friendName, setFriendName] = useState('')
-  const [selectedFriend, setSelectedFriend] = useState(null)
   const [summoningOrbAnimationRun, setSummoningOrbAnimationRun] = useState(0)
+  const friendMenu = useFriendMenuState()
+  const { isAuthenticated } = useAuthSession()
   const canSummonFromGround = (offlineUser?.daily_summons_left ?? 0) > 0
   const displayedSlimes = slimes.slice(0, 25)
   const offlineUserId = offlineUser?.id
@@ -238,40 +237,22 @@ function App() {
     }
   }
 
-  function handleAddFriend() {
-    if (!friendName.trim()) return
-
-    const newFriend = {
-      id: Date.now(),
-      name: friendName,
-
-      // temp status
-      online: Math.random() > 0.5,
-    }
-
-    setFriends((currentFriends) => [
-      ...currentFriends,
-      newFriend,
-    ])
-
-    setFriendName('')
+  function handleLogin(credentials) {
+    return loginAuthSession({
+      password: credentials.password,
+      username: credentials.identifier,
+    })
   }
 
-  function handleRemoveFriend(friendId) {
-    setFriends((currentFriends) =>
-      currentFriends.filter((friend) => friend.id !== friendId)
-    )
+  function handleRegister(credentials) {
+    return registerAuthSession(credentials)
   }
 
   if (!isAuthenticated) {
     return (
       <AuthScreen
-        onLogin={async () => {
-          setIsAuthenticated(true)
-        }}
-        onRegister={async () => {
-          setIsAuthenticated(true)
-        }}
+        onLogin={handleLogin}
+        onRegister={handleRegister}
       />
     )
   }
@@ -301,18 +282,7 @@ function App() {
         onClose={closeMenu}
         onConfirmLogout={confirmLogout}
         onSetMenuMode={setMenuMode}
-        friends={friends}
-        friendName={friendName}
-        setFriendName={setFriendName}
-        handleAddFriend={handleAddFriend}
-        handleRemoveFriend={handleRemoveFriend}
-        selectedFriend={selectedFriend}
-        setSelectedFriend={setSelectedFriend}
-      />
-      <SlimeDeleteConfirm
-        slime={pendingDeleteSlime}
-        onCancel={() => setPendingDeleteSlime(null)}
-        onConfirm={handleRemoveSlime}
+        {...friendMenu}
       />
       <SlimeDeleteConfirm
         slime={pendingDeleteSlime}

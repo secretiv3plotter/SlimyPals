@@ -11,7 +11,8 @@
   background: #d9c0ef;
   color: #170d1b;
   font-family: var(--pixel-font);
-  font-size: clamp(0.62rem, 1.1vw, 0.72rem);
+  font-size: clamp(0.82rem, 1.45vw, 1rem);
+  font-weight: 900;
   cursor: pointer;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.18);
   transition: transform 120ms ease, background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
@@ -56,12 +57,15 @@
   display: grid;
   width: 100%;
   height: 100%;
-  gap: clamp(1px, 0.35vw, 2px);
+  align-content: start;
+  gap: var(--auth-form-gap);
 }
 
 .auth-field {
   display: grid;
-  gap: clamp(1px, 0.35vw, 2px);
+  grid-template-rows: auto auto;
+  gap: 2px;
+  align-content: start;
 }
 
 .auth-field-label {
@@ -69,7 +73,8 @@
   font-family: var(--pixel-font);
   font-size: clamp(0.58rem, 1.15vw, 0.9rem);
   letter-spacing: 0.14em;
-  line-height: 1.5;
+  line-height: 1.05;
+  margin: 0;
 }
 
 .auth-form-row {
@@ -114,7 +119,7 @@
   color: #233327;
   cursor: pointer;
   line-height: 0;
-  transform: translateY(-25px);
+  transform: translateY(-50%);
   padding: 0;
 }
 
@@ -138,15 +143,16 @@
 .auth-actions {
   display: grid;
   gap: 5px;
-  margin-top: 2px;
+  margin-top: clamp(10px, 2.2vh, 18px);
 }
 
 .auth-primary-button,
 .auth-secondary-button {
-  min-height: 42px;
+  min-height: clamp(54px, 8vh, 72px);
   border: 3px solid #07110b;
   font-family: var(--pixel-font);
-  font-size: clamp(0.58rem, 1vw, 0.68rem);
+  font-size: clamp(1rem, 2vw, 1.32rem);
+  font-weight: 900;
   cursor: pointer;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.14);
   transition: transform 120ms ease, filter 120ms ease, background-color 120ms ease, box-shadow 120ms ease;

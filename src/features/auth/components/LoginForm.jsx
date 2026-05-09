@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import PasswordField from './PasswordField'
 
-function LoginForm({ isLoading, onSubmit, onSwitchMode }) {
+function LoginForm({ isLoading, onSubmit }) {
   const [form, setForm] = useState({
     identifier: '',
     password: '',
-    rememberMe: true,
   })
 
   function updateField(name, value) {
@@ -21,7 +20,6 @@ function LoginForm({ isLoading, onSubmit, onSwitchMode }) {
     await onSubmit({
       identifier: form.identifier,
       password: form.password,
-      rememberMe: form.rememberMe,
     })
   }
 
@@ -53,31 +51,11 @@ function LoginForm({ isLoading, onSubmit, onSwitchMode }) {
         value={form.password}
       />
 
-      <label className="auth-check">
-        <input
-          type="checkbox"
-          checked={form.rememberMe}
-          onChange={(event) => updateField('rememberMe', event.target.checked)}
-          disabled={isLoading}
-        />
-        <span>Remember this device</span>
-      </label>
-
       <div className="auth-actions">
         <button className="auth-primary-button" type="submit" disabled={isLoading}>
           {isLoading ? 'LOGGING IN...' : 'ENTER THE YARD'}
         </button>
-        <button
-          className="auth-secondary-button"
-          type="button"
-          onClick={onSwitchMode}
-          disabled={isLoading}
-        >
-          CREATE A NEW ACCOUNT
-        </button>
       </div>
-
-      <p className="auth-footer">Forgot your account? Use the register tab to start fresh.</p>
     </form>
   )
 }

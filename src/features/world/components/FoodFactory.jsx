@@ -1,10 +1,10 @@
-import foodFactorySprite from '../assets/sprites/foodfactory.png'
+import foodFactorySprite from '../../../assets/sprites/foodfactory.png'
 import {
   FOOD_FACTORY_FRAME_COUNT,
   FOOD_FACTORY_FRAME_HEIGHT,
   FOOD_FACTORY_FRAME_WIDTH,
   FOOD_FACTORY_SCALE,
-} from '../game/worldConstants'
+} from '../../../game/worldConstants'
 
 function FoodFactory({
   animationRun,
