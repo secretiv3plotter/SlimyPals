@@ -5,6 +5,10 @@ import {
   SUMMONING_GROUND_FRAME_HEIGHT,
   SUMMONING_GROUND_FRAME_WIDTH,
   SUMMONING_GROUND_SCALE,
+  SUMMONING_ORB_FRAME_COUNT,
+  SUMMONING_ORB_FRAME_HEIGHT,
+  SUMMONING_ORB_FRAME_WIDTH,
+  SUMMONING_ORB_SCALE,
 } from '../../../game/worldConstants'
 
 function SummoningGround({
@@ -42,6 +46,10 @@ function SummoningGround({
           aria-hidden="true"
           onAnimationEnd={onOrbAnimationEnd}
           style={{
+            '--summoning-ground-frame-count': SUMMONING_ORB_FRAME_COUNT,
+            '--summoning-ground-frame-height': `${SUMMONING_ORB_FRAME_HEIGHT}px`,
+            '--summoning-ground-frame-width': `${SUMMONING_ORB_FRAME_WIDTH}px`,
+            '--summoning-ground-scale': SUMMONING_ORB_SCALE,
             backgroundImage: `url(${summoningOrbSprite})`,
           }}
         />

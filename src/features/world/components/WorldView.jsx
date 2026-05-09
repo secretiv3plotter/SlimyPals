@@ -10,6 +10,7 @@ function WorldView({
   canProduceFood,
   canSummon,
   displayedSlimes,
+  dyingSlimeIds,
   foodFactoryAnimationRun,
   foodQuantity,
   onFoodFactoryAnimationEnd,
@@ -17,6 +18,7 @@ function WorldView({
   onFeedFriendSlime,
   onFeedSlime,
   onRemoveSlime,
+  onSlimeDeathAnimationEnd,
   onSlimeSummon,
   onSummoningOrbAnimationEnd,
   summoningOrbAnimationRun,
@@ -172,6 +174,7 @@ function WorldView({
           canProduceFood={canProduceFood}
           canSummon={canSummon}
           displayedSlimes={displayedSlimes}
+          dyingSlimeIds={dyingSlimeIds}
           foodFactoryAnimationRun={foodFactoryAnimationRun}
           foodQuantity={foodQuantity}
           onFoodFactoryAnimationEnd={onFoodFactoryAnimationEnd}
@@ -181,6 +184,7 @@ function WorldView({
           onFeedFriendSlime={onFeedFriendSlime}
           onFeedSlime={onFeedSlime}
           onRemoveSlime={onRemoveSlime}
+          onSlimeDeathAnimationEnd={onSlimeDeathAnimationEnd}
           onSlimeSummon={onSlimeSummon}
           onSpritePointerDown={handleSpriteButtonPointerDown}
           onSpritePointerUp={handleSpriteButtonPointerUp}

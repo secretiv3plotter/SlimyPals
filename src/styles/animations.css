@@ -60,6 +60,17 @@
   }
 }
 
+@keyframes slime-blackhole-death {
+  to {
+    background-position-x:
+      calc(
+        var(--slime-death-frame-width) *
+        var(--slime-death-frame-count) *
+        -1
+      );
+  }
+}
+
 @keyframes slime-jump {
   0%,
   100% {

@@ -12,14 +12,20 @@ import { getSlimeColorFilter, getSlimeMotionPath } from '../../../game/slimePres
 import { simpleSlimeSprite, slimeOverlaySprites } from '../../../game/slimeSprites'
 import { getSlimeDisplayName } from '../../../game/slimeText'
 import killButtonSprite from '../../../assets/sprites/deathbutton.png'
+import slimeBlackholeDeathSprite from '../../../assets/sprites/slime_blackhole_death.png'
+
+const SLIME_DEATH_FRAME_COUNT = 6
+const SLIME_DEATH_FRAME_ASPECT_RATIO = 47 / 44
 
 function SlimeYard({
   canRemoveSlimes = true,
   displayedSlimes,
+  dyingSlimeIds = [],
   feedTargetOwner = null,
   feedTargetOwnerId = null,
   feedTargetType = 'own',
   isFeedTarget = true,
+  onDeathAnimationEnd,
   onRemoveSlime,
   slimeYardPosition,
 }) {
@@ -57,6 +63,8 @@ function SlimeYard({
             feedTargetType={feedTargetType}
             index={index}
             isFeedTarget={isFeedTarget}
+            isDying={dyingSlimeIds.includes(slime.id)}
+            onDeathAnimationEnd={onDeathAnimationEnd}
             onRemoveSlime={onRemoveSlime}
             slime={slime}
           />
@@ -73,6 +81,8 @@ function YardSlime({
   feedTargetType,
   index,
   isFeedTarget,
+  isDying,
+  onDeathAnimationEnd,
   onRemoveSlime,
   slime,
 }) {
@@ -87,6 +97,10 @@ function YardSlime({
   }, [])
 
   function handlePointerDown(event) {
+    if (isDying) {
+      return
+    }
+
     event.stopPropagation()
     setJumpRun((run) => run + 1)
     setIsLevelPinned(true)
@@ -103,16 +117,20 @@ function YardSlime({
 
   return (
     <div
-      className="yard-slime"
-      data-feed-target-owner={isFeedTarget ? feedTargetOwner : undefined}
-      data-feed-target-owner-id={isFeedTarget ? feedTargetOwnerId : undefined}
-      data-feed-target-type={isFeedTarget ? feedTargetType : undefined}
-      data-slime-id={isFeedTarget ? slime.id : undefined}
-      data-slime-last-fed-at={isFeedTarget ? slime.last_fed_at : undefined}
-      data-slime-level={isFeedTarget ? slime.level : undefined}
-      data-slime-name={isFeedTarget ? getSlimeDisplayName(slime) : undefined}
+      className={`yard-slime${isDying ? ' yard-slime--dying' : ''}`}
+      data-feed-target-owner={isFeedTarget && !isDying ? feedTargetOwner : undefined}
+      data-feed-target-owner-id={isFeedTarget && !isDying ? feedTargetOwnerId : undefined}
+      data-feed-target-type={isFeedTarget && !isDying ? feedTargetType : undefined}
+      data-slime-id={isFeedTarget && !isDying ? slime.id : undefined}
+      data-slime-last-fed-at={isFeedTarget && !isDying ? slime.last_fed_at : undefined}
+      data-slime-level={isFeedTarget && !isDying ? slime.level : undefined}
+      data-slime-name={isFeedTarget && !isDying ? getSlimeDisplayName(slime) : undefined}
       onPointerDown={handlePointerDown}
       style={{
+        '--slime-death-frame-aspect-ratio': SLIME_DEATH_FRAME_ASPECT_RATIO,
+        '--slime-death-frame-count': SLIME_DEATH_FRAME_COUNT,
+        '--slime-death-frame-height': `calc(${SLIME_FRAME_HEIGHT}px * ${SLIME_SCALE})`,
+        '--slime-death-sprite': `url(${slimeBlackholeDeathSprite})`,
         '--slime-frame-count': 4,
         '--slime-frame-height': `${SLIME_FRAME_HEIGHT}px`,
         '--slime-frame-width': `${SLIME_FRAME_WIDTH}px`,
@@ -154,6 +172,13 @@ function YardSlime({
           )}
         </div>
       </div>
+      {isDying && (
+        <span
+          className="yard-slime-death"
+          aria-hidden="true"
+          onAnimationEnd={() => onDeathAnimationEnd?.(slime.id)}
+        />
+      )}
       <div className={`yard-slime-level${isLevelPinned ? ' yard-slime-level--pinned' : ''}`}>
         <span>Level {slime.level}</span>
         {canRemoveSlimes && (

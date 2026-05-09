@@ -27,6 +27,7 @@ function App() {
   const [menuMode, setMenuMode] = useState('main')
   const [notifications, setNotifications] = useState([])
   const [offlineUser, setOfflineUser] = useState(null)
+  const [dyingSlimeIds, setDyingSlimeIds] = useState([])
   const [pendingDeleteSlime, setPendingDeleteSlime] = useState(null)
   const [slimes, setSlimes] = useState([])
   const [summoningOrbAnimationRun, setSummoningOrbAnimationRun] = useState(0)
@@ -219,14 +220,23 @@ function App() {
 
     try {
       await removeOwnedSlime({ slimeId, userId: offlineUser.id })
-      setSlimes((currentSlimes) => (
-        currentSlimes.filter((currentSlime) => currentSlime.id !== slimeId)
-      ))
       setPendingDeleteSlime(null)
+      setDyingSlimeIds((currentIds) => (
+        currentIds.includes(slimeId) ? currentIds : [...currentIds, slimeId]
+      ))
       await refreshFoodProductionReadiness(offlineUser.id)
     } catch (error) {
       notifyActionFailure('Unable to remove slime.', error)
     }
+  }
+
+  function handleSlimeDeathAnimationEnd(slimeId) {
+    setSlimes((currentSlimes) => (
+      currentSlimes.filter((currentSlime) => currentSlime.id !== slimeId)
+    ))
+    setDyingSlimeIds((currentIds) => (
+      currentIds.filter((currentId) => currentId !== slimeId)
+    ))
   }
 
   async function queueFriendFeedAction({ friendUserId, slimeId, userId }) {
@@ -293,6 +303,7 @@ function App() {
         canProduceFood={canProduceFood}
         canSummon={canSummonFromGround}
         displayedSlimes={displayedSlimes}
+        dyingSlimeIds={dyingSlimeIds}
         foodFactoryAnimationRun={foodFactoryAnimationRun}
         foodQuantity={foodQuantity}
         onFoodFactoryAnimationEnd={handleFoodFactoryAnimationEnd}
@@ -300,6 +311,7 @@ function App() {
         onFeedFriendSlime={handleFeedFriendSlime}
         onFeedSlime={handleFeedSlime}
         onRemoveSlime={setPendingDeleteSlime}
+        onSlimeDeathAnimationEnd={handleSlimeDeathAnimationEnd}
         onSlimeSummon={handleSummonSlime}
         onSummoningOrbAnimationEnd={() => setSummoningOrbAnimationRun(0)}
         summoningOrbAnimationRun={summoningOrbAnimationRun}

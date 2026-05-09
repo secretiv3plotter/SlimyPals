@@ -25,6 +25,7 @@ function WorldMap({
   canProduceFood,
   canSummon,
   displayedSlimes,
+  dyingSlimeIds,
   foodFactoryAnimationRun,
   foodQuantity,
   onFoodFactoryAnimationEnd,
@@ -34,6 +35,7 @@ function WorldMap({
   onFeedFriendSlime,
   onFeedSlime,
   onRemoveSlime,
+  onSlimeDeathAnimationEnd,
   onSlimeSummon,
   onSpritePointerDown,
   onSpritePointerUp,
@@ -150,6 +152,8 @@ function WorldMap({
       <div className="map-tint-layer" />
       <SlimeYard
         displayedSlimes={displayedSlimes}
+        dyingSlimeIds={dyingSlimeIds}
+        onDeathAnimationEnd={onSlimeDeathAnimationEnd}
         onRemoveSlime={onRemoveSlime}
         slimeYardPosition={slimeYardPosition}
       />
