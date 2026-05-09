@@ -92,18 +92,23 @@
 }
 
 .yard-slime-kill {
-  padding: 2px 4px;
-  border: 2px solid #111111;
-  background: rgba(207, 71, 63, 0.8);
-  color: #111111;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: none;
+  background: transparent;
   cursor: pointer;
-  font-family: var(--pixel-font);
-  font-size: 0.45rem;
-  font-weight: 700;
-  line-height: 1;
+
+  transition:
+    transform 120ms ease,
+    filter 120ms ease;
 }
 
 .yard-slime-kill:hover,
 .yard-slime-kill:focus-visible {
-  background: rgba(224, 84, 75, 0.95);
+  transform: scale(1.8);
+
+  filter:
+    drop-shadow(0 0 4px rgba(255, 80, 80, 0.7))
+    drop-shadow(0 0 8px rgba(255, 80, 80, 0.5));
 }

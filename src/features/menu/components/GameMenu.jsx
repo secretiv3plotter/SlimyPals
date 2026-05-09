@@ -98,21 +98,34 @@ function GameMenu({
                                 : 'friend-status offline'
                             }
                           />
-
                           <span className="friend-name">
                             {friend.name}
                           </span>
+
+                          {friend.pending && (
+                            <span className="friend-pending-status">
+                              PENDING
+                            </span>
+                          )}
                         </div>
-                        <button
-                          type="button"
-                          className="friend-remove-button"
-                          onClick={() => {
-                            setSelectedFriend(friend)
-                            onSetMenuMode('unfriend-confirm')
-                          }}
-                        >
-                          X
-                        </button>
+                        <div className="friend-actions">
+                          
+                            <span className="friend-pending-status">
+                              PENDING CONFIRMATION
+                            </span>
+                          
+
+                          <button
+                            type="button"
+                            className="friend-remove-button"
+                            onClick={() => {
+                              setSelectedFriend(friend)
+                              onSetMenuMode('unfriend-confirm')
+                            }}
+                          >
+                            X
+                          </button>
+                        </div>
                       </div>
                     ))
                   )}

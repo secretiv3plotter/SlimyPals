@@ -11,6 +11,7 @@ import { getGridSizeStyle } from '../../../game/mapTiles'
 import { getSlimeColorFilter, getSlimeMotionPath } from '../../../game/slimePresentation'
 import { simpleSlimeSprite, slimeOverlaySprites } from '../../../game/slimeSprites'
 import { getSlimeDisplayName } from '../../../game/slimeText'
+import killButtonSprite from '../../../assets/sprites/deathbutton.png'
 
 function SlimeYard({
   canRemoveSlimes = true,
@@ -163,7 +164,11 @@ function YardSlime({
             onClick={handleKillClick}
             onPointerDown={(event) => event.stopPropagation()}
           >
-            KILL
+            <img
+              src={killButtonSprite}
+              alt=""
+              draggable="false"
+            />
           </button>
         )}
       </div>

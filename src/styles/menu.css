@@ -166,6 +166,7 @@
   align-items: center;
   gap: 22px;
   font-family: var(--pixel-font);
+  font-weight: bold;
 }
 
 .menu-panel-title {
@@ -173,6 +174,7 @@
   color: #000000;
   font-family: var(--pixel-font);
   font-size: 1.9rem;
+  font-weight: bold;
   line-height: 1.9;
   text-align: center;
 }
@@ -265,3 +267,48 @@
   transform: rotate(1deg);
 }
 
+.menu-modal,
+.menu-modal * {
+  font-weight: 700;
+}
+
+.friend-slot-filled {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.friend-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.friend-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.friend-pending-status {
+  padding: 2px 6px;
+  border: 2px solid #000000;
+  background: #d8b14a;
+  color: #111111;
+  font-size: 0.55rem;
+  font-family: var(--pixel-font);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.friend-remove-button {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #000000;
+  background: #cf473f;
+  color: #000000;
+  font-family: var(--pixel-font);
+  font-weight: 700;
+  cursor: pointer;
+}
