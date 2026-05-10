@@ -260,9 +260,9 @@
     5px 5px 0 rgba(0, 0, 0, 0.35);
   color: #111111;
   font-family: var(--pixel-font);
-  font-size: 0.72rem;
-  font-weight: 700;
-  line-height: 1.35;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.4;
   padding: 14px 16px;
   transform: rotate(1deg);
 }

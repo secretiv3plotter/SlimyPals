@@ -11,8 +11,8 @@ import { getGridSizeStyle } from '../../../game/mapTiles'
 import { getSlimeColorFilter, getSlimeMotionPath } from '../../../game/slimePresentation'
 import { simpleSlimeSprite, slimeOverlaySprites } from '../../../game/slimeSprites'
 import { getSlimeDisplayName } from '../../../game/slimeText'
-import killButtonSprite from '../../../assets/sprites/deathbutton.png'
-import slimeBlackholeDeathSprite from '../../../assets/sprites/slime_blackhole_death.png'
+import killButtonSprite from '../../../assets/slimes/ui/deathbutton.png'
+import slimeBlackholeDeathSprite from '../../../assets/slimes/effects/slime_blackhole_death.png'
 
 const SLIME_DEATH_FRAME_COUNT = 6
 const SLIME_DEATH_FRAME_ASPECT_RATIO = 47 / 44

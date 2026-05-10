@@ -2,139 +2,207 @@ import { SOUND_FILES } from './soundFiles'
 
 class AudioManager {
   constructor() {
-    this.musicVolume = 0.35
+    this.ctx = null
+    this.bgmVolume = 0.45
+    this.bgmMuted = false
+    this.bgmGain = null
+    this.bgmSource = null
+    this.bgmKey = null
     this.sfxVolume = 0.8
-    this.musicMuted = false
     this.sfxMuted = false
-    this.currentBgm = null
-    this.loopingSfx = new Map()
+    
+    this.buffers = new Map()
+    this.loopingSfxSources = new Map()
+    this.sfxGain = null
+
+    // Start loading and decoding in the background immediately
+    this.preloadPromise = this.preloadAll()
   }
 
-  createAudio(soundKey) {
-    const source = SOUND_FILES[soundKey]
-    if (!source) {
-      console.warn(`Unknown sound key: ${soundKey}`)
+  /**
+   * Initialize the AudioContext with a fixed sample rate for performance.
+   */
+  async init() {
+    if (this.ctx) return
+    
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext
+    this.ctx = new AudioContextClass({
+      latencyHint: 'interactive',
+      sampleRate: 44100,
+    })
+    
+    this.sfxGain = this.ctx.createGain()
+    this.sfxGain.connect(this.ctx.destination)
+    this.bgmGain = this.ctx.createGain()
+    this.bgmGain.connect(this.ctx.destination)
+    
+    this.updateVolumes()
+  }
+
+  async preloadAll() {
+    const loaders = Object.entries(SOUND_FILES).map(async ([key, url]) => {
+      try {
+        const response = await fetch(url)
+        const arrayBuffer = await response.arrayBuffer()
+        
+        if (this.ctx) {
+          const buffer = await this.ctx.decodeAudioData(arrayBuffer)
+          this.buffers.set(key, buffer)
+        } else {
+          this.buffers.set(key, arrayBuffer)
+        }
+      } catch (e) {
+        console.error(`Failed to preload ${key}:`, e)
+      }
+    })
+    await Promise.all(loaders)
+  }
+
+  async decodeBuffer(key) {
+    if (!this.ctx) await this.init()
+    let data = this.buffers.get(key)
+    if (!data && this.preloadPromise) {
+      await this.preloadPromise
+      data = this.buffers.get(key)
+    }
+    if (!data) return null
+    if (data instanceof AudioBuffer) return data
+    
+    try {
+      const buffer = await this.ctx.decodeAudioData(data.slice(0))
+      this.buffers.set(key, buffer)
+      return buffer
+    } catch (e) {
+      console.error(`Error decoding ${key}:`, e)
       return null
     }
-
-    return new Audio(source)
   }
 
-  async playBgm(soundKey) {
-    if (this.currentBgm) {
-      this.stopBgm()
+  async unlock() {
+    await this.init()
+    if (this.ctx.state === 'suspended') {
+      await this.ctx.resume()
     }
-
-    const track = this.createAudio(soundKey)
-    if (!track) {
-      return
-    }
-
-    track.loop = true
-    track.volume = this.musicMuted ? 0 : this.musicVolume
-    this.currentBgm = track
-
-    try {
-      await track.play()
-    } catch (error) {
-      console.warn('Unable to play BGM:', error)
+    
+    for (const key of this.buffers.keys()) {
+      this.decodeBuffer(key)
     }
   }
 
-  stopBgm() {
-    if (!this.currentBgm) {
-      return
+  updateVolumes() {
+    if (!this.ctx) return
+    const now = this.ctx.currentTime
+    if (this.sfxGain) {
+      this.sfxGain.gain.setTargetAtTime(this.sfxMuted ? 0 : this.sfxVolume, now, 0.1)
     }
-
-    this.currentBgm.pause()
-    this.currentBgm.currentTime = 0
-    this.currentBgm = null
-  }
-
-  setMusicVolume(volume) {
-    this.musicVolume = Math.max(0, Math.min(1, volume))
-    if (this.currentBgm && !this.musicMuted) {
-      this.currentBgm.volume = this.musicVolume
+    if (this.bgmGain) {
+      this.bgmGain.gain.setTargetAtTime(this.bgmMuted ? 0 : this.bgmVolume, now, 0.1)
     }
   }
 
   setSfxVolume(volume) {
     this.sfxVolume = Math.max(0, Math.min(1, volume))
-    this.loopingSfx.forEach((effect) => {
-      effect.volume = this.sfxMuted ? 0 : this.sfxVolume
-    })
-  }
-
-  setMusicMuted(isMuted) {
-    this.musicMuted = isMuted
-    if (this.currentBgm) {
-      this.currentBgm.volume = isMuted ? 0 : this.musicVolume
-    }
+    this.updateVolumes()
   }
 
   setSfxMuted(isMuted) {
     this.sfxMuted = isMuted
-    this.loopingSfx.forEach((effect) => {
-      effect.volume = isMuted ? 0 : this.sfxVolume
-    })
+    this.updateVolumes()
   }
 
-  playSfx(soundKey, options = {}) {
-    const effect = this.createAudio(soundKey)
-    if (!effect || this.sfxMuted) {
-      return
+  setBgmVolume(volume) {
+    this.bgmVolume = Math.max(0, Math.min(1, volume))
+    this.updateVolumes()
+  }
+
+  setBgmMuted(isMuted) {
+    this.bgmMuted = isMuted
+    this.updateVolumes()
+  }
+
+  async playBgm(soundKey) {
+    await this.unlock()
+    if (this.bgmSource && this.bgmKey === soundKey) return true
+
+    this.stopBgm()
+
+    const buffer = await this.decodeBuffer(soundKey)
+    if (!buffer) return false
+
+    const source = this.ctx.createBufferSource()
+    source.buffer = buffer
+    source.loop = true
+
+    source.connect(this.bgmGain)
+    source.start(0)
+    this.bgmSource = source
+    this.bgmKey = soundKey
+    return true
+  }
+
+  stopBgm() {
+    if (!this.bgmSource) return
+
+    try { this.bgmSource.stop() } catch {
+      // The source may already be stopped by the browser.
     }
+    this.bgmSource = null
+    this.bgmKey = null
+  }
+
+  async playSfx(soundKey, options = {}) {
+    await this.unlock()
+    const buffer = await this.decodeBuffer(soundKey)
+    if (!buffer) return
 
     const { volume = 1, playbackRate = 1 } = options
-    effect.volume = Math.max(0, Math.min(1, this.sfxVolume * volume))
-    effect.playbackRate = playbackRate
-    effect.play().catch((error) => {
-      console.warn('Unable to play SFX:', error)
-    })
+    const source = this.ctx.createBufferSource()
+    const gain = this.ctx.createGain()
+    
+    source.buffer = buffer
+    source.playbackRate.setTargetAtTime(playbackRate, this.ctx.currentTime, 0.01)
+    gain.gain.setTargetAtTime(volume, this.ctx.currentTime, 0.01)
+    
+    source.connect(gain)
+    gain.connect(this.sfxGain)
+    source.start(0)
   }
 
   async playLoopingSfx(soundKey) {
-    if (this.loopingSfx.has(soundKey)) {
-      return
-    }
+    await this.unlock()
+    if (this.loopingSfxSources.has(soundKey)) return
 
-    const effect = this.createAudio(soundKey)
-    if (!effect) {
-      return
-    }
+    const buffer = await this.decodeBuffer(soundKey)
+    if (!buffer) return
 
-    effect.loop = true
-    effect.volume = this.sfxMuted ? 0 : this.sfxVolume
-    this.loopingSfx.set(soundKey, effect)
-
-    try {
-      await effect.play()
-    } catch (error) {
-      console.warn('Unable to play looping SFX:', error)
-      this.loopingSfx.delete(soundKey)
-    }
+    const source = this.ctx.createBufferSource()
+    source.buffer = buffer
+    source.loop = true
+    
+    source.connect(this.sfxGain)
+    source.start(0)
+    this.loopingSfxSources.set(soundKey, source)
   }
 
   stopLoopingSfx(soundKey) {
-    const effect = this.loopingSfx.get(soundKey)
-    if (!effect) {
-      return
+    const source = this.loopingSfxSources.get(soundKey)
+    if (source) {
+      try { source.stop() } catch {
+        // The source may already be stopped by the browser.
+      }
+      this.loopingSfxSources.delete(soundKey)
     }
-
-    effect.pause()
-    effect.currentTime = 0
-    this.loopingSfx.delete(soundKey)
   }
 
   stopAllLoopingSfx() {
-    this.loopingSfx.forEach((effect, soundKey) => {
-      effect.pause()
-      effect.currentTime = 0
-      this.loopingSfx.delete(soundKey)
+    this.loopingSfxSources.forEach((source) => {
+      try { source.stop() } catch {
+        // The source may already be stopped by the browser.
+      }
     })
+    this.loopingSfxSources.clear()
   }
 }
 
 const audioManager = new AudioManager()
-
 export default audioManager

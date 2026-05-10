@@ -1,4 +1,4 @@
-import simpleSlimeSprite from '../assets/slimes/simpleslime.png'
+import simpleSlimeSprite from '../assets/slimes/common/simpleslime.png'
 import mythicalDemonSlimeSprite from '../assets/slimes/mythical/mythicaldemonslime.png'
 import mythicalKingSlimeSprite from '../assets/slimes/mythical/mythicalkingslime.png'
 import mythicalWitchSlimeSprite from '../assets/slimes/mythical/mythicalwitchslime.png'

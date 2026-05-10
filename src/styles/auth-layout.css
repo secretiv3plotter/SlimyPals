@@ -4,8 +4,7 @@
   display: grid;
   min-height: 100dvh;
   padding: clamp(12px, 4vw, 24px);
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   overscroll-behavior: contain;
   place-items: center;
   background: #314f32;
@@ -21,32 +20,29 @@
 
 .auth-map-background {
   position: absolute;
-  inset: -24px;
+  inset: -64px;
   z-index: -2;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 80px);
-  grid-auto-rows: 80px;
+  justify-content: center;
+  align-content: center;
+  grid-template-columns: repeat(auto-fill, 64px);
+  grid-auto-rows: 64px;
   overflow: hidden;
   background: #6f9552;
-  filter: blur(5px) brightness(0.52) sepia(0.2) saturate(0.9) hue-rotate(-30deg);
+  filter: blur(4px);
   image-rendering: pixelated;
   pointer-events: none;
 }
 
 .auth-map-background img {
-  width: 80px;
-  height: 80px;
+  width: 64px;
+  height: 64px;
   object-fit: cover;
   image-rendering: pixelated;
   user-select: none;
+  filter: sepia(0.4) hue-rotate(275deg) brightness(0.5) saturate(1.1);
 }
 
-.auth-screen::after {
-  z-index: -1;
-  background:
-    radial-gradient(circle at 50% 32%, rgba(111, 149, 82, 0.22), transparent 30%),
-    linear-gradient(180deg, rgba(34, 64, 37, 0.54), rgba(15, 26, 16, 0.72));
-}
 
 .auth-stage {
   position: relative;

@@ -1,5 +1,5 @@
-import fenceColumnTile from '../assets/sprites/fencecolumn.png'
-import fenceRowTile from '../assets/sprites/fencerow.png'
+import fenceColumnTile from '../assets/map/fence/fencecolumn.png'
+import fenceRowTile from '../assets/map/fence/fencerow.png'
 import {
   FENCE_COLUMNS,
   FENCE_ROWS,
@@ -7,7 +7,7 @@ import {
 } from './worldConstants'
 
 const mapTiles = Object.entries(
-  import.meta.glob('../assets/sprites/map*.png', {
+  import.meta.glob('../assets/map/tiles/map*.png', {
     eager: true,
     import: 'default',
   }),

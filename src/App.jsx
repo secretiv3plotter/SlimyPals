@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import menuButtonSprite from './assets/sprites/menu button.png'
+import menuButtonSprite from './assets/buttons/menu button.png'
 import audioManager from './audio/audioManager'
 import { SOUND_KEYS } from './audio/soundFiles'
 import { useBackgroundMusic } from './audio/useBackgroundMusic'
@@ -19,10 +19,11 @@ import {
   removeOwnedSlime,
   summonOwnedSlime,
 } from './services/slimyPalsDomain'
+import { GAME_LIMITS } from './services/slimyPalsDb/constants'
 import { queueFeedFriendSlime } from './services/offlineSync'
 
 function App() {
-  useBackgroundMusic(SOUND_KEYS.BGM_LOOP, [SOUND_KEYS.SUMMON_1])
+  useBackgroundMusic()
 
   const [worldView] = useState(() => getMaximizedWorldView(getScreenViewSize()))
   const [foodFactoryAnimationRun, setFoodFactoryAnimationRun] = useState(0)
@@ -118,15 +119,18 @@ function App() {
 
   async function handleSummonSlime(event) {
     event.stopPropagation()
-    audioManager.playSfx(SOUND_KEYS.SUMMON_2)
 
     if (!offlineUser) {
       return
     }
 
-    if (canSummonFromGround) {
-      setSummoningOrbAnimationRun((run) => run + 1)
+    if (!canSummonFromGround) {
+      addNotification("You've used all your summons for today!")
+      return
     }
+
+    audioManager.playSfx(SOUND_KEYS.SUMMON_2)
+    setSummoningOrbAnimationRun((run) => run + 1)
 
     try {
       const { slime, user } = await summonOwnedSlime(offlineUser.id)
@@ -142,15 +146,28 @@ function App() {
 
   async function handleFoodFactoryClick(event) {
     event.stopPropagation()
-    audioManager.playSfx(SOUND_KEYS.FACTORY)
 
     if (!offlineUser || foodFactoryAnimationRun > 0) {
       return
     }
 
-    if (canProduceFood) {
-      setFoodFactoryAnimationRun((run) => run + 1)
+    if (slimes.length === 0) {
+      addNotification('Summon a slime first to produce food!')
+      return
     }
+
+    if (foodQuantity >= GAME_LIMITS.MAX_FOOD_STOCK) {
+      addNotification('Greedy! You have more than enough food.')
+      return
+    }
+
+    if (!canProduceFood) {
+      addNotification('Your factory is out of resources. Try again tomorrow.')
+      return
+    }
+
+    audioManager.playSfx(SOUND_KEYS.FACTORY)
+    setFoodFactoryAnimationRun((run) => run + 1)
 
     try {
       const { foodFactoryStock, producedQuantity } = await produceOwnedFood(offlineUser.id)

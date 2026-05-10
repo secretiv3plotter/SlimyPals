@@ -43,6 +43,7 @@
   margin: 6px 0 0;
   padding: 7px 9px;
   border: 3px solid #07110b;
+  font-family: var(--pixel-font);
   font-size: clamp(0.74rem, 1.3vw, 0.84rem);
   line-height: 1.45;
   background: rgba(232, 218, 247, 0.88);
@@ -92,6 +93,7 @@
   background: #f7f6ef;
   color: #233327;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.14);
+  font-family: var(--pixel-font);
   font-size: clamp(0.82rem, 1.35vw, 0.98rem);
 }
 
@@ -134,6 +136,7 @@
   align-items: center;
   gap: 7px;
   color: #eef4df;
+  font-family: var(--pixel-font);
   font-size: clamp(0.72rem, 1.2vw, 0.88rem);
   line-height: 1.35;
 }

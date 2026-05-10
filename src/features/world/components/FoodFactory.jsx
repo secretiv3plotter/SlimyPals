@@ -1,4 +1,5 @@
-import foodFactorySprite from '../../../assets/sprites/foodfactory.png'
+import foodFactoryShadowSprite from '../../../assets/foodfactory/foodfactory-shadow.png'
+import foodFactorySprite from '../../../assets/foodfactory/foodfactory.png'
 import {
   FOOD_FACTORY_FRAME_COUNT,
   FOOD_FACTORY_FRAME_HEIGHT,
@@ -17,28 +18,65 @@ function FoodFactory({
 }) {
   const isAnimating = animationRun > 0
 
+  const styleProps = {
+    '--food-factory-frame-count': FOOD_FACTORY_FRAME_COUNT,
+    '--food-factory-frame-height': `${FOOD_FACTORY_FRAME_HEIGHT}px`,
+    '--food-factory-frame-width': `${FOOD_FACTORY_FRAME_WIDTH}px`,
+    '--food-factory-scale': FOOD_FACTORY_SCALE,
+    transform: `translate(${foodFactoryPosition.x}px, ${foodFactoryPosition.y}px)`,
+  }
+
+  const spriteStyle = {
+    '--food-factory-frame-count': FOOD_FACTORY_FRAME_COUNT,
+    '--food-factory-frame-height': `${FOOD_FACTORY_FRAME_HEIGHT}px`,
+    '--food-factory-frame-width': `${FOOD_FACTORY_FRAME_WIDTH}px`,
+    '--food-factory-scale': FOOD_FACTORY_SCALE,
+    '--factory-image': `url(${foodFactorySprite})`,
+    '--shadow-image': `url(${foodFactoryShadowSprite})`,
+  }
+
   return (
-    <button
-      key={`food-factory-${animationRun}`}
-      className={`food-factory${isAnimating ? ' food-factory--active' : ''}${!canProduce && !isAnimating ? ' food-factory--disabled' : ''}`}
-      type="button"
-      aria-label="Produce slime food"
-      aria-disabled={!canProduce}
-      disabled={isAnimating}
-      onAnimationEnd={onAnimationEnd}
-      onClick={onClick}
-      onPointerCancel={onSpritePointerUp}
-      onPointerDown={onSpritePointerDown}
-      onPointerUp={onSpritePointerUp}
-      style={{
-        '--food-factory-frame-count': FOOD_FACTORY_FRAME_COUNT,
-        '--food-factory-frame-height': `${FOOD_FACTORY_FRAME_HEIGHT}px`,
-        '--food-factory-frame-width': `${FOOD_FACTORY_FRAME_WIDTH}px`,
-        '--food-factory-scale': FOOD_FACTORY_SCALE,
-        backgroundImage: `url(${foodFactorySprite})`,
-        transform: `translate(${foodFactoryPosition.x}px, ${foodFactoryPosition.y}px)`,
-      }}
-    />
+    <div
+      className="food-factory-container"
+      style={styleProps}
+    >
+      {/* 1. The Shadow */}
+      <div
+        className={`food-factory-shadow${isAnimating ? ' food-factory-shadow--active' : ''}`}
+        style={{
+          ...spriteStyle,
+          backgroundImage: 'var(--shadow-image)',
+        }}
+      />
+
+      {/* 2. The Visual Building (Handles full animation without clipping) */}
+      <div
+        key={`food-factory-visual-${animationRun}`}
+        className={`food-factory-visual${isAnimating ? ' food-factory-visual--active' : ''}${!canProduce && !isAnimating ? ' food-factory-visual--disabled' : ''}`}
+        onAnimationEnd={onAnimationEnd}
+        style={{
+          ...spriteStyle,
+          backgroundImage: 'var(--factory-image)',
+        }}
+      />
+
+      {/* 3. The Invisible Hitbox (Handles alpha-aware clicks) */}
+      <button
+        className="food-factory-hitbox"
+        type="button"
+        aria-label="Produce slime food"
+        aria-disabled={!canProduce}
+        disabled={isAnimating}
+        onClick={onClick}
+        onPointerCancel={onSpritePointerUp}
+        onPointerDown={onSpritePointerDown}
+        onPointerUp={onSpritePointerUp}
+        style={{
+          ...spriteStyle,
+          '--hitbox-mask': 'var(--shadow-image)',
+        }}
+      />
+    </div>
   )
 }
 

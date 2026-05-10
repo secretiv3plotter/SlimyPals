@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const authMapTiles = Object.entries(
-  import.meta.glob('../../../assets/sprites/map*.png', {
+  import.meta.glob('../../../assets/map/tiles/map*.png', {
     eager: true,
     import: 'default',
   }),
@@ -9,7 +9,7 @@ const authMapTiles = Object.entries(
   .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
   .map(([, tile]) => tile)
 
-const AUTH_BACKGROUND_TILE_COUNT = 420
+const AUTH_BACKGROUND_TILE_COUNT = 4000
 
 function AuthMapBackground() {
   const [tiles] = useState(() => createRandomizedTiles())

@@ -121,10 +121,10 @@ export function getFoodFactoryPosition(fencePosition) {
     x:
       fencePosition.x -
       FOOD_FACTORY_COLUMNS_FROM_FENCE * TILE_SIZE -
-      foodFactoryWidth,
+      foodFactoryWidth + 9,
     y:
       fencePosition.y +
-      (7.4 * TILE_SIZE - foodFactoryHeight) / 2,
+      (7.8 * TILE_SIZE - foodFactoryHeight),
   }
 }
 

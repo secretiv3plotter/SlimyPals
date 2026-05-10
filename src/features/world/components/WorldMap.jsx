@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import foodSprite from '../../../assets/sprites/food.png'
+import foodSprite from '../../../assets/foodfactory/food.png'
 import { runtimeConfig } from '../../../config'
 import { createFenceTiles, createTileGrid, getGridSizeStyle } from '../../../game/mapTiles'
 import {
@@ -149,7 +149,6 @@ function WorldMap({
           fenceTiles={fenceTiles}
         />
       )}
-      <div className="map-tint-layer" />
       <SlimeYard
         displayedSlimes={displayedSlimes}
         dyingSlimeIds={dyingSlimeIds}
@@ -190,7 +189,8 @@ function WorldMap({
         style={{
           width: FOOD_OVERLAY_WIDTH,
           height: FOOD_OVERLAY_HEIGHT,
-          transform: `translate(${foodOverlayPosition.x}px, ${foodOverlayPosition.y}px)`,
+          '--food-x': `${foodOverlayPosition.x}px`,
+          '--food-y': `${foodOverlayPosition.y}px`,
         }}
       />
       <span
@@ -199,7 +199,7 @@ function WorldMap({
         aria-label={`${foodQuantity} slime food available`}
         style={{
           '--food-count-x': `${foodOverlayPosition.x + FOOD_OVERLAY_WIDTH / 2}px`,
-          '--food-count-y': `${foodOverlayPosition.y + 2}px`,
+          '--food-count-y': `${foodOverlayPosition.y - 1}px`,
         }}
       >
         {foodQuantity}
