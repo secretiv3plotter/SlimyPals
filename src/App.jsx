@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
 import menuButtonSprite from './assets/sprites/menu button.png'
+import audioManager from './audio/audioManager'
+import { SOUND_KEYS } from './audio/soundFiles'
+import { useBackgroundMusic } from './audio/useBackgroundMusic'
 import { AuthScreen, useAuthSession } from './features/auth'
 import { useDomainHydration } from './features/domain'
 import { GameMenu, SlimeDeleteConfirm, useFriendMenuState } from './features/menu'
@@ -19,6 +22,8 @@ import {
 import { queueFeedFriendSlime } from './services/offlineSync'
 
 function App() {
+  useBackgroundMusic(SOUND_KEYS.BGM_LOOP, [SOUND_KEYS.SUMMON_1])
+
   const [worldView] = useState(() => getMaximizedWorldView(getScreenViewSize()))
   const [foodFactoryAnimationRun, setFoodFactoryAnimationRun] = useState(0)
   const [canProduceFood, setCanProduceFood] = useState(false)
@@ -113,6 +118,7 @@ function App() {
 
   async function handleSummonSlime(event) {
     event.stopPropagation()
+    audioManager.playSfx(SOUND_KEYS.SUMMON_2)
 
     if (!offlineUser) {
       return
@@ -136,6 +142,7 @@ function App() {
 
   async function handleFoodFactoryClick(event) {
     event.stopPropagation()
+    audioManager.playSfx(SOUND_KEYS.FACTORY)
 
     if (!offlineUser || foodFactoryAnimationRun > 0) {
       return
@@ -167,11 +174,14 @@ function App() {
       return
     }
 
+    const previousSlime = slimes.find((currentSlime) => currentSlime.id === slimeId)
+
     try {
       const { foodFactoryStock, slime } = await feedOwnedSlime({
         slimeId,
         userId: offlineUser.id,
       })
+      audioManager.playSfx(SOUND_KEYS.EATING)
 
       setFoodQuantity(foodFactoryStock.quantity)
       setSlimes((currentSlimes) => (
@@ -179,6 +189,9 @@ function App() {
           currentSlime.id === slime.id ? slime : currentSlime
         ))
       ))
+      if (previousSlime && slime.level > previousSlime.level) {
+        audioManager.playSfx(SOUND_KEYS.LEVEL_UP)
+      }
       addNotification(
         `You fed your ${getSlimeDisplayName(slime)} slime.`,
       )
@@ -217,6 +230,8 @@ function App() {
     if (!offlineUser) {
       return
     }
+
+    audioManager.playSfx(SOUND_KEYS.KILL)
 
     try {
       await removeOwnedSlime({ slimeId, userId: offlineUser.id })
