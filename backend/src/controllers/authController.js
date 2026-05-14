@@ -15,6 +15,28 @@ const signRefreshToken = (userId) => {
   });
 };
 
+const createAuthSession = async (user) => {
+  const accessToken = signAccessToken(user.id);
+  const refreshToken = signRefreshToken(user.id);
+
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + 7);
+
+  await db.query(
+    'INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)',
+    [user.id, refreshToken, expiresAt]
+  );
+
+  return {
+    accessToken,
+    refreshToken,
+    user: {
+      id: user.id,
+      username: user.username
+    }
+  };
+};
+
 exports.register = async (req, res, next) => {
   try {
     const { username, password } = req.body;
@@ -29,10 +51,11 @@ exports.register = async (req, res, next) => {
     }
 
     const user = await User.create({ username, password });
+    const authSession = await createAuthSession(user);
 
     res.status(201).json({
       status: 'success',
-      data: { user }
+      data: authSession
     });
   } catch (err) {
     next(err);
@@ -52,28 +75,11 @@ exports.login = async (req, res, next) => {
       return res.status(401).json({ error: { message: 'Invalid username or password' } });
     }
 
-    const accessToken = signAccessToken(user.id);
-    const refreshToken = signRefreshToken(user.id);
-
-    // Save refresh token to DB
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7);
-
-    await db.query(
-      'INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)',
-      [user.id, refreshToken, expiresAt]
-    );
+    const authSession = await createAuthSession(user);
 
     res.status(200).json({
       status: 'success',
-      data: {
-        accessToken,
-        refreshToken,
-        user: {
-          id: user.id,
-          username: user.username
-        }
-      }
+      data: authSession
     });
   } catch (err) {
     next(err);

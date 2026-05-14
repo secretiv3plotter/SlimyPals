@@ -91,11 +91,15 @@ export function subscribeAuthSession(listener) {
 }
 
 function saveAuthResponse(response) {
-  currentSession = writeStoredAuthSession(response)
+  currentSession = writeStoredAuthSession(getAuthResponsePayload(response))
   applyAccessToken(currentSession)
   notifyAuthSessionListeners()
 
   return currentSession
+}
+
+function getAuthResponsePayload(response) {
+  return response?.data || response
 }
 
 function applyAccessToken(session) {
