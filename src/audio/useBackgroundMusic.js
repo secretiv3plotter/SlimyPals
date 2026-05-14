@@ -32,7 +32,9 @@ export function useBackgroundMusic(
       try {
         const bgmStarted = await audioManager.playBgm(soundKey)
         if (!shouldPlay()) {
-          audioManager.stopAllAudio()
+          audioManager.suspend().catch(() => {
+            // Some browsers reject suspension during page lifecycle changes.
+          })
           return
         }
         await Promise.all(loopingSfx.map((loopingSfxConfig) => {
@@ -66,19 +68,27 @@ export function useBackgroundMusic(
       isPlayingRef.current = false
       isStartingRef.current = false
     }
+    const pauseBackgroundMusic = () => {
+      audioManager.suspend().catch(() => {
+        // Some browsers reject suspension during page lifecycle changes.
+      })
+    }
+    const resumeBackgroundMusic = () => {
+      audioManager.resume().catch(() => {
+        // The next user interaction can unlock audio again if the browser requires it.
+      })
+      startBackgroundMusic()
+    }
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
-        stopBackgroundMusic()
+        pauseBackgroundMusic()
         return
       }
 
-      startBackgroundMusic()
+      resumeBackgroundMusic()
     }
     const handlePageHide = () => {
-      stopBackgroundMusic()
-      audioManager.suspend().catch(() => {
-        // Some browsers reject suspension during page teardown.
-      })
+      pauseBackgroundMusic()
     }
 
     interactionEvents.forEach((eventName) => {

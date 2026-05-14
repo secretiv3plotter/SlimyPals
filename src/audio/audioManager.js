@@ -264,10 +264,14 @@ class AudioManager {
   }
 
   async suspend() {
-    this.stopAllAudio()
-
     if (this.ctx?.state === 'running') {
       await this.ctx.suspend()
+    }
+  }
+
+  async resume() {
+    if (this.ctx?.state === 'suspended') {
+      await this.ctx.resume()
     }
   }
 }

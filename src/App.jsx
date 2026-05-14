@@ -25,7 +25,7 @@ import { queueFeedFriendSlime } from './services/offlineSync'
 const GAME_BACKGROUND_LAYERS = [
   {
     soundKey: SOUND_KEYS.SUMMON_1,
-    volume: 0.08,
+    volume: 0.8,
   },
 ]
 const SUMMON_RARITY_SOUND_KEYS = Object.freeze({
