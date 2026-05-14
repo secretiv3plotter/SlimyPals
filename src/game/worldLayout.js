@@ -10,8 +10,10 @@ import {
   PLAYABLE_PIXEL_HEIGHT,
   PLAYABLE_PIXEL_WIDTH,
   PLAYABLE_ROWS,
-  SLIME_FRAME_HEIGHT,
-  SLIME_FRAME_WIDTH,
+  SLIME_MOVEMENT_HEIGHT,
+  SLIME_MOVEMENT_OFFSET_X,
+  SLIME_MOVEMENT_OFFSET_Y,
+  SLIME_MOVEMENT_WIDTH,
   SLIME_SCALE,
   SLIME_YARD_COLUMN_START,
   SLIME_YARD_COLUMNS,
@@ -144,22 +146,24 @@ export function getSlimeYardPosition(fencePosition) {
 
 export function getSlimePosition(index) {
   const columns = 5
-  const xGap = (SLIME_YARD_COLUMNS * TILE_SIZE - SLIME_FRAME_WIDTH * SLIME_SCALE) /
+  const xGap = (SLIME_YARD_COLUMNS * TILE_SIZE - SLIME_MOVEMENT_WIDTH * SLIME_SCALE) /
     (columns - 1)
   const yGap = 14
   const row = Math.floor(index / columns)
   const column = index % columns
   const rowOffset = row % 2 === 0 ? 0 : xGap / 2
+  const movementX = Math.min(
+    SLIME_YARD_COLUMNS * TILE_SIZE - SLIME_MOVEMENT_WIDTH * SLIME_SCALE,
+    column * xGap + rowOffset,
+  )
+  const movementY = Math.min(
+    SLIME_YARD_ROWS * TILE_SIZE - SLIME_MOVEMENT_HEIGHT * SLIME_SCALE,
+    row * yGap,
+  )
 
   return {
-    x: Math.min(
-      SLIME_YARD_COLUMNS * TILE_SIZE - SLIME_FRAME_WIDTH * SLIME_SCALE,
-      column * xGap + rowOffset,
-    ),
-    y: Math.min(
-      SLIME_YARD_ROWS * TILE_SIZE - SLIME_FRAME_HEIGHT * SLIME_SCALE,
-      row * yGap,
-    ),
+    x: movementX - SLIME_MOVEMENT_OFFSET_X * SLIME_SCALE,
+    y: movementY - SLIME_MOVEMENT_OFFSET_Y * SLIME_SCALE,
   }
 }
 

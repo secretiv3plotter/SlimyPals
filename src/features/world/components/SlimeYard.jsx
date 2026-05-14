@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   SLIME_FRAME_HEIGHT,
   SLIME_FRAME_WIDTH,
@@ -8,11 +8,21 @@ import {
   TILE_SIZE,
 } from '../../../game/worldConstants'
 import { getGridSizeStyle } from '../../../game/mapTiles'
-import { getSlimeColorFilter, getSlimeMotionPath } from '../../../game/slimePresentation'
-import { simpleSlimeSprite, slimeOverlaySprites } from '../../../game/slimeSprites'
+import {
+  getSlimeColorFilter,
+  getSlimeMotionPath,
+  getSlimeMovementDepth,
+} from '../../../game/slimePresentation'
+import {
+  getSlimeBaseSprite,
+  getSlimeOverlayShadowSprite,
+  getSlimeOverlaySprite,
+  getSlimeShadowSprite,
+} from '../../../game/slimeSprites'
 import { getSlimeDisplayName } from '../../../game/slimeText'
 import killButtonSprite from '../../../assets/slimes/ui/deathbutton.png'
 import slimeBlackholeDeathSprite from '../../../assets/slimes/effects/slime_blackhole_death.png'
+import { SLIME_LEVELS } from '../../../services/slimyPalsDb'
 
 // Deterministic pseudo-random 0–1 value derived from a slime's ID + salt.
 // Stable across page refreshes but unique per slime, so animations are
@@ -28,6 +38,11 @@ function seededRandom(id, salt = '') {
 
 const SLIME_DEATH_FRAME_COUNT = 6
 const SLIME_DEATH_FRAME_ASPECT_RATIO = 47 / 44
+const SLIME_WANDER_SPEED_SECONDS_BY_LEVEL = Object.freeze({
+  [SLIME_LEVELS.BABY]: 56,
+  [SLIME_LEVELS.TEEN]: 38,
+  [SLIME_LEVELS.ADULT]: 28,
+})
 
 function SlimeYard({
   canRemoveSlimes = true,
@@ -98,15 +113,75 @@ function YardSlime({
   onRemoveSlime,
   slime,
 }) {
+  const slimeRef = useRef(null)
+  const slimeFacingRef = useRef(null)
+  const slimeShadowRef = useRef(null)
   const levelTimerRef = useRef(null)
+  const lastFacingRef = useRef(1)
+  const wanderProgressRef = useRef(null)
   const [jumpRun, setJumpRun] = useState(0)
   const [isLevelPinned, setIsLevelPinned] = useState(false)
-  const slimeMotionPath = getSlimeMotionPath(slime, index)
-  const overlaySprite = slimeOverlaySprites[slime.rarity]?.[slime.type]
+  const slimeId = slime.id
+  const slimeMotionPath = useMemo(
+    () => getSlimeMotionPath({ id: slimeId }, index),
+    [index, slimeId],
+  )
+  const baseSprite = getSlimeBaseSprite(slime.level)
+  const shadowSprite = getSlimeShadowSprite(slime.level)
+  const overlaySprite = getSlimeOverlaySprite(slime)
+  const overlayShadowSprite = getSlimeOverlayShadowSprite(slime)
+  const slimeDepths = slimeMotionPath.points.map(getSlimeMovementDepth)
+  const slimeWanderSpeedSeconds =
+    SLIME_WANDER_SPEED_SECONDS_BY_LEVEL[slime.level] ??
+    SLIME_WANDER_SPEED_SECONDS_BY_LEVEL[SLIME_LEVELS.ADULT]
 
   useEffect(() => {
     return () => window.clearTimeout(levelTimerRef.current)
   }, [])
+
+  useEffect(() => {
+    const slimeElement = slimeRef.current
+    const facingElement = slimeFacingRef.current
+    const shadowElement = slimeShadowRef.current
+
+    if (!slimeElement || !facingElement || !shadowElement || isDying) {
+      return undefined
+    }
+
+    let animationFrameId = 0
+    let lastFrameTime = performance.now()
+
+    if (wanderProgressRef.current === null) {
+      wanderProgressRef.current = seededRandom(slimeId, 'wander')
+    }
+
+    function updateSlimePosition(frameTime) {
+      const elapsedSeconds = (frameTime - lastFrameTime) / 1000
+      lastFrameTime = frameTime
+      wanderProgressRef.current = (
+        wanderProgressRef.current +
+        elapsedSeconds / slimeWanderSpeedSeconds
+      ) % 1
+
+      const { face, point } = getSlimeMotionFrame(
+        slimeMotionPath,
+        wanderProgressRef.current,
+        lastFacingRef.current,
+      )
+
+      slimeElement.style.transform = `translate(${point.x}px, ${point.y}px)`
+      slimeElement.style.zIndex = getSlimeMovementDepth(point)
+      facingElement.style.transform = `scaleX(${face})`
+      shadowElement.style.transform = `scaleX(${face})`
+      lastFacingRef.current = face
+
+      animationFrameId = window.requestAnimationFrame(updateSlimePosition)
+    }
+
+    updateSlimePosition(lastFrameTime)
+
+    return () => window.cancelAnimationFrame(animationFrameId)
+  }, [isDying, jumpRun, slimeId, slimeMotionPath, slimeWanderSpeedSeconds])
 
   function handlePointerDown(event) {
     if (isDying) {
@@ -129,6 +204,7 @@ function YardSlime({
 
   return (
     <div
+      ref={slimeRef}
       className={`yard-slime${isDying ? ' yard-slime--dying' : ''}`}
       data-feed-target-owner={isFeedTarget && !isDying ? feedTargetOwner : undefined}
       data-feed-target-owner-id={isFeedTarget && !isDying ? feedTargetOwnerId : undefined}
@@ -155,25 +231,46 @@ function YardSlime({
         '--slime-y-2': `${slimeMotionPath.points[2].y}px`,
         '--slime-x-3': `${slimeMotionPath.points[3].x}px`,
         '--slime-y-3': `${slimeMotionPath.points[3].y}px`,
+        '--slime-z-0': slimeDepths[0],
+        '--slime-z-1': slimeDepths[1],
+        '--slime-z-2': slimeDepths[2],
+        '--slime-z-3': slimeDepths[3],
         '--slime-face-0': slimeMotionPath.faces[0],
         '--slime-face-1': slimeMotionPath.faces[1],
         '--slime-face-2': slimeMotionPath.faces[2],
         '--slime-face-3': slimeMotionPath.faces[3],
-        // Negative delays start the animation mid-cycle, giving each slime
-        // a unique starting point that is stable across page refreshes.
-        '--slime-wander-delay': `-${(seededRandom(slime.id, 'wander') * 28).toFixed(2)}s`,
         '--slime-idle-delay': `-${(seededRandom(slime.id, 'idle') * 1.3).toFixed(3)}s`,
       }}
     >
       <div
+        key={`shadow-${jumpRun}`}
+        ref={slimeShadowRef}
+        className="yard-slime-shadow-layer"
+      >
+        <div
+          className="yard-slime-shadow"
+          style={{
+            '--slime-shadow-sprite': `url(${shadowSprite})`,
+          }}
+        />
+        {overlayShadowSprite && (
+          <div
+            className="yard-slime-overlay-shadow"
+            style={{
+              backgroundImage: `url(${overlayShadowSprite})`,
+            }}
+          />
+        )}
+      </div>
+      <div
         key={jumpRun}
         className={`yard-slime-jump${jumpRun > 0 ? ' yard-slime-jump--active' : ''}`}
       >
-        <div className="yard-slime-facing">
+        <div ref={slimeFacingRef} className="yard-slime-facing">
           <div
             className="yard-slime-base"
             style={{
-              '--slime-base-sprite': `url(${simpleSlimeSprite})`,
+              '--slime-base-sprite': `url(${baseSprite})`,
               '--slime-filter': getSlimeColorFilter(slime.color),
             }}
           />
@@ -214,6 +311,40 @@ function YardSlime({
       </div>
     </div>
   )
+}
+
+function getSlimeMotionFrame(slimeMotionPath, progress, fallbackFace) {
+  const segmentProgress = progress * slimeMotionPath.points.length
+  const pointIndex = Math.floor(segmentProgress) % slimeMotionPath.points.length
+  const nextPointIndex = (pointIndex + 1) % slimeMotionPath.points.length
+  const progressBetweenPoints = segmentProgress - Math.floor(segmentProgress)
+  const fromPoint = slimeMotionPath.points[pointIndex]
+  const toPoint = slimeMotionPath.points[nextPointIndex]
+  const point = interpolatePoint(
+    fromPoint,
+    toPoint,
+    progressBetweenPoints,
+  )
+
+  return {
+    face: getFaceForHorizontalMovement(toPoint.x - fromPoint.x, fallbackFace),
+    point,
+  }
+}
+
+function getFaceForHorizontalMovement(deltaX, fallbackFace) {
+  if (Math.abs(deltaX) < 0.25) {
+    return fallbackFace
+  }
+
+  return deltaX > 0 ? -1 : 1
+}
+
+function interpolatePoint(fromPoint, toPoint, progress) {
+  return {
+    x: fromPoint.x + (toPoint.x - fromPoint.x) * progress,
+    y: fromPoint.y + (toPoint.y - fromPoint.y) * progress,
+  }
 }
 
 export default SlimeYard

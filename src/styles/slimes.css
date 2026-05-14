@@ -1,14 +1,11 @@
 .yard-slime {
-  --slime-wander-speed: 28s;
-
   position: absolute;
   width: calc(var(--slime-frame-width) * var(--slime-scale));
   height: calc(var(--slime-frame-height) * var(--slime-scale));
-  animation:
-    slime-wander var(--slime-wander-speed)
-    linear var(--slime-wander-delay) infinite;
   image-rendering: pixelated;
   pointer-events: auto;
+  transform: translate(var(--slime-x-0), var(--slime-y-0));
+  z-index: var(--slime-z-0);
 }
 
 .yard-slime--dying {
@@ -25,14 +22,19 @@
   position: absolute;
   inset: 0;
   transform-origin: center;
-  animation:
-    slime-face var(--slime-wander-speed)
-    linear var(--slime-wander-delay) infinite;
 }
 
 .yard-slime-jump {
   position: absolute;
   inset: 0;
+  z-index: 1;
+}
+
+.yard-slime-level--pinned ~ *,
+.yard-slime:has(.yard-slime-level--pinned) .yard-slime-jump {
+  filter:
+    drop-shadow(0 0 3px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 7px rgba(255, 255, 255, 0.75));
 }
 
 .yard-slime-jump--active {
@@ -40,7 +42,9 @@
 }
 
 .yard-slime-base,
-.yard-slime-overlay {
+.yard-slime-shadow,
+.yard-slime-overlay,
+.yard-slime-overlay-shadow {
   --slime-idle-speed: 1.3s;
 
   position: absolute;
@@ -58,12 +62,28 @@
 }
 
 .yard-slime-base {
+  z-index: 1;
   background-image: var(--slime-base-sprite);
   filter: var(--slime-filter);
 }
 
-.yard-slime-overlay {
+.yard-slime-shadow-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transform-origin: center;
+}
+
+.yard-slime-shadow {
+  background-image: var(--slime-shadow-sprite);
+}
+
+.yard-slime-overlay-shadow {
   z-index: 1;
+}
+
+.yard-slime-overlay {
+  z-index: 2;
 }
 
 .yard-slime-death {
@@ -103,10 +123,10 @@
     rgba(0, 0, 0, 0.26) 48%,
     rgba(0, 0, 0, 0) 82%
   );
-  color: #111111;
+  color: #ffffff;
   font-family: var(--pixel-font);
   font-size: 0.5rem;
-  font-weight: 700;
+  font-weight: 900;
   line-height: 1;
   opacity: 0;
   pointer-events: none;

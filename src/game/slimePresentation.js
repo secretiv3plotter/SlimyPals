@@ -1,7 +1,9 @@
 import { slimeColorFilters } from './slimeSprites'
 import {
-  SLIME_FRAME_HEIGHT,
-  SLIME_FRAME_WIDTH,
+  SLIME_MOVEMENT_HEIGHT,
+  SLIME_MOVEMENT_OFFSET_X,
+  SLIME_MOVEMENT_OFFSET_Y,
+  SLIME_MOVEMENT_WIDTH,
   SLIME_SCALE,
   SLIME_YARD_COLUMNS,
   SLIME_YARD_ROWS,
@@ -11,14 +13,23 @@ import { getSlimePosition } from './worldLayout'
 
 export function getSlimeMotionPath(slime, index) {
   const random = createSeededRandom(getStringSeed(slime.id))
-  const maxX = Math.max(0, SLIME_YARD_COLUMNS * TILE_SIZE - SLIME_FRAME_WIDTH * SLIME_SCALE)
-  const maxY = Math.max(0, SLIME_YARD_ROWS * TILE_SIZE - SLIME_FRAME_HEIGHT * SLIME_SCALE)
+  const maxX = Math.max(0, SLIME_YARD_COLUMNS * TILE_SIZE - SLIME_MOVEMENT_WIDTH * SLIME_SCALE)
+  const maxY = Math.max(0, SLIME_YARD_ROWS * TILE_SIZE - SLIME_MOVEMENT_HEIGHT * SLIME_SCALE)
   const start = getSlimePosition(index)
   const points = [
     start,
-    { x: random() * maxX, y: random() * maxY },
-    { x: random() * maxX, y: random() * maxY },
-    { x: random() * maxX, y: random() * maxY },
+    getSlimeSpritePositionFromMovementBox({
+      x: random() * maxX,
+      y: random() * maxY,
+    }),
+    getSlimeSpritePositionFromMovementBox({
+      x: random() * maxX,
+      y: random() * maxY,
+    }),
+    getSlimeSpritePositionFromMovementBox({
+      x: random() * maxX,
+      y: random() * maxY,
+    }),
   ]
   const faces = points.map((point, pointIndex) => {
     const nextPoint = points[(pointIndex + 1) % points.length]
@@ -27,6 +38,20 @@ export function getSlimeMotionPath(slime, index) {
   })
 
   return { faces, points }
+}
+
+export function getSlimeMovementDepth(point) {
+  return Math.round(
+    point.y +
+    (SLIME_MOVEMENT_OFFSET_Y + SLIME_MOVEMENT_HEIGHT) * SLIME_SCALE,
+  )
+}
+
+export function getSlimeSpritePositionFromMovementBox(point) {
+  return {
+    x: point.x - SLIME_MOVEMENT_OFFSET_X * SLIME_SCALE,
+    y: point.y - SLIME_MOVEMENT_OFFSET_Y * SLIME_SCALE,
+  }
 }
 
 export function getSlimeColorFilter(color) {

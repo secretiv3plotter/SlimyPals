@@ -8,6 +8,9 @@ class AudioManager {
     this.bgmGain = null
     this.bgmSource = null
     this.bgmKey = null
+    this.bgmStartPromise = null
+    this.bgmStartingKey = null
+    this.bgmStartId = 0
     this.sfxVolume = 0.8
     this.sfxMuted = false
     
@@ -123,24 +126,53 @@ class AudioManager {
   async playBgm(soundKey) {
     await this.unlock()
     if (this.bgmSource && this.bgmKey === soundKey) return true
+    if (this.bgmStartPromise && this.bgmStartingKey === soundKey) {
+      return this.bgmStartPromise
+    }
 
-    this.stopBgm()
+    const startId = this.bgmStartId + 1
+    this.bgmStartId = startId
+    this.stopCurrentBgm()
 
-    const buffer = await this.decodeBuffer(soundKey)
-    if (!buffer) return false
+    this.bgmStartingKey = soundKey
+    this.bgmStartPromise = (async () => {
+      const buffer = await this.decodeBuffer(soundKey)
+      if (!buffer || this.bgmStartId !== startId) return false
 
-    const source = this.ctx.createBufferSource()
-    source.buffer = buffer
-    source.loop = true
+      const source = this.ctx.createBufferSource()
+      source.buffer = buffer
+      source.loop = true
 
-    source.connect(this.bgmGain)
-    source.start(0)
-    this.bgmSource = source
-    this.bgmKey = soundKey
-    return true
+      source.connect(this.bgmGain)
+      if (this.bgmStartId !== startId) {
+        source.disconnect()
+        return false
+      }
+
+      source.start(0)
+      this.bgmSource = source
+      this.bgmKey = soundKey
+      return true
+    })()
+
+    try {
+      return await this.bgmStartPromise
+    } finally {
+      if (this.bgmStartId === startId) {
+        this.bgmStartPromise = null
+        this.bgmStartingKey = null
+      }
+    }
   }
 
   stopBgm() {
+    this.bgmStartId += 1
+    this.bgmStartPromise = null
+    this.bgmStartingKey = null
+    this.stopCurrentBgm()
+  }
+
+  stopCurrentBgm() {
     if (!this.bgmSource) return
 
     try { this.bgmSource.stop() } catch {
