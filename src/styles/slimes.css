@@ -51,7 +51,9 @@
     calc(var(--slime-frame-height) * var(--slime-scale));
   animation:
     slime-idle var(--slime-idle-speed)
-    steps(var(--slime-frame-count)) infinite;
+    steps(var(--slime-frame-count))
+    var(--slime-idle-delay, 0s)
+    infinite;
   image-rendering: pixelated;
 }
 

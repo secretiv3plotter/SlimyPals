@@ -1,10 +1,10 @@
-import simpleSlimeSprite from '../assets/slimes/common/simpleslime.png'
-import mythicalDemonSlimeSprite from '../assets/slimes/mythical/mythicaldemonslime.png'
-import mythicalKingSlimeSprite from '../assets/slimes/mythical/mythicalkingslime.png'
-import mythicalWitchSlimeSprite from '../assets/slimes/mythical/mythicalwitchslime.png'
-import rareBaseballSlimeSprite from '../assets/slimes/rare/rarebaseballslime.png'
-import rareBeanieSlimeSprite from '../assets/slimes/rare/rarebeanieslime.png'
-import rareFedoraSlimeSprite from '../assets/slimes/rare/rarefedoraslime.png'
+import simpleSlimeSprite from '../assets/slimes/adult/adultslime.png'
+import mythicalDemonSlimeSprite from '../assets/slimes/adult/mythical/mythicaladultdemon.png'
+import mythicalKingSlimeSprite from '../assets/slimes/adult/mythical/mythicaladultking.png'
+import mythicalWitchSlimeSprite from '../assets/slimes/adult/mythical/mythicaladultwitch.png'
+import rareBaseballSlimeSprite from '../assets/slimes/adult/rare/rareadultbaseball.png'
+import rareBeanieSlimeSprite from '../assets/slimes/adult/rare/rareadultbeanie.png'
+import rareFedoraSlimeSprite from '../assets/slimes/adult/rare/rareadultfedora.png'
 import { SLIME_RARITIES } from '../services/slimyPalsDb'
 
 export { simpleSlimeSprite }

@@ -14,6 +14,18 @@ import { getSlimeDisplayName } from '../../../game/slimeText'
 import killButtonSprite from '../../../assets/slimes/ui/deathbutton.png'
 import slimeBlackholeDeathSprite from '../../../assets/slimes/effects/slime_blackhole_death.png'
 
+// Deterministic pseudo-random 0–1 value derived from a slime's ID + salt.
+// Stable across page refreshes but unique per slime, so animations are
+// naturally desynchronised without resetting on reload.
+function seededRandom(id, salt = '') {
+  const str = String(id) + salt
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 31 + str.charCodeAt(i)) & 0xfffffff
+  }
+  return hash / 0xfffffff
+}
+
 const SLIME_DEATH_FRAME_COUNT = 6
 const SLIME_DEATH_FRAME_ASPECT_RATIO = 47 / 44
 
@@ -147,7 +159,10 @@ function YardSlime({
         '--slime-face-1': slimeMotionPath.faces[1],
         '--slime-face-2': slimeMotionPath.faces[2],
         '--slime-face-3': slimeMotionPath.faces[3],
-        '--slime-wander-delay': `${index * -1.7}s`,
+        // Negative delays start the animation mid-cycle, giving each slime
+        // a unique starting point that is stable across page refreshes.
+        '--slime-wander-delay': `-${(seededRandom(slime.id, 'wander') * 28).toFixed(2)}s`,
+        '--slime-idle-delay': `-${(seededRandom(slime.id, 'idle') * 1.3).toFixed(3)}s`,
       }}
     >
       <div
