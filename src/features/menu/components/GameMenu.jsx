@@ -33,6 +33,9 @@ function GameMenu({
     'unfriend-confirm',
   ].includes(menuMode)
   const requestReturnMode = selectedRequest?.returnMode || 'friend-requests'
+  const modalClassName = isConfirmMode
+    ? 'unfriend-popup'
+    : `menu-modal menu-modal--${menuMode}`
 
   return (
     <>
@@ -43,7 +46,7 @@ function GameMenu({
           onClick={onClose}
         >
           <section
-            className={isConfirmMode ? 'unfriend-popup' : 'menu-modal'}
+            className={modalClassName}
             role="dialog"
             aria-label="Game menu"
             aria-modal="true"
