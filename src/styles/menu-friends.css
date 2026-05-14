@@ -215,6 +215,7 @@
 }
 
 .unfriend-popup {
+  position: relative;
   display: flex;
   width: min(88vw, 420px);
   min-height: 220px;

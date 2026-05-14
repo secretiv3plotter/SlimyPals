@@ -88,8 +88,8 @@
 
 .menu-modal-close {
   position: absolute;
-  top: 18px;
-  right: 18px;
+  top: -34px;
+  right: 14px;
   width: 58px;
   height: 58px;
   padding: 0;
@@ -259,8 +259,6 @@
 .slime-delete-panel .menu-panel-title {
   line-height: 1.15;
   margin-bottom: -5px;
-  max-width: calc(100% - 96px);
-  overflow-wrap: anywhere;
 }
 
 .slime-delete-preview {
@@ -396,8 +394,8 @@
   }
 
   .slime-delete-modal .menu-modal-close {
-    top: 12px;
-    right: 12px;
+    top: -28px;
+    right: 8px;
     width: 48px;
     height: 48px;
   }
@@ -413,7 +411,6 @@
   }
 
   .slime-delete-panel .menu-panel-title {
-    max-width: calc(100% - 80px);
     font-size: 1.55rem;
     line-height: 1.2;
     padding-top: 12px;
