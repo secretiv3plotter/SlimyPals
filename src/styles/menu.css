@@ -192,6 +192,12 @@
 
 .slime-delete-panel {
   width: min(78vw, 390px);
+  gap: 14px;
+}
+
+.slime-delete-panel .menu-panel-title {
+  line-height: 1.15;
+  margin-bottom: -5px;
 }
 
 .slime-delete-preview {
@@ -205,31 +211,34 @@
   image-rendering: pixelated;
 }
 
-.slime-delete-preview-image {
-  position: absolute;
-  top: calc(var(--slime-preview-y-offset) * 1%);
-  left: calc(var(--slime-preview-x-offset) * 1%);
-  display: block;
-  width: var(--slime-preview-frame-display-width);
-  height: var(--slime-preview-frame-display-height);
-  image-rendering: pixelated;
-}
-
 .slime-delete-preview-sprite {
   position: absolute;
-  top: calc(var(--slime-preview-y-offset) * 1%);
-  left: calc(var(--slime-preview-x-offset) * 1%);
-  width: var(--slime-preview-frame-display-width);
-  height: var(--slime-preview-frame-display-height);
+  top: calc(var(--slime-preview-y-offset) / var(--slime-preview-visible-height) * 100%);
+  left: calc(var(--slime-preview-x-offset) / var(--slime-preview-visible-width) * 100%);
+  width:
+    calc(
+      var(--slime-preview-frame-width) /
+      var(--slime-preview-visible-width) *
+      100%
+    );
+  height:
+    calc(
+      var(--slime-preview-frame-height) /
+      var(--slime-preview-visible-height) *
+      100%
+    );
 }
 
 .slime-delete-base,
 .slime-delete-overlay {
   position: absolute;
-  inset: 0;
-  background-size: 400% 100%;
-  background-position: 0 0;
+  top: 0;
+  left: 0;
+  width: 400%;
+  height: 100%;
   background-repeat: no-repeat;
+  background-size: 100% 100%;
+  animation: slime-delete-idle 1.3s steps(4) infinite;
 }
 
 .slime-delete-base {
@@ -239,6 +248,12 @@
 
 .slime-delete-overlay {
   background-repeat: no-repeat;
+}
+
+@keyframes slime-delete-idle {
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 .slime-delete-details {
@@ -296,6 +311,10 @@
 
 .menu-modal .slime-delete-details dd {
   font-weight: 700;
+}
+
+.slime-delete-details .slime-delete-rarity-value {
+  color: var(--slime-rarity-color, #111111);
 }
 
 .slime-delete-confirm {

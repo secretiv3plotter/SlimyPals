@@ -8,18 +8,24 @@ const SLIME_PREVIEW_FRAME = Object.freeze({
 
 const SLIME_PREVIEW_BOUNDS = Object.freeze({
   common: {
-    default: { x: 11, y: 33, width: 14, height: 12 },
+    default: { x: 6, y: 28, width: 24, height: 18 },
   },
   rare: {
-    baseball: { x: 10, y: 20, width: 15, height: 25 },
-    beanie: { x: 11, y: 21, width: 15, height: 24 },
-    fedora: { x: 11, y: 24, width: 14, height: 21 },
+    baseball: { x: 6, y: 17, width: 24, height: 28 },
+    beanie: { x: 6, y: 18, width: 24, height: 27 },
+    fedora: { x: 6, y: 21, width: 24, height: 24 },
   },
   mythical: {
-    demon: { x: 4, y: 17, width: 28, height: 28 },
-    king: { x: 6, y: 16, width: 24, height: 29 },
-    witch: { x: 4, y: 10, width: 32, height: 35 },
+    demon: { x: 1, y: 14, width: 34, height: 31 },
+    king: { x: 3, y: 13, width: 31, height: 32 },
+    witch: { x: 1, y: 7, width: 38, height: 38 },
   },
+})
+
+const SLIME_RARITY_COLORS = Object.freeze({
+  common: '#ffffff',
+  mythical: '#ffd83d',
+  rare: '#d43cff',
 })
 
 function getSlimePreviewBounds(slime) {
@@ -36,24 +42,16 @@ function SlimeDeleteConfirm({ slime, onCancel, onConfirm }) {
     return null
   }
 
-  const previewFrame = Array.isArray(slime.frames) && slime.frames.length > 0
-    ? slime.frames[0]
-    : null
+  const rarityKey = String(slime.rarity ?? '').toLowerCase()
   const overlaySprite = slimeOverlaySprites[slime.rarity]?.[slime.type]
   const previewBounds = getSlimePreviewBounds(slime)
   const previewStyle = {
-    '--slime-preview-frame-width': `${SLIME_PREVIEW_FRAME.width}`,
-    '--slime-preview-frame-height': `${SLIME_PREVIEW_FRAME.height}`,
     '--slime-preview-visible-width': `${previewBounds.width}`,
     '--slime-preview-visible-height': `${previewBounds.height}`,
-    '--slime-preview-frame-display-width':
-      `${(SLIME_PREVIEW_FRAME.width / previewBounds.width) * 100}%`,
-    '--slime-preview-frame-display-height':
-      `${(SLIME_PREVIEW_FRAME.height / previewBounds.height) * 100}%`,
-    '--slime-preview-x-offset':
-      `${-(previewBounds.x / previewBounds.width) * 100}`,
-    '--slime-preview-y-offset':
-      `${-(previewBounds.y / previewBounds.height) * 100}`,
+    '--slime-preview-frame-width': `${SLIME_PREVIEW_FRAME.width}`,
+    '--slime-preview-frame-height': `${SLIME_PREVIEW_FRAME.height}`,
+    '--slime-preview-x-offset': `${-previewBounds.x}`,
+    '--slime-preview-y-offset': `${-previewBounds.y}`,
   }
 
   return (
@@ -84,29 +82,25 @@ function SlimeDeleteConfirm({ slime, onCancel, onConfirm }) {
             className="slime-delete-preview"
             style={previewStyle}
           >
-            {previewFrame ? ( 
-              <img
-                src={previewFrame}
-                alt={`${slime.rarity} slime`}
-                className="slime-delete-preview-image"
+            <div
+              className="slime-delete-preview-sprite"
+              role="img"
+              aria-label={`${slime.rarity} slime`}
+            >
+              <div
+                className="slime-delete-base"
+                style={{
+                  '--slime-base-sprite': `url(${simpleSlimeSprite})`,
+                  '--slime-filter': getSlimeColorFilter(slime.color),
+                }}
               />
-            ) : (
-              <div className="slime-delete-preview-sprite">
+              {overlaySprite && (
                 <div
-                  className="slime-delete-base"
-                  style={{
-                    '--slime-base-sprite': `url(${simpleSlimeSprite})`,
-                    '--slime-filter': getSlimeColorFilter(slime.color),
-                  }}
+                  className="slime-delete-overlay"
+                  style={{ backgroundImage: `url(${overlaySprite})` }}
                 />
-                {overlaySprite && (
-                  <div
-                    className="slime-delete-overlay"
-                    style={{ backgroundImage: `url(${overlaySprite})` }}
-                  />
-                )}
-              </div>
-            )}
+              )}
+            </div>
           </div>
           
           <dl className="slime-delete-details">
@@ -116,7 +110,12 @@ function SlimeDeleteConfirm({ slime, onCancel, onConfirm }) {
             </div>
             <div>
               <dt>RARITY</dt>
-              <dd>{slime.rarity}</dd>
+              <dd
+                className="slime-delete-rarity-value"
+                style={{ '--slime-rarity-color': SLIME_RARITY_COLORS[rarityKey] }}
+              >
+                {slime.rarity}
+              </dd>
             </div>
             <div>
               <dt>TYPE</dt>
