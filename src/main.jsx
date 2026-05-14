@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import audioManager from './audio/audioManager'
+import { SOUND_KEYS } from './audio/soundFiles'
 
 // Unlock audio on first interaction so music can start immediately after login
 const unlockAudio = () => {
@@ -15,6 +16,17 @@ const unlockAudio = () => {
 window.addEventListener('pointerdown', unlockAudio)
 window.addEventListener('keydown', unlockAudio)
 window.addEventListener('touchstart', unlockAudio)
+
+// Global click listener for buttons (using capture phase to bypass stopPropagation)
+document.addEventListener('click', (e) => {
+  const button = e.target.closest('button, [role="button"], a');
+  if (button) {
+    const isActionContainer = button.closest('.menu-modal, .unfriend-popup, .auth-screen, .menu-modal-backdrop, .auth-card, .menu-button');
+    if (isActionContainer) {
+      audioManager.playSfx(SOUND_KEYS.CLICK, { volume: 0.5 });
+    }
+  }
+}, true);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

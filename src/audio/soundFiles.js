@@ -1,4 +1,5 @@
 import loopBackground from '../assets/soundeffects/LOOP_BACKGROUND.mp3'
+import click from '../assets/soundeffects/click.MP3'
 import eating from '../assets/soundeffects/eating.mp3'
 import factory from '../assets/soundeffects/factory.mp3'
 import kill from '../assets/soundeffects/kill.mp3'
@@ -14,6 +15,7 @@ import summon2 from '../assets/soundeffects/summon/summon2.mp3'
 
 export const SOUND_KEYS = {
   BGM_LOOP: 'BGM_LOOP',
+  CLICK: 'CLICK',
   EATING: 'EATING',
   FACTORY: 'FACTORY',
   KILL: 'KILL',
@@ -30,6 +32,7 @@ export const SOUND_KEYS = {
 
 export const SOUND_FILES = {
   [SOUND_KEYS.BGM_LOOP]: loopBackground,
+  [SOUND_KEYS.CLICK]: click,
   [SOUND_KEYS.EATING]: eating,
   [SOUND_KEYS.FACTORY]: factory,
   [SOUND_KEYS.KILL]: kill,

@@ -84,6 +84,12 @@
   gap: 6px;
 }
 
+@media (max-width: 480px) {
+  .auth-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* --- Inputs --- */
 .auth-input {
   width: 100%;
@@ -95,6 +101,9 @@
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.14);
   font-family: var(--pixel-font);
   font-size: clamp(0.82rem, 1.35vw, 0.98rem);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .auth-input::placeholder { color: #829084; }
