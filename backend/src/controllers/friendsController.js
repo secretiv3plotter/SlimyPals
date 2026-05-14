@@ -77,6 +77,34 @@ exports.sendFriendRequest = async (req, res, next) => {
   }
 };
 
+exports.searchUser = async (req, res, next) => {
+  try {
+    const username = String(req.query.username || '').trim();
+
+    if (!username) {
+      return res.status(400).json({ error: { message: 'Username is required' } });
+    }
+
+    const user = await User.findPublicByUsername(username);
+    if (!user) {
+      return res.status(404).json({ error: { message: 'User not found' } });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user: {
+          id: user.id,
+          username: user.username,
+          createdAt: user.created_at
+        }
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.acceptFriendRequest = async (req, res, next) => {
   try {
     const { id } = req.params;
