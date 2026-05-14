@@ -17,6 +17,19 @@ window.addEventListener('pointerdown', unlockAudio)
 window.addEventListener('keydown', unlockAudio)
 window.addEventListener('touchstart', unlockAudio)
 
+const stopAudioWhenPageIsHidden = () => {
+  if (document.visibilityState === 'hidden') {
+    audioManager.stopAllAudio()
+  }
+}
+
+document.addEventListener('visibilitychange', stopAudioWhenPageIsHidden)
+window.addEventListener('pagehide', () => {
+  audioManager.suspend().catch(() => {
+    // The browser may already be tearing down the page.
+  })
+})
+
 // Global click listener for buttons (using capture phase to bypass stopPropagation)
 document.addEventListener('click', (e) => {
   const button = e.target.closest('button, [role="button"], a');

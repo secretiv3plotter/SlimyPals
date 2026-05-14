@@ -257,6 +257,19 @@ class AudioManager {
     this.loopingSfxSources.clear()
     this.loopingSfxGains.clear()
   }
+
+  stopAllAudio() {
+    this.stopBgm()
+    this.stopAllLoopingSfx()
+  }
+
+  async suspend() {
+    this.stopAllAudio()
+
+    if (this.ctx?.state === 'running') {
+      await this.ctx.suspend()
+    }
+  }
 }
 
 const audioManager = new AudioManager()

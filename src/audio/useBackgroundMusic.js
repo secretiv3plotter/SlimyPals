@@ -14,23 +14,27 @@ export function useBackgroundMusic(
 
   useEffect(() => {
     if (!enabled) {
-      audioManager.stopBgm()
-      audioManager.stopAllLoopingSfx()
+      audioManager.stopAllAudio()
       isPlayingRef.current = false
       isStartingRef.current = false
       return undefined
     }
 
     let isDisposed = false
+    const shouldPlay = () => !isDisposed && document.visibilityState === 'visible'
 
     async function startBackgroundMusic() {
-      if (isDisposed || isPlayingRef.current || isStartingRef.current) {
+      if (!shouldPlay() || isPlayingRef.current || isStartingRef.current) {
         return
       }
 
       isStartingRef.current = true
       try {
         const bgmStarted = await audioManager.playBgm(soundKey)
+        if (!shouldPlay()) {
+          audioManager.stopAllAudio()
+          return
+        }
         await Promise.all(loopingSfx.map((loopingSfxConfig) => {
           const config = typeof loopingSfxConfig === 'string'
             ? { soundKey: loopingSfxConfig }
@@ -57,20 +61,42 @@ export function useBackgroundMusic(
     const handleInteraction = () => {
       startBackgroundMusic()
     }
+    const stopBackgroundMusic = () => {
+      audioManager.stopAllAudio()
+      isPlayingRef.current = false
+      isStartingRef.current = false
+    }
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        stopBackgroundMusic()
+        return
+      }
+
+      startBackgroundMusic()
+    }
+    const handlePageHide = () => {
+      stopBackgroundMusic()
+      audioManager.suspend().catch(() => {
+        // Some browsers reject suspension during page teardown.
+      })
+    }
 
     interactionEvents.forEach((eventName) => {
       window.addEventListener(eventName, handleInteraction)
     })
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('pagehide', handlePageHide)
+    window.addEventListener('beforeunload', stopBackgroundMusic)
 
     return () => {
       isDisposed = true
       interactionEvents.forEach((eventName) => {
         window.removeEventListener(eventName, handleInteraction)
       })
-      audioManager.stopBgm()
-      audioManager.stopAllLoopingSfx()
-      isPlayingRef.current = false
-      isStartingRef.current = false
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('pagehide', handlePageHide)
+      window.removeEventListener('beforeunload', stopBackgroundMusic)
+      stopBackgroundMusic()
     }
   }, [enabled, loopingSfx, soundKey])
 
