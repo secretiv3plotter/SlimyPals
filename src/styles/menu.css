@@ -188,6 +188,7 @@
 
 .slime-delete-modal {
   min-height: 470px;
+  background: #ae88bd;
 }
 
 .slime-delete-panel {
@@ -270,7 +271,7 @@
   align-items: center;
   min-height: 46px;
   border: 4px solid #000000;
-  background: #ae88bd;
+  background: var(--menu-base-color);
   box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 

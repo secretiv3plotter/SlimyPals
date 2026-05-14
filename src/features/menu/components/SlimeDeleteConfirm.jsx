@@ -1,41 +1,17 @@
-import { simpleSlimeSprite, slimeOverlaySprites } from '../../../game/slimeSprites'
+import { getSlimeBaseSprite, getSlimeOverlaySprite } from '../../../game/slimeSprites'
 import { getSlimeColorFilter } from '../../../game/slimePresentation'
+import { SLIME_FRAME_HEIGHT, SLIME_FRAME_WIDTH } from '../../../game/worldConstants'
 
 const SLIME_PREVIEW_FRAME = Object.freeze({
-  width: 68,
-  height: 46,
-})
-
-const SLIME_PREVIEW_BOUNDS = Object.freeze({
-  common: {
-    default: { x: 6, y: 28, width: 24, height: 18 },
-  },
-  rare: {
-    baseball: { x: 6, y: 17, width: 24, height: 28 },
-    beanie: { x: 6, y: 18, width: 24, height: 27 },
-    fedora: { x: 6, y: 21, width: 24, height: 24 },
-  },
-  mythical: {
-    demon: { x: 1, y: 14, width: 34, height: 31 },
-    king: { x: 3, y: 13, width: 31, height: 32 },
-    witch: { x: 1, y: 7, width: 38, height: 38 },
-  },
+  width: SLIME_FRAME_WIDTH,
+  height: SLIME_FRAME_HEIGHT,
 })
 
 const SLIME_RARITY_COLORS = Object.freeze({
   common: '#ffffff',
-  mythical: '#ffd83d',
-  rare: '#d43cff',
+  mythical: '#d43cff',
+  rare: '#ffd83d',
 })
-
-function getSlimePreviewBounds(slime) {
-  const rarity = String(slime.rarity ?? '').toLowerCase()
-  const type = String(slime.type ?? '').toLowerCase()
-
-  return SLIME_PREVIEW_BOUNDS[rarity]?.[type]
-    ?? SLIME_PREVIEW_BOUNDS[rarity]?.default
-    ?? SLIME_PREVIEW_BOUNDS.common.default
-}
 
 function SlimeDeleteConfirm({ slime, onCancel, onConfirm }) {
   if (!slime) {
@@ -43,15 +19,16 @@ function SlimeDeleteConfirm({ slime, onCancel, onConfirm }) {
   }
 
   const rarityKey = String(slime.rarity ?? '').toLowerCase()
-  const overlaySprite = slimeOverlaySprites[slime.rarity]?.[slime.type]
-  const previewBounds = getSlimePreviewBounds(slime)
+  const baseSprite = getSlimeBaseSprite(slime.level)
+  const overlaySprite = getSlimeOverlaySprite(slime)
+  
   const previewStyle = {
-    '--slime-preview-visible-width': `${previewBounds.width}`,
-    '--slime-preview-visible-height': `${previewBounds.height}`,
+    '--slime-preview-visible-width': `${SLIME_PREVIEW_FRAME.width}`,
+    '--slime-preview-visible-height': `${SLIME_PREVIEW_FRAME.height}`,
     '--slime-preview-frame-width': `${SLIME_PREVIEW_FRAME.width}`,
     '--slime-preview-frame-height': `${SLIME_PREVIEW_FRAME.height}`,
-    '--slime-preview-x-offset': `${-previewBounds.x}`,
-    '--slime-preview-y-offset': `${-previewBounds.y}`,
+    '--slime-preview-x-offset': `0`,
+    '--slime-preview-y-offset': `0`,
   }
 
   return (
@@ -90,7 +67,7 @@ function SlimeDeleteConfirm({ slime, onCancel, onConfirm }) {
               <div
                 className="slime-delete-base"
                 style={{
-                  '--slime-base-sprite': `url(${simpleSlimeSprite})`,
+                  '--slime-base-sprite': `url(${baseSprite})`,
                   '--slime-filter': getSlimeColorFilter(slime.color),
                 }}
               />
