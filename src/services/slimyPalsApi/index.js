@@ -42,6 +42,7 @@ export {
   listFriends,
   pokeFriendSlime,
   removeFriend,
+  searchUser,
   sendFriendRequest,
 } from './friendsApi'
 export {

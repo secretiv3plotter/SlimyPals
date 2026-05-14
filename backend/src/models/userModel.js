@@ -36,6 +36,14 @@ const User = {
     return result.rows[0];
   },
 
+  async findPublicByUsername(username) {
+    const result = await db.query(
+      'SELECT id, username, created_at FROM users WHERE username = $1 AND deleted_at IS NULL',
+      [username]
+    );
+    return result.rows[0];
+  },
+
   async comparePassword(candidatePassword, hash) {
     return bcrypt.compare(candidatePassword, hash);
   }

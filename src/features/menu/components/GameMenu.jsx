@@ -1,19 +1,39 @@
-import { FRIEND_SLOTS } from '../../../game/worldConstants'
-
 function GameMenu({
   isOpen,
   menuMode,
   onClose,
   onConfirmLogout,
   onSetMenuMode,
-  friends,
   friendName,
   setFriendName,
-  handleAddFriend,
+  handleAcceptFriendRequest,
+  handleCancelFriendRequest,
+  handleDeclineFriendRequest,
+  handleSearchFriend,
+  handleSendFriendRequest,
   handleRemoveFriend,
+  friendMenuMessage,
+  friendSlots,
+  incomingRequests,
+  isFriendMenuLoading,
+  refreshFriendMenu,
+  canAcceptFriendRequest,
+  canSendFriendRequest,
+  searchedUser,
   selectedFriend,
   setSelectedFriend,
+  selectedRequest,
+  setSelectedRequest,
 }) {
+  const isConfirmMode = [
+    'add-friend-confirm',
+    'accept-request-confirm',
+    'cancel-request-confirm',
+    'decline-request-confirm',
+    'unfriend-confirm',
+  ].includes(menuMode)
+  const requestReturnMode = selectedRequest?.returnMode || 'friend-requests'
+
   return (
     <>
       {isOpen && (
@@ -23,30 +43,29 @@ function GameMenu({
           onClick={onClose}
         >
           <section
-              className={
-                menuMode === 'unfriend-confirm'
-                  ? 'unfriend-popup'
-                  : 'menu-modal'
-              }
+            className={isConfirmMode ? 'unfriend-popup' : 'menu-modal'}
             role="dialog"
             aria-label="Game menu"
             aria-modal="true"
             onClick={(event) => event.stopPropagation()}
           >
-              <button
-                className="menu-modal-close"
-                type="button"
-                aria-label="Close menu"
-                onClick={onClose}
-              >
-                <span aria-hidden="true" />
-              </button>
+            <button
+              className="menu-modal-close"
+              type="button"
+              aria-label="Close menu"
+              onClick={onClose}
+            >
+              <span aria-hidden="true" />
+            </button>
             {menuMode === 'main' && (
               <div className="menu-main-actions">
                 <button
                   className="menu-modal-action"
                   type="button"
-                  onClick={() => onSetMenuMode('friends')}
+                  onClick={() => {
+                    onSetMenuMode('friends')
+                    refreshFriendMenu()
+                  }}
                 >
                   FRIENDS
                 </button>
@@ -60,104 +79,203 @@ function GameMenu({
               </div>
             )}
             {menuMode === 'friends' && (
-              <div className="menu-panel">
+              <div className="menu-panel friends-panel">
                 <h2 className="menu-panel-title">FRIENDS</h2>
-                <div className="friend-input-row">
+                <form
+                  className="friend-input-row"
+                  onSubmit={(event) => {
+                    event.preventDefault()
+                    handleSearchFriend()
+                  }}
+                >
                   <input
                     type="text"
                     value={friendName}
                     onChange={(event) => setFriendName(event.target.value)}
-                    placeholder="Friend name"
+                    placeholder="Search username"
                     className="friend-input"
                   />
 
                   <button
                     className="menu-modal-action menu-modal-action--small"
-                    type="button"
-                    onClick={handleAddFriend}
+                    type="submit"
+                    disabled={isFriendMenuLoading}
                   >
-                    ADD FRIEND
+                    SEARCH
                   </button>
-                </div>
+                </form>
 
                 <div className="friend-slots" aria-label="Friend slots">
-                  {friends.length === 0 ? (
-                    Array.from({ length: FRIEND_SLOTS }, (_, index) => (
-                      <div className="friend-slot" key={index}>
-                        EMPTY SLOT
-                      </div>
-                    ))
-                  ) : (
-                    friends.map((friend) => (
-                      <div className="friend-slot friend-slot-filled" key={friend.id}>
+                  {friendSlots.map((slot, index) => {
+                    if (slot.slotType === 'empty') {
+                      return (
+                        <div className="friend-slot" key={slot.id}>
+                          EMPTY SLOT
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <div
+                        className="friend-slot friend-slot-filled"
+                        key={`${slot.slotType}-${slot.friendshipId || slot.id || index}`}
+                      >
                         <div className="friend-info">
-                          <div
-                            className={
-                              friend.online
-                                ? 'friend-status online'
-                                : 'friend-status offline'
-                            }
-                          />
+                          {slot.slotType === 'friend' && (
+                            <div
+                              className={
+                                slot.online
+                                  ? 'friend-status online'
+                                  : 'friend-status offline'
+                              }
+                              aria-label={slot.online ? 'Available' : 'Offline'}
+                            />
+                          )}
                           <span className="friend-name">
-                            {friend.name}
+                            {slot.username}
                           </span>
 
-                          {friend.pending && (
+                          {slot.slotType === 'sent-request' && (
                             <span className="friend-pending-status">
                               PENDING
                             </span>
                           )}
                         </div>
                         <div className="friend-actions">
-                          
-                            <span className="friend-pending-status">
-                              PENDING CONFIRMATION
-                            </span>
-                          
+                          {slot.slotType === 'sent-request' && (
+                            <button
+                              type="button"
+                              className="friend-remove-button"
+                              disabled={isFriendMenuLoading}
+                              onClick={() => {
+                                setSelectedRequest(slot)
+                                onSetMenuMode('cancel-request-confirm')
+                              }}
+                              aria-label={`Cancel friend request to ${slot.username}`}
+                            >
+                              <span className="friend-remove-icon" aria-hidden="true" />
+                            </button>
+                          )}
 
-                          <button
-                            type="button"
-                            className="friend-remove-button"
-                            onClick={() => {
-                              setSelectedFriend(friend)
-                              onSetMenuMode('unfriend-confirm')
-                            }}
-                          >
-                            X
-                          </button>
+                          {slot.slotType === 'search-result' && (
+                            <button
+                              type="button"
+                              className="friend-add-button"
+                              disabled={!canSendFriendRequest || isFriendMenuLoading}
+                              aria-label={`Send friend request to ${slot.username}`}
+                              onClick={() => onSetMenuMode('add-friend-confirm')}
+                            >
+                              <span className="friend-add-icon" aria-hidden="true" />
+                            </button>
+                          )}
+
+                          {slot.slotType === 'incoming-search' && (
+                            <>
+                              <button
+                                type="button"
+                                className="friend-accept-button"
+                                disabled={!canAcceptFriendRequest || isFriendMenuLoading}
+                                aria-label={`Accept friend request from ${slot.username}`}
+                                onClick={() => {
+                                  setSelectedRequest({
+                                    ...slot,
+                                    returnMode: 'friends',
+                                  })
+                                  onSetMenuMode('accept-request-confirm')
+                                }}
+                              >
+                                <span className="friend-accept-icon" aria-hidden="true" />
+                              </button>
+                              <button
+                                type="button"
+                                className="friend-remove-button"
+                                disabled={isFriendMenuLoading}
+                                aria-label={`Decline friend request from ${slot.username}`}
+                                onClick={() => {
+                                  setSelectedRequest({
+                                    ...slot,
+                                    returnMode: 'friends',
+                                  })
+                                  onSetMenuMode('decline-request-confirm')
+                                }}
+                              >
+                                <span className="friend-remove-icon" aria-hidden="true" />
+                              </button>
+                            </>
+                          )}
+
+                          {slot.slotType === 'friend' && (
+                            <button
+                              type="button"
+                              className="friend-remove-button"
+                              aria-label={`Unfriend ${slot.username}`}
+                              onClick={() => {
+                                setSelectedFriend(slot)
+                                onSetMenuMode('unfriend-confirm')
+                              }}
+                            >
+                              <span className="friend-remove-icon" aria-hidden="true" />
+                            </button>
+                          )}
                         </div>
                       </div>
-                    ))
-                  )}
+                    )
+                  })}
                 </div>
+                {friendMenuMessage && (
+                  <p className="friend-menu-message">{friendMenuMessage}</p>
+                )}
                 <button
-                  className="menu-modal-action menu-modal-action--small"
+                  className="menu-modal-action menu-modal-action--med"
                   type="button"
-                  onClick={() => onSetMenuMode('friend-requests')}
+                  onClick={() => {
+                    onSetMenuMode('friend-requests')
+                    refreshFriendMenu()
+                  }}
                 >
                   VIEW FRIEND REQUESTS
                 </button>
               </div>
             )}
-            {menuMode === 'unfriend-confirm' && (
+            {menuMode === 'add-friend-confirm' && (
               <div className="menu-panel">
                 <h2 className="menu-panel-title">
-                  UNFRIEND {selectedFriend?.name}?
+                  ADD FRIEND?
                 </h2>
+                <p className="friend-confirm-copy">
+                  Send a request to {searchedUser?.username}?
+                </p>
 
                 <div className="menu-confirm-actions">
                   <button
                     className="menu-modal-action menu-modal-action--small"
                     type="button"
+                    onClick={() => onSetMenuMode('friends')}
+                  >
+                    NO
+                  </button>
+
+                  <button
+                    className="menu-modal-action menu-modal-action--small"
+                    type="button"
+                    disabled={!canSendFriendRequest || isFriendMenuLoading}
                     onClick={() => {
-                      handleRemoveFriend(selectedFriend.id)
-                      setSelectedFriend(null)
+                      handleSendFriendRequest()
                       onSetMenuMode('friends')
                     }}
                   >
                     YES
                   </button>
+                </div>
+              </div>
+            )}
+            {menuMode === 'unfriend-confirm' && (
+              <div className="menu-panel">
+                <h2 className="menu-panel-title">
+                  UNFRIEND {selectedFriend?.username}?
+                </h2>
 
+                <div className="menu-confirm-actions">
                   <button
                     className="menu-modal-action menu-modal-action--small"
                     type="button"
@@ -167,6 +285,17 @@ function GameMenu({
                     }}
                   >
                     NO
+                  </button>
+
+                  <button
+                    className="menu-modal-action menu-modal-action--small"
+                    type="button"
+                    onClick={() => {
+                      handleRemoveFriend(selectedFriend.id)
+                      onSetMenuMode('friends')
+                    }}
+                  >
+                    YES
                   </button>
                 </div>
               </div>
@@ -178,16 +307,16 @@ function GameMenu({
                   <button
                     className="menu-modal-action menu-modal-action--small"
                     type="button"
-                    onClick={onConfirmLogout}
+                    onClick={() => onSetMenuMode('main')}
                   >
-                    YES
+                    NO
                   </button>
                   <button
                     className="menu-modal-action menu-modal-action--small"
                     type="button"
-                    onClick={() => onSetMenuMode('main')}
+                    onClick={onConfirmLogout}
                   >
-                    NO
+                    YES
                   </button>
                 </div>
               </div>
@@ -202,6 +331,172 @@ function GameMenu({
                 >
                   OK
                 </button>
+              </div>
+            )}
+            {menuMode === 'friend-requests' && (
+              <div className="menu-panel">
+                <button
+                  className="menu-modal-back"
+                  type="button"
+                  aria-label="Back to friends"
+                  onClick={() => onSetMenuMode('friends')}
+                >
+                  <span className="menu-modal-back-icon" aria-hidden="true" />
+                  <span className="menu-modal-back-label">BACK</span>
+                </button>
+                <h2 className="menu-panel-title">FRIEND REQUESTS</h2>
+                {!canAcceptFriendRequest && incomingRequests.length > 0 && (
+                  <p className="friend-menu-message">
+                    Friend slots full. Cancel a sent request or remove a friend before accepting.
+                  </p>
+                )}
+                <div className="friend-request-list" aria-label="Friend requests">
+                  {incomingRequests.length === 0 ? (
+                    <div className="friend-slot">NO REQUESTS</div>
+                  ) : (
+                    incomingRequests.map((request) => (
+                      <div className="friend-slot friend-slot-filled" key={request.friendshipId}>
+                        <div className="friend-info">
+                          <span className="friend-name">{request.username}</span>
+                        </div>
+                        <div className="friend-actions">
+                          <button
+                            type="button"
+                            className="friend-accept-button"
+                            disabled={!canAcceptFriendRequest || isFriendMenuLoading}
+                            aria-label={`Accept friend request from ${request.username}`}
+                            onClick={() => {
+                              setSelectedRequest({
+                                ...request,
+                                returnMode: 'friend-requests',
+                              })
+                              onSetMenuMode('accept-request-confirm')
+                            }}
+                          >
+                            <span className="friend-accept-icon" aria-hidden="true" />
+                          </button>
+                          <button
+                            type="button"
+                            className="friend-remove-button"
+                            disabled={isFriendMenuLoading}
+                            aria-label={`Decline friend request from ${request.username}`}
+                            onClick={() => {
+                              setSelectedRequest({
+                                ...request,
+                                returnMode: 'friend-requests',
+                              })
+                              onSetMenuMode('decline-request-confirm')
+                            }}
+                          >
+                            <span className="friend-remove-icon" aria-hidden="true" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+                {friendMenuMessage && (
+                  <p className="friend-menu-message">{friendMenuMessage}</p>
+                )}
+              </div>
+            )}
+            {menuMode === 'cancel-request-confirm' && (
+              <div className="menu-panel">
+                <h2 className="menu-panel-title">
+                  CANCEL REQUEST?
+                </h2>
+                <p className="friend-confirm-copy">
+                  Cancel request to {selectedRequest?.username}?
+                </p>
+
+                <div className="menu-confirm-actions">
+                  <button
+                    className="menu-modal-action menu-modal-action--small"
+                    type="button"
+                    onClick={() => {
+                      setSelectedRequest(null)
+                      onSetMenuMode('friends')
+                    }}
+                  >
+                    NO
+                  </button>
+
+                  <button
+                    className="menu-modal-action menu-modal-action--small"
+                    type="button"
+                    disabled={isFriendMenuLoading}
+                    onClick={() => {
+                      handleCancelFriendRequest()
+                      onSetMenuMode('friends')
+                    }}
+                  >
+                    YES
+                  </button>
+                </div>
+              </div>
+            )}
+            {menuMode === 'accept-request-confirm' && (
+              <div className="menu-panel">
+                <h2 className="menu-panel-title">
+                  ACCEPT {selectedRequest?.username}?
+                </h2>
+
+                <div className="menu-confirm-actions">
+                  <button
+                    className="menu-modal-action menu-modal-action--small"
+                    type="button"
+                    onClick={() => {
+                      setSelectedRequest(null)
+                      onSetMenuMode(requestReturnMode)
+                    }}
+                  >
+                    NO
+                  </button>
+
+                  <button
+                    className="menu-modal-action menu-modal-action--small"
+                    type="button"
+                    disabled={!canAcceptFriendRequest || isFriendMenuLoading}
+                    onClick={async () => {
+                      await handleAcceptFriendRequest()
+                      onSetMenuMode(requestReturnMode)
+                    }}
+                  >
+                    YES
+                  </button>
+                </div>
+              </div>
+            )}
+            {menuMode === 'decline-request-confirm' && (
+              <div className="menu-panel">
+                <h2 className="menu-panel-title">
+                  DECLINE {selectedRequest?.username}?
+                </h2>
+
+                <div className="menu-confirm-actions">
+                  <button
+                    className="menu-modal-action menu-modal-action--small"
+                    type="button"
+                    onClick={() => {
+                      setSelectedRequest(null)
+                      onSetMenuMode(requestReturnMode)
+                    }}
+                  >
+                    NO
+                  </button>
+
+                  <button
+                    className="menu-modal-action menu-modal-action--small"
+                    type="button"
+                    disabled={isFriendMenuLoading}
+                    onClick={async () => {
+                      await handleDeclineFriendRequest()
+                      onSetMenuMode(requestReturnMode)
+                    }}
+                  >
+                    YES
+                  </button>
+                </div>
               </div>
             )}
           </section>

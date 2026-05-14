@@ -5,6 +5,10 @@
   gap: 10px;
 }
 
+.friends-panel {
+  padding-bottom: 18px;
+}
+
 .friend-input {
   flex: 1;
   min-height: 44px;
@@ -28,6 +32,15 @@
   gap: 10px;
 }
 
+.friend-request-list {
+  display: grid;
+  width: 100%;
+  max-height: 210px;
+  gap: 10px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
 .friend-slot {
   display: grid;
   min-height: 44px;
@@ -37,6 +50,7 @@
   box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.1);
   color: #111111;
   font-size: 1rem;
+  overflow: hidden;
 }
 
 .friend-slot-filled {
@@ -45,12 +59,27 @@
   justify-content: space-between;
   gap: 10px;
   padding: 0 10px;
+  background: #ae88bd;
 }
 
 .friend-info {
   display: flex;
+  min-width: 0;
   align-items: center;
   gap: 10px;
+}
+
+.friend-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.friend-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
 }
 
 .friend-status {
@@ -66,23 +95,123 @@
 }
 
 .friend-status.offline {
-  background: #cf473f;
+  background: #8d8790;
 }
 
+.friend-add-button,
+.friend-accept-button,
 .friend-remove-button {
+  display: grid;
+  place-items: center;
   width: 32px;
   height: 32px;
   flex-shrink: 0;
   border: 3px solid #000000;
-  background: #cf473f;
   color: #000000;
   cursor: pointer;
   font-family: var(--pixel-font);
   font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.friend-add-button {
+  background: #88c95d;
+}
+
+.friend-accept-button {
+  background: #4cff4c;
+}
+
+.friend-add-icon {
+  position: relative;
+  width: 18px;
+  height: 18px;
+}
+
+.friend-add-icon::before,
+.friend-add-icon::after {
+  position: absolute;
+  background: #000000;
+  content: "";
+}
+
+.friend-add-icon::before {
+  top: 6px;
+  left: 0;
+  width: 18px;
+  height: 5px;
+}
+
+.friend-add-icon::after {
+  top: 0;
+  left: 6px;
+  width: 5px;
+  height: 18px;
+}
+
+.friend-accept-icon {
+  width: 16px;
+  height: 9px;
+  border-left: 5px solid #000000;
+  border-bottom: 5px solid #000000;
+  transform: translateY(-2px) rotate(-45deg);
+}
+
+.friend-remove-icon {
+  position: relative;
+  width: 18px;
+  height: 18px;
+}
+
+.friend-remove-icon::before,
+.friend-remove-icon::after {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 18px;
+  height: 5px;
+  background: #000000;
+  content: "";
+}
+
+.friend-remove-icon::before {
+  transform: rotate(45deg);
+}
+
+.friend-remove-icon::after {
+  transform: rotate(-45deg);
+}
+
+.friend-remove-button {
+  background: #cf473f;
+}
+
+.friend-add-button:hover,
+.friend-accept-button:hover {
+  background: #a6e375;
 }
 
 .friend-remove-button:hover {
   background: #e0544b;
+}
+
+.friend-add-button:disabled,
+.friend-accept-button:disabled,
+.friend-remove-button:disabled {
+  background: #7b7480;
+  color: #38343b;
+  cursor: not-allowed;
+}
+
+.friend-menu-message,
+.friend-confirm-copy {
+  width: 100%;
+  margin: 0;
+  color: #111111;
+  font-family: var(--pixel-font);
+  font-size: 0.68rem;
+  line-height: 1.35;
+  text-align: center;
 }
 
 .unfriend-popup {

@@ -4,6 +4,10 @@ export function listFriends() {
   return apiRequest('/me/friends')
 }
 
+export function searchUser(username) {
+  return apiRequest(`/users/search?username=${encodeURIComponent(username)}`)
+}
+
 export function sendFriendRequest(username) {
   return apiRequest('/me/friends', getJsonOptions('POST', { username }))
 }
