@@ -9,11 +9,18 @@ function FenceOverlay({ fencePosition, fenceTiles }) {
         width: FENCE_COLUMNS * TILE_SIZE,
         height: FENCE_ROWS * TILE_SIZE,
         ...getGridSizeStyle({ columns: FENCE_COLUMNS, rows: FENCE_ROWS }),
-        transform: `translate(${fencePosition.x}px, ${fencePosition.y}px)`,
+        left: fencePosition.x,
+        top: fencePosition.y,
       }}
     >
       {fenceTiles.map((tile) => (
-        <div key={tile.id} className="fence-cell map-tile">
+        <div
+          key={tile.id}
+          className="fence-cell map-tile"
+          style={{
+            zIndex: Math.round(fencePosition.y + (tile.y + 1) * TILE_SIZE),
+          }}
+        >
           {tile.layers.map((layer) => (
             <img
               key={`${tile.id}-${layer.id}`}

@@ -17,6 +17,7 @@ function FoodFactory({
   onSpritePointerUp,
 }) {
   const isAnimating = animationRun > 0
+  const isReady = canProduce && !isAnimating
 
   const styleProps = {
     '--food-factory-frame-count': FOOD_FACTORY_FRAME_COUNT,
@@ -24,6 +25,7 @@ function FoodFactory({
     '--food-factory-frame-width': `${FOOD_FACTORY_FRAME_WIDTH}px`,
     '--food-factory-scale': FOOD_FACTORY_SCALE,
     transform: `translate(${foodFactoryPosition.x}px, ${foodFactoryPosition.y}px)`,
+    zIndex: Math.round(foodFactoryPosition.y + FOOD_FACTORY_FRAME_HEIGHT * FOOD_FACTORY_SCALE),
   }
 
   const spriteStyle = {
@@ -52,7 +54,7 @@ function FoodFactory({
       {/* 2. The Visual Building (Handles full animation without clipping) */}
       <div
         key={`food-factory-visual-${animationRun}`}
-        className={`food-factory-visual${isAnimating ? ' food-factory-visual--active' : ''}${!canProduce && !isAnimating ? ' food-factory-visual--disabled' : ''}`}
+        className={`food-factory-visual${isAnimating ? ' food-factory-visual--active' : ''}${isReady ? ' food-factory-visual--ready' : ''}${!canProduce && !isAnimating ? ' food-factory-visual--disabled' : ''}`}
         onAnimationEnd={onAnimationEnd}
         style={{
           ...spriteStyle,

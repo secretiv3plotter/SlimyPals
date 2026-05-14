@@ -3,7 +3,6 @@
   --food-factory-brightness: 0.8;
 
   position: absolute;
-  z-index: 10;
   top: 0;
   left: 0;
   width: calc(var(--food-factory-frame-width) * var(--food-factory-scale));
@@ -34,6 +33,10 @@
   animation:
     food-factory-play var(--food-factory-speed)
     steps(var(--food-factory-frame-count));
+}
+
+.food-factory-visual--ready {
+  animation: ready-subtle-shake 1800ms ease-in-out infinite;
 }
 
 .food-factory-hitbox {
@@ -218,6 +221,14 @@
     steps(var(--summoning-ground-frame-count)) infinite;
 }
 
+.summoning-container--ready .summoning-ground-base,
+.summoning-container--ready .summoning-fire {
+  animation:
+    summoning-ground-play var(--summoning-ground-speed)
+    steps(var(--summoning-ground-frame-count)) infinite,
+    ready-subtle-shake 1800ms ease-in-out infinite;
+}
+
 /* Layer Stacking (Top to Bottom) */
 .summoning-orb-active { z-index: 5; }
 .summoning-fire { z-index: 4; }
@@ -236,6 +247,27 @@
   }
   to {
     background-position: 100% 0;
+  }
+}
+
+@keyframes ready-subtle-shake {
+  0%, 72%, 100% {
+    transform: translate(0, 0);
+  }
+  76% {
+    transform: translate(-0.3px, 0);
+  }
+  80% {
+    transform: translate(0.3px, 0);
+  }
+  84% {
+    transform: translate(-0.3px, 0);
+  }
+  88% {
+    transform: translate(0.3px, 0);
+  }
+  92% {
+    transform: translate(0, 0);
   }
 }
 

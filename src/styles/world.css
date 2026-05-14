@@ -36,7 +36,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
   pointer-events: none;
 }
 
@@ -49,7 +48,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 2;
   pointer-events: none;
 }
 
@@ -57,7 +55,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 3;
   pointer-events: none;
 }
 
@@ -90,10 +87,22 @@
   color: #111111;
   font-family: var(--pixel-font);
   font-size: 0.5rem;
-  font-weight: 700;
+  font-weight: 900;
   line-height: 1;
   pointer-events: none;
+  animation: friend-yard-label-float 2400ms ease-in-out infinite;
   white-space: nowrap;
+}
+
+@keyframes friend-yard-label-float {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-2px);
+  }
 }
 
 .map-tile {

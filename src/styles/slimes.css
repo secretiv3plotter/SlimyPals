@@ -3,7 +3,7 @@
   width: calc(var(--slime-frame-width) * var(--slime-scale));
   height: calc(var(--slime-frame-height) * var(--slime-scale));
   image-rendering: pixelated;
-  pointer-events: auto;
+  pointer-events: none;
   transform: translate(var(--slime-x-0), var(--slime-y-0));
   z-index: var(--slime-z-0);
 }
@@ -13,7 +13,12 @@
   pointer-events: none;
 }
 
+.yard-slime--appearing .yard-slime-facing {
+  animation: slime-summon-flicker 1000ms steps(1, end);
+}
+
 .yard-slime--dying .yard-slime-jump,
+.yard-slime--dying .yard-slime-shadow-layer,
 .yard-slime--dying .yard-slime-level {
   opacity: 0;
 }
@@ -30,8 +35,14 @@
   z-index: 1;
 }
 
-.yard-slime-level--pinned ~ *,
-.yard-slime:has(.yard-slime-level--pinned) .yard-slime-jump {
+.yard-slime:has(.yard-slime-level--pinned) .yard-slime-base {
+  filter:
+    var(--slime-filter)
+    drop-shadow(0 0 3px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 7px rgba(255, 255, 255, 0.75));
+}
+
+.yard-slime:has(.yard-slime-level--pinned) .yard-slime-overlay {
   filter:
     drop-shadow(0 0 3px rgba(255, 255, 255, 0.95))
     drop-shadow(0 0 7px rgba(255, 255, 255, 0.75));
@@ -39,6 +50,27 @@
 
 .yard-slime-jump--active {
   animation: slime-jump 2000ms ease-out;
+}
+
+@keyframes slime-summon-flicker {
+  0%,
+  12%,
+  24%,
+  38%,
+  52%,
+  68% {
+    opacity: 0.28;
+  }
+
+  6%,
+  18%,
+  31%,
+  45%,
+  60%,
+  78%,
+  100% {
+    opacity: 1;
+  }
 }
 
 .yard-slime-base,
@@ -86,6 +118,17 @@
   z-index: 2;
 }
 
+.yard-slime-hitbox {
+  position: absolute;
+  left: var(--slime-hitbox-offset-x);
+  top: var(--slime-hitbox-offset-y);
+  z-index: 3;
+  width: var(--slime-hitbox-width);
+  height: var(--slime-hitbox-height);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
 .yard-slime-death {
   --slime-death-frame-width:
     calc(var(--slime-death-frame-height) * var(--slime-death-frame-aspect-ratio));
@@ -115,17 +158,11 @@
   z-index: 3;
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 5px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 0, 0, 0.46) 0%,
-    rgba(0, 0, 0, 0.26) 48%,
-    rgba(0, 0, 0, 0) 82%
-  );
-  color: #ffffff;
+  gap: 2px;
+  padding: 1px 10px;
+  color: #D3D3D3;
   font-family: var(--pixel-font);
-  font-size: 0.5rem;
+  font-size: 0.3rem;
   font-weight: 900;
   line-height: 1;
   opacity: 0;
@@ -137,17 +174,36 @@
   white-space: nowrap;
 }
 
-.yard-slime:hover .yard-slime-level,
-.yard-slime:focus-visible .yard-slime-level,
+.yard-slime-level::before {
+  position: absolute;
+  inset: 1px 1px;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.46) 0%,
+    rgba(0, 0, 0, 0.26) 46%,
+    rgba(0, 0, 0, 0) 82%
+  );
+  content: "";
+  pointer-events: none;
+}
+
+.yard-slime:has(.yard-slime-hitbox:hover) .yard-slime-level,
+.yard-slime:has(.yard-slime-hitbox:focus-visible) .yard-slime-level,
 .yard-slime-level--pinned {
   opacity: 1;
   pointer-events: auto;
   transform: translateX(-50%) translateY(0);
 }
 
+.yard-slime-kill-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
 .yard-slime-kill {
-  width: 12px;
-  height: 12px;
+  width: 9px;
+  height: 9px;
   padding: 0;
   border: none;
   background: transparent;
@@ -158,6 +214,26 @@
     filter 120ms ease;
 }
 
+.yard-slime-kill-label {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + -2px);
+  color: #d91919;
+  font-family: var(--pixel-font);
+  font-size: -1rem;
+  font-weight: 900;
+  line-height: 2.8;
+  opacity: 0;
+  pointer-events: none;
+  -webkit-text-stroke: 1px #000000;
+  paint-order: stroke fill;
+  transform: translateX(-50%) translateY(2px);
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+  white-space: nowrap;
+}
+
 .yard-slime-kill:hover,
 .yard-slime-kill:focus-visible {
   transform: scale(1.8);
@@ -165,4 +241,10 @@
   filter:
     drop-shadow(0 0 4px rgba(255, 80, 80, 0.7))
     drop-shadow(0 0 8px rgba(255, 80, 80, 0.5));
+}
+
+.yard-slime-kill-wrap:hover .yard-slime-kill-label,
+.yard-slime-kill-wrap:focus-within .yard-slime-kill-label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }

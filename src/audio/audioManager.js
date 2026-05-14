@@ -16,6 +16,7 @@ class AudioManager {
     
     this.buffers = new Map()
     this.loopingSfxSources = new Map()
+    this.loopingSfxGains = new Map()
     this.sfxGain = null
 
     // Start loading and decoding in the background immediately
@@ -200,20 +201,40 @@ class AudioManager {
     source.start(0)
   }
 
-  async playLoopingSfx(soundKey) {
+  async playLoopingSfx(soundKey, options = {}) {
     await this.unlock()
-    if (this.loopingSfxSources.has(soundKey)) return
+    const { volume = 1 } = options
+    if (this.loopingSfxSources.has(soundKey)) {
+      this.setLoopingSfxVolume(soundKey, volume)
+      return
+    }
 
     const buffer = await this.decodeBuffer(soundKey)
     if (!buffer) return
 
     const source = this.ctx.createBufferSource()
+    const gain = this.ctx.createGain()
     source.buffer = buffer
     source.loop = true
+    gain.gain.setValueAtTime(Math.max(0, Math.min(1, volume)), this.ctx.currentTime)
     
-    source.connect(this.sfxGain)
+    source.connect(gain)
+    gain.connect(this.sfxGain)
     source.start(0)
     this.loopingSfxSources.set(soundKey, source)
+    this.loopingSfxGains.set(soundKey, gain)
+  }
+
+  setLoopingSfxVolume(soundKey, volume = 1) {
+    if (!this.ctx) return
+
+    const gain = this.loopingSfxGains.get(soundKey)
+    if (!gain) return
+
+    const clampedVolume = Math.max(0, Math.min(1, volume))
+
+    gain.gain.cancelScheduledValues(this.ctx.currentTime)
+    gain.gain.setValueAtTime(clampedVolume, this.ctx.currentTime)
   }
 
   stopLoopingSfx(soundKey) {
@@ -223,6 +244,7 @@ class AudioManager {
         // The source may already be stopped by the browser.
       }
       this.loopingSfxSources.delete(soundKey)
+      this.loopingSfxGains.delete(soundKey)
     }
   }
 
@@ -233,6 +255,7 @@ class AudioManager {
       }
     })
     this.loopingSfxSources.clear()
+    this.loopingSfxGains.clear()
   }
 }
 

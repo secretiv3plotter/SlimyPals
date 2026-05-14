@@ -23,11 +23,27 @@ function NotificationStack({ notifications, onDismiss }) {
     <div className="notification-stack" aria-live="polite">
       {notifications.map((notification) => (
         <section className="notification-card" key={notification.id}>
-          {notification.message}
+          {renderNotificationMessage(notification.message)}
         </section>
       ))}
     </div>
   )
+}
+
+function renderNotificationMessage(message) {
+  return String(message).split(/(mythical|rare|common)/gi).map((part, index) => {
+    const rarity = part.toLowerCase()
+
+    if (!['mythical', 'rare', 'common'].includes(rarity)) {
+      return part
+    }
+
+    return (
+      <span className={`notification-rarity notification-rarity--${rarity}`} key={`${part}-${index}`}>
+        {part}
+      </span>
+    )
+  })
 }
 
 export default NotificationStack

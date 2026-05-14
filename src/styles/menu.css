@@ -267,6 +267,18 @@
   transform: rotate(1deg);
 }
 
+.notification-rarity--mythical {
+  color: #d43cff;
+}
+
+.notification-rarity--rare {
+  color: #ffd83d;
+}
+
+.notification-rarity--common {
+  color: #ffffff;
+}
+
 .menu-modal,
 .menu-modal * {
   font-weight: 700;

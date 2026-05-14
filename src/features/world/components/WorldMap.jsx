@@ -22,6 +22,7 @@ import SlimeYard from './SlimeYard'
 import SummoningGround from './SummoningGround'
 
 function WorldMap({
+  appearingSlimeIds,
   canProduceFood,
   canSummon,
   displayedSlimes,
@@ -150,6 +151,7 @@ function WorldMap({
         />
       )}
       <SlimeYard
+        appearingSlimeIds={appearingSlimeIds}
         displayedSlimes={displayedSlimes}
         dyingSlimeIds={dyingSlimeIds}
         onDeathAnimationEnd={onSlimeDeathAnimationEnd}

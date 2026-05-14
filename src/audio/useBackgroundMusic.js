@@ -2,16 +2,25 @@ import { useEffect, useRef } from 'react'
 import audioManager from './audioManager'
 import { SOUND_KEYS } from './soundFiles'
 
-const DEFAULT_LOOPING_SFX_KEYS = []
+const DEFAULT_LOOPING_SFX = []
 
 export function useBackgroundMusic(
   soundKey = SOUND_KEYS.BGM_LOOP,
-  loopingSfxKeys = DEFAULT_LOOPING_SFX_KEYS,
+  loopingSfx = DEFAULT_LOOPING_SFX,
+  enabled = true,
 ) {
   const isPlayingRef = useRef(false)
   const isStartingRef = useRef(false)
 
   useEffect(() => {
+    if (!enabled) {
+      audioManager.stopBgm()
+      audioManager.stopAllLoopingSfx()
+      isPlayingRef.current = false
+      isStartingRef.current = false
+      return undefined
+    }
+
     let isDisposed = false
 
     async function startBackgroundMusic() {
@@ -22,11 +31,15 @@ export function useBackgroundMusic(
       isStartingRef.current = true
       try {
         const bgmStarted = await audioManager.playBgm(soundKey)
-        await Promise.all(
-          loopingSfxKeys.map((loopingSfxKey) =>
-            audioManager.playLoopingSfx(loopingSfxKey),
-          ),
-        )
+        await Promise.all(loopingSfx.map((loopingSfxConfig) => {
+          const config = typeof loopingSfxConfig === 'string'
+            ? { soundKey: loopingSfxConfig }
+            : loopingSfxConfig
+
+          return audioManager.playLoopingSfx(config.soundKey, {
+            volume: config.volume,
+          })
+        }))
         if (!isDisposed && bgmStarted) {
           isPlayingRef.current = true
         }
@@ -59,5 +72,19 @@ export function useBackgroundMusic(
       isPlayingRef.current = false
       isStartingRef.current = false
     }
-  }, [loopingSfxKeys, soundKey])
+  }, [enabled, loopingSfx, soundKey])
+
+  useEffect(() => {
+    if (!enabled || !isPlayingRef.current) {
+      return
+    }
+
+    loopingSfx.forEach((loopingSfxConfig) => {
+      const config = typeof loopingSfxConfig === 'string'
+        ? { soundKey: loopingSfxConfig }
+        : loopingSfxConfig
+
+      audioManager.setLoopingSfxVolume(config.soundKey, config.volume)
+    })
+  }, [enabled, loopingSfx])
 }

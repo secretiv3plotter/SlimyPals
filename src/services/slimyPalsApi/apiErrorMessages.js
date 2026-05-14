@@ -16,7 +16,7 @@ export const API_ERROR_MESSAGES = Object.freeze({
   NO_ACTIVE_SLIMES: 'You need at least one slime to produce food.',
   NO_FOOD_AVAILABLE: 'No slime food available.',
   RATE_LIMITED: 'Please slow down and try again shortly.',
-  SLIME_ALREADY_ADULT: 'That slime is already fully grown.',
+  SLIME_ALREADY_ADULT: 'This slime has reached 100% of its potential!',
   SLIME_OWNER_MISMATCH: 'You cannot do that to this slime.',
   SLIME_UNAVAILABLE: 'That slime is unavailable.',
   USER_UNAVAILABLE: 'This user is unavailable.',

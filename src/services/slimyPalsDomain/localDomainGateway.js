@@ -6,6 +6,7 @@ import { getOrCreateOfflineUser } from '../../game/offlineUser'
 import {
   feedSlime,
   FEED_COOLDOWN_MS,
+  formatRemainingCooldown,
   getFoodProductionReadiness,
   produceSlimeFood,
   removeSlime,
@@ -98,7 +99,13 @@ export function getMockFriendFeedResult({ foodQuantity, lastFedAt, slimeLevel })
   }
 
   if (lastFedAt && Date.now() - new Date(lastFedAt).getTime() < FEED_COOLDOWN_MS) {
-    return { allowed: false, reason: 'FEED_COOLDOWN_ACTIVE' }
+    return {
+      allowed: false,
+      message: `This slime is not hungry yet. Try again in ${
+        formatRemainingCooldown({ last_fed_at: lastFedAt })
+      }.`,
+      reason: 'FEED_COOLDOWN_ACTIVE',
+    }
   }
 
   return { allowed: true, reason: null }

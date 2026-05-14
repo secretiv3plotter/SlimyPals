@@ -24,6 +24,7 @@ function SummoningGround({
   summoningOrbAnimationRun,
 }) {
   const isActivated = summoningOrbAnimationRun > 0
+  const isReady = canSummon && !isActivated
 
   const commonVars = {
     '--summoning-ground-frame-count': SUMMONING_GROUND_FRAME_COUNT,
@@ -41,7 +42,7 @@ function SummoningGround({
 
   return (
     <div
-      className="summoning-container"
+      className={`summoning-container${isReady ? ' summoning-container--ready' : ''}`}
       style={{
         transform: `translate(${summoningGroundPosition.x}px, ${summoningGroundPosition.y}px)`,
         width: `${SUMMONING_GROUND_FRAME_WIDTH * SUMMONING_GROUND_SCALE}px`,

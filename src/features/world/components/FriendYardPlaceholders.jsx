@@ -25,7 +25,8 @@ function FriendYardPlaceholders({ fencePosition, fenceTiles }) {
               <div
                 className="friend-yard-label"
                 style={{
-                  transform: `translate(${friendFencePosition.x + (FENCE_COLUMNS * TILE_SIZE) / 2}px, ${friendFencePosition.y - TILE_SIZE}px)`,
+                  left: friendFencePosition.x + (FENCE_COLUMNS * TILE_SIZE) / 2,
+                  top: friendFencePosition.y - TILE_SIZE,
                 }}
               >
                 {friend.username}'s yard

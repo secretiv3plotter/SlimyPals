@@ -53,6 +53,8 @@ export function createFenceTiles() {
     return {
       id: `fence-${x}-${y}`,
       layers,
+      x,
+      y,
     }
   })
 }

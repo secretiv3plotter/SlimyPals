@@ -73,7 +73,7 @@ export function canFeedSlime({ slime, foodStock, now = new Date() }) {
   }
 
   if (slime.level >= SLIME_LEVELS.ADULT) {
-    return failedRule('SLIME_ALREADY_ADULT', 'Adult slimes are already at max level.')
+    return failedRule('SLIME_ALREADY_ADULT', 'This slime has reached 100% of its potential!')
   }
 
   if (!foodStock || foodStock.deleted_at || foodStock.quantity <= 0) {
@@ -81,7 +81,10 @@ export function canFeedSlime({ slime, foodStock, now = new Date() }) {
   }
 
   if (!isFeedWindowOpen(slime, now)) {
-    return failedRule('FEED_COOLDOWN_ACTIVE', 'This slime must wait for its next 6-hour feeding window.')
+    return failedRule(
+      'FEED_COOLDOWN_ACTIVE',
+      `This slime is not hungry yet. Try again in ${formatRemainingCooldown(slime, now)}.`,
+    )
   }
 
   return passedRule()
@@ -137,6 +140,20 @@ export function getNextFeedAt(slime) {
   }
 
   return new Date(new Date(slime.last_fed_at).getTime() + FEED_COOLDOWN_MS).toISOString()
+}
+
+export function getRemainingFeedCooldown(slime, now = new Date()) {
+  if (!slime.last_fed_at) {
+    return 0
+  }
+
+  const nextFeedAt = new Date(slime.last_fed_at).getTime() + FEED_COOLDOWN_MS
+
+  return Math.max(0, nextFeedAt - new Date(now).getTime())
+}
+
+export function formatRemainingCooldown(slime, now = new Date()) {
+  return formatDuration(getRemainingFeedCooldown(slime, now))
 }
 
 export function getFoodProductionAmount(activeSlimeCount, currentFoodQuantity = 0) {
@@ -203,4 +220,20 @@ function passedRule() {
 
 function failedRule(reason, message) {
   return { allowed: false, reason, message }
+}
+
+function formatDuration(durationMs) {
+  const totalMinutes = Math.max(1, Math.ceil(durationMs / (60 * 1000)))
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
+
+  if (hours <= 0) {
+    return `${minutes}m`
+  }
+
+  if (minutes <= 0) {
+    return `${hours}h`
+  }
+
+  return `${hours}h ${minutes}m`
 }

@@ -23,6 +23,7 @@ export {
   canSummonSlime,
   createInteractionLogDraft,
   createSummonedSlimeDraft,
+  formatRemainingCooldown,
   getFoodProductionAmount,
   getNextFeedAt,
   getNextSlimeLevel,

@@ -9,15 +9,16 @@ import {
   SLIME_YARD_ROWS,
   TILE_SIZE,
 } from './worldConstants'
-import { getSlimePosition } from './worldLayout'
 
-export function getSlimeMotionPath(slime, index) {
+export function getSlimeMotionPath(slime) {
   const random = createSeededRandom(getStringSeed(slime.id))
   const maxX = Math.max(0, SLIME_YARD_COLUMNS * TILE_SIZE - SLIME_MOVEMENT_WIDTH * SLIME_SCALE)
   const maxY = Math.max(0, SLIME_YARD_ROWS * TILE_SIZE - SLIME_MOVEMENT_HEIGHT * SLIME_SCALE)
-  const start = getSlimePosition(index)
   const points = [
-    start,
+    getSlimeSpritePositionFromMovementBox({
+      x: random() * maxX,
+      y: random() * maxY,
+    }),
     getSlimeSpritePositionFromMovementBox({
       x: random() * maxX,
       y: random() * maxY,
