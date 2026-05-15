@@ -134,6 +134,19 @@
   transform: translate(-50%, -50%) rotate(90deg);
 }
 
+.menu-user-greeting {
+  position: absolute;
+  top: 30px;
+  left: 18px;
+  max-width: calc(100% - 112px);
+  margin: 0;
+  color: #000000;
+  font-family: var(--pixel-font);
+  font-size: clamp(0.88rem, 4vw, 1.25rem);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
 .menu-modal-back {
   position: absolute;
   top: 18px;
@@ -451,6 +464,12 @@
   .menu-modal--friend-requests .menu-modal-back-label {
     left: 38px;
     font-size: 0.8rem;
+  }
+
+  .menu-user-greeting {
+    top: 24px;
+    left: 14px;
+    max-width: calc(100% - 90px);
   }
 
   @media (max-width: 360px) {

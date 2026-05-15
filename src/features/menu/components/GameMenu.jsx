@@ -4,6 +4,7 @@ function GameMenu({
   onClose,
   onConfirmLogout,
   onSetMenuMode,
+  username,
   friendName,
   setFriendName,
   handleAcceptFriendRequest,
@@ -36,6 +37,7 @@ function GameMenu({
   const modalClassName = isConfirmMode
     ? 'unfriend-popup'
     : `menu-modal menu-modal--${menuMode}`
+  const canShowGreeting = !isConfirmMode && menuMode !== 'friend-requests'
 
   return (
     <>
@@ -60,6 +62,9 @@ function GameMenu({
             >
               <span aria-hidden="true" />
             </button>
+            {canShowGreeting && username && (
+              <p className="menu-user-greeting">Hi, {username}!</p>
+            )}
             {menuMode === 'main' && (
               <div className="menu-main-actions">
                 <button

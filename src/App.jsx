@@ -42,7 +42,7 @@ const SUMMON_RARITY_SOUND_KEYS = Object.freeze({
 })
 
 function App() {
-  const { isAuthenticated } = useAuthSession()
+  const { isAuthenticated, user } = useAuthSession()
 
   useBackgroundMusic(SOUND_KEYS.BGM_LOOP, isAuthenticated ? GAME_BACKGROUND_LAYERS : [])
 
@@ -365,6 +365,7 @@ function App() {
         onClose={closeMenu}
         onConfirmLogout={confirmLogout}
         onSetMenuMode={setMenuMode}
+        username={user?.username}
         {...friendMenu}
       />
       <SlimeDeleteConfirm
