@@ -1,5 +1,6 @@
 const FoodFactory = require('../models/foodFactoryModel');
 const Slime = require('../models/slimeModel');
+const presenceManager = require('../sockets/presenceManager');
 
 exports.getFoodFactory = async (req, res, next) => {
   try {
@@ -72,6 +73,14 @@ exports.produceFood = async (req, res, next) => {
 
     // 4. Produce food (amount = slime count)
     const updatedFactory = await FoodFactory.produce(req.user.id, activeSlimeCount);
+    presenceManager.sendToUser(req.user.id, {
+      type: 'domain.food.updated',
+      payload: {
+        foodFactoryStock: updatedFactory,
+        producedQuantity: activeSlimeCount,
+        userId: req.user.id
+      }
+    });
 
     res.status(200).json({
       status: 'success',

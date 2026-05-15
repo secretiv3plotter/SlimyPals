@@ -23,7 +23,7 @@ import {
   summonOwnedSlime,
 } from './services/slimyPalsDomain'
 import { GAME_LIMITS, SLIME_RARITIES } from './services/slimyPalsDb/constants'
-import { SERVER_REALTIME_EVENTS, websocketClient } from './services/websockets'
+import { REALTIME_CONNECTION_STATUSES, SERVER_REALTIME_EVENTS, websocketClient } from './services/websockets'
 
 const GAME_BACKGROUND_LAYERS = [
   {
@@ -210,6 +210,26 @@ function AuthenticatedGame({ authSession, user }) {
       return
     }
 
+    if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_CREATED && payload.slime) {
+      setSlimes((currentSlimes) => (
+        currentSlimes.some((slime) => slime.id === payload.slime.id)
+          ? currentSlimes
+          : [...currentSlimes, payload.slime]
+      ))
+      setAppearingSlimeIds((currentIds) => (
+        currentIds.includes(payload.slime.id) ? currentIds : [...currentIds, payload.slime.id]
+      ))
+      window.setTimeout(() => {
+        setAppearingSlimeIds((currentIds) => (
+          currentIds.filter((currentId) => currentId !== payload.slime.id)
+        ))
+      }, 1000)
+      if (payload.user) {
+        setOfflineUser(payload.user)
+      }
+      return
+    }
+
     if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_UPDATED && payload.slime) {
       setSlimes((currentSlimes) => currentSlimes.map((slime) => (
         slime.id === payload.slime.id ? payload.slime : slime
@@ -218,9 +238,17 @@ function AuthenticatedGame({ authSession, user }) {
     }
 
     if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_DELETED && payload.slimeId) {
-      setSlimes((currentSlimes) => (
-        currentSlimes.filter((slime) => slime.id !== payload.slimeId)
+      setDyingSlimeIds((currentIds) => (
+        currentIds.includes(payload.slimeId) ? currentIds : [...currentIds, payload.slimeId]
       ))
+      return
+    }
+
+    if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_FOOD_UPDATED) {
+      const foodFactoryStock = payload.foodFactoryStock || payload.factory
+      if (foodFactoryStock) {
+        setFoodQuantity(foodFactoryStock.quantity)
+      }
     }
   }, [handleRealtimeFriendYardEvent, triggerPokedSlime])
 
@@ -233,9 +261,6 @@ function AuthenticatedGame({ authSession, user }) {
       websocketClient.disconnect()
       return undefined
     }
-
-    websocketClient.connect({ token: authSession.accessToken })
-    refreshFriendMenuRef.current()
 
     const unsubscribe = websocketClient.subscribe((event) => {
       if (shouldRefreshFriendMenu(event)) {
@@ -259,9 +284,18 @@ function AuthenticatedGame({ authSession, user }) {
         addNotification(notificationMessage)
       }
     })
+    const unsubscribeStatus = websocketClient.subscribeToStatus((status) => {
+      if (status === REALTIME_CONNECTION_STATUSES.OPEN) {
+        refreshFriendMenuRef.current()
+      }
+    })
+
+    websocketClient.connect({ token: authSession.accessToken })
+    refreshFriendMenuRef.current()
 
     return () => {
       unsubscribe()
+      unsubscribeStatus()
       websocketClient.disconnect()
     }
   }, [authSession?.accessToken, handleRealtimeDomainEvent, user?.id])
@@ -395,11 +429,17 @@ function AuthenticatedGame({ authSession, user }) {
       const raritySoundKey = getSummonRaritySoundKey(slime)
 
       setOfflineUser(user)
-      setSlimes((currentSlimes) => [...currentSlimes, slime])
+      setSlimes((currentSlimes) => (
+        currentSlimes.some((currentSlime) => currentSlime.id === slime.id)
+          ? currentSlimes
+          : [...currentSlimes, slime]
+      ))
       if (raritySoundKey) {
         audioManager.playSfx(raritySoundKey)
       }
-      setAppearingSlimeIds((currentIds) => [...currentIds, slime.id])
+      setAppearingSlimeIds((currentIds) => (
+        currentIds.includes(slime.id) ? currentIds : [...currentIds, slime.id]
+      ))
       window.setTimeout(() => {
         setAppearingSlimeIds((currentIds) => (
           currentIds.filter((currentId) => currentId !== slime.id)

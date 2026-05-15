@@ -291,6 +291,13 @@ exports.feedFriendSlime = async (req, res, next) => {
           userId: friendUserId
         }
       });
+      presenceManager.sendToUser(req.user.id, {
+        type: 'domain.food.updated',
+        payload: {
+          foodFactoryStock: updatedFactory,
+          userId: req.user.id
+        }
+      });
 
       // Emit WebSocket event to friendUserId
       presenceManager.sendToUser(friendUserId, {

@@ -56,7 +56,8 @@ exports.summonSlime = async (req, res, next) => {
       
       await db.query('COMMIT');
       broadcastSlimeDomainEvent(req.user.id, 'domain.slime.created', {
-        slime: newSlime
+        slime: newSlime,
+        user: userResult.rows[0]
       });
       
       res.status(201).json({
@@ -117,6 +118,9 @@ exports.feedSlime = async (req, res, next) => {
       });
       
       await db.query('COMMIT');
+      sendUserDomainEvent(req.user.id, 'domain.food.updated', {
+        foodFactoryStock: updatedFactory
+      });
       broadcastSlimeDomainEvent(req.user.id, 'domain.slime.updated', {
         slime: updatedSlime
       });
@@ -157,7 +161,20 @@ exports.deleteSlime = async (req, res, next) => {
 };
 
 function broadcastSlimeDomainEvent(userId, type, payload = {}) {
-  presenceManager.broadcastToFriends(userId, {
+  const event = {
+    type,
+    payload: {
+      ...payload,
+      userId
+    }
+  };
+
+  presenceManager.sendToUser(userId, event);
+  presenceManager.broadcastToFriends(userId, event);
+}
+
+function sendUserDomainEvent(userId, type, payload = {}) {
+  presenceManager.sendToUser(userId, {
     type,
     payload: {
       ...payload,
