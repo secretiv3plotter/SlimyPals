@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { FRIEND_SLOTS } from '../../../game/worldConstants'
 import {
   acceptFriendRequest,
@@ -19,6 +19,7 @@ export function useFriendMenuState() {
   const [selectedRequest, setSelectedRequest] = useState(null)
   const [friendMenuMessage, setFriendMenuMessage] = useState('')
   const [isFriendMenuLoading, setIsFriendMenuLoading] = useState(false)
+  const refreshRequestIdRef = useRef(0)
 
   const occupiedFriendSlots = friends.length + sentRequests.length
   const availableFriendSlots = Math.max(0, FRIEND_SLOTS - occupiedFriendSlots)
@@ -52,18 +53,35 @@ export function useFriendMenuState() {
     ))
   }, [friends, searchedUser, sentRequests])
 
-  async function refreshFriendMenu() {
+  const applyFriendListResponse = useCallback((response) => {
+    const payload = getPayload(response)
+
+    setFriends((payload.friends || []).map(normalizeFriend).sort(sortByCreatedAt))
+    setIncomingRequests((payload.pending || []).map(normalizeIncomingRequest).sort(sortByCreatedAt))
+    setSentRequests((payload.sent || []).map(normalizeSentRequest).sort(sortByCreatedAt))
+  }, [])
+
+  const refreshFriendMenu = useCallback(async () => {
+    const requestId = refreshRequestIdRef.current + 1
+    refreshRequestIdRef.current = requestId
     setIsFriendMenuLoading(true)
     setFriendMenuMessage('')
 
     try {
-      applyFriendListResponse(await listFriends())
+      const response = await listFriends()
+      if (requestId === refreshRequestIdRef.current) {
+        applyFriendListResponse(response)
+      }
     } catch (error) {
-      setFriendMenuMessage(getApiErrorMessage(error, 'Unable to load friends.'))
+      if (requestId === refreshRequestIdRef.current) {
+        setFriendMenuMessage(getApiErrorMessage(error, 'Unable to load friends.'))
+      }
     } finally {
-      setIsFriendMenuLoading(false)
+      if (requestId === refreshRequestIdRef.current) {
+        setIsFriendMenuLoading(false)
+      }
     }
-  }
+  }, [applyFriendListResponse])
 
   async function handleSearchFriend() {
     const username = friendName.trim()
@@ -237,14 +255,6 @@ export function useFriendMenuState() {
     } finally {
       setIsFriendMenuLoading(false)
     }
-  }
-
-  function applyFriendListResponse(response) {
-    const payload = getPayload(response)
-
-    setFriends((payload.friends || []).map(normalizeFriend).sort(sortByCreatedAt))
-    setIncomingRequests((payload.pending || []).map(normalizeIncomingRequest).sort(sortByCreatedAt))
-    setSentRequests((payload.sent || []).map(normalizeSentRequest).sort(sortByCreatedAt))
   }
 
   return {

@@ -3,7 +3,7 @@ const User = require('../models/userModel');
 const Friendship = require('../models/friendshipModel');
 require('dotenv').config();
 
-// Store online users: userId -> { ws, username, friends: [] }
+// Store online users: userId -> { connections, username, friends: [] }
 const onlineUsers = new Map();
 
 const presenceManager = {
@@ -20,20 +20,27 @@ const presenceManager = {
       const friends = await Friendship.findFriends(userId);
       const friendIds = friends.map(f => f.friend_id);
 
-      // Store user connection
-      onlineUsers.set(userId, {
-        ws,
+      const existingConnection = onlineUsers.get(userId);
+      const wasOffline = !existingConnection || existingConnection.connections.size === 0;
+      const userConnection = existingConnection || {
+        connections: new Set(),
         username: user.username,
         friendIds
-      });
+      };
+
+      userConnection.connections.add(ws);
+      userConnection.username = user.username;
+      userConnection.friendIds = friendIds;
+      onlineUsers.set(userId, userConnection);
 
       console.log(`User connected: ${user.username} (${userId})`);
 
-      // Notify friends that this user is online
-      this.broadcastToFriends(userId, {
-        type: 'friend.online',
-        payload: { userId, username: user.username }
-      });
+      if (wasOffline) {
+        this.broadcastToFriends(userId, {
+          type: 'friend.online',
+          payload: { userId, username: user.username }
+        });
+      }
 
       // Send initial presence list to the connected user
       const onlineFriendIds = friendIds.filter(id => onlineUsers.has(id));
@@ -44,6 +51,12 @@ const presenceManager = {
 
       ws.on('close', () => {
         console.log(`User disconnected: ${user.username}`);
+        const currentConnection = onlineUsers.get(userId);
+        if (!currentConnection) return;
+
+        currentConnection.connections.delete(ws);
+        if (currentConnection.connections.size > 0) return;
+
         onlineUsers.delete(userId);
         this.broadcastToFriends(userId, {
           type: 'friend.offline',
@@ -68,21 +81,29 @@ const presenceManager = {
 
     userData.friendIds.forEach(friendId => {
       const friendConnection = onlineUsers.get(friendId);
-      if (friendConnection && friendConnection.ws.readyState === 1) { // 1 = OPEN
-        friendConnection.ws.send(JSON.stringify(message));
+      if (friendConnection) {
+        friendConnection.connections.forEach(connection => {
+          if (connection.readyState === 1) { // 1 = OPEN
+            connection.send(JSON.stringify(message));
+          }
+        });
       }
     });
   },
 
   sendToUser(userId, message) {
     const userData = onlineUsers.get(userId);
-    if (userData && userData.ws.readyState === 1) {
-      userData.ws.send(JSON.stringify(message));
+    if (userData) {
+      userData.connections.forEach(connection => {
+        if (connection.readyState === 1) {
+          connection.send(JSON.stringify(message));
+        }
+      });
     }
   },
 
   isUserOnline(userId) {
-    return onlineUsers.has(userId);
+    return Boolean(onlineUsers.get(userId)?.connections.size);
   },
 
   async refreshUserFriends(userId) {
