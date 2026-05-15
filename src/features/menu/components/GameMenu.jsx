@@ -20,16 +20,13 @@ function GameMenu({
   refreshFriendMenu,
   canAcceptFriendRequest,
   canSendFriendRequest,
-  searchedUser,
   selectedFriend,
   setSelectedFriend,
   selectedRequest,
   setSelectedRequest,
 }) {
   const isConfirmMode = [
-    'add-friend-confirm',
     'accept-request-confirm',
-    'cancel-request-confirm',
     'decline-request-confirm',
     'unfriend-confirm',
   ].includes(menuMode)
@@ -156,8 +153,7 @@ function GameMenu({
                               className="friend-remove-button"
                               disabled={isFriendMenuLoading}
                               onClick={() => {
-                                setSelectedRequest(slot)
-                                onSetMenuMode('cancel-request-confirm')
+                                handleCancelFriendRequest(slot)
                               }}
                               aria-label={`Cancel friend request to ${slot.username}`}
                             >
@@ -171,7 +167,7 @@ function GameMenu({
                               className="friend-add-button"
                               disabled={!canSendFriendRequest || isFriendMenuLoading}
                               aria-label={`Send friend request to ${slot.username}`}
-                              onClick={() => onSetMenuMode('add-friend-confirm')}
+                              onClick={handleSendFriendRequest}
                             >
                               <span className="friend-add-icon" aria-hidden="true" />
                             </button>
@@ -243,38 +239,6 @@ function GameMenu({
                 >
                   VIEW FRIEND REQUESTS
                 </button>
-              </div>
-            )}
-            {menuMode === 'add-friend-confirm' && (
-              <div className="menu-panel">
-                <h2 className="menu-panel-title">
-                  ADD FRIEND?
-                </h2>
-                <p className="friend-confirm-copy">
-                  Send a request to {searchedUser?.username}?
-                </p>
-
-                <div className="menu-confirm-actions">
-                  <button
-                    className="menu-modal-action menu-modal-action--small"
-                    type="button"
-                    onClick={() => onSetMenuMode('friends')}
-                  >
-                    NO
-                  </button>
-
-                  <button
-                    className="menu-modal-action menu-modal-action--small"
-                    type="button"
-                    disabled={!canSendFriendRequest || isFriendMenuLoading}
-                    onClick={() => {
-                      handleSendFriendRequest()
-                      onSetMenuMode('friends')
-                    }}
-                  >
-                    YES
-                  </button>
-                </div>
               </div>
             )}
             {menuMode === 'unfriend-confirm' && (
@@ -406,41 +370,6 @@ function GameMenu({
                 {friendMenuMessage && (
                   <p className="friend-menu-message">{friendMenuMessage}</p>
                 )}
-              </div>
-            )}
-            {menuMode === 'cancel-request-confirm' && (
-              <div className="menu-panel">
-                <h2 className="menu-panel-title">
-                  CANCEL REQUEST?
-                </h2>
-                <p className="friend-confirm-copy">
-                  Cancel request to {selectedRequest?.username}?
-                </p>
-
-                <div className="menu-confirm-actions">
-                  <button
-                    className="menu-modal-action menu-modal-action--small"
-                    type="button"
-                    onClick={() => {
-                      setSelectedRequest(null)
-                      onSetMenuMode('friends')
-                    }}
-                  >
-                    NO
-                  </button>
-
-                  <button
-                    className="menu-modal-action menu-modal-action--small"
-                    type="button"
-                    disabled={isFriendMenuLoading}
-                    onClick={() => {
-                      handleCancelFriendRequest()
-                      onSetMenuMode('friends')
-                    }}
-                  >
-                    YES
-                  </button>
-                </div>
               </div>
             )}
             {menuMode === 'accept-request-confirm' && (
