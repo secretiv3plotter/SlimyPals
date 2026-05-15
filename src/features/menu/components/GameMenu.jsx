@@ -167,7 +167,7 @@ function GameMenu({
                               className="friend-add-button"
                               disabled={!canSendFriendRequest || isFriendMenuLoading}
                               aria-label={`Send friend request to ${slot.username}`}
-                              onClick={handleSendFriendRequest}
+                              onClick={() => handleSendFriendRequest()}
                             >
                               <span className="friend-add-icon" aria-hidden="true" />
                             </button>
