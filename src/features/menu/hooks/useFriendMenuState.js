@@ -61,11 +61,13 @@ export function useFriendMenuState() {
     setSentRequests((payload.sent || []).map(normalizeSentRequest).sort(sortByCreatedAt))
   }, [])
 
-  const refreshFriendMenu = useCallback(async () => {
+  const refreshFriendMenu = useCallback(async ({ silent = false } = {}) => {
     const requestId = refreshRequestIdRef.current + 1
     refreshRequestIdRef.current = requestId
-    setIsFriendMenuLoading(true)
-    setFriendMenuMessage('')
+    if (!silent) {
+      setIsFriendMenuLoading(true)
+      setFriendMenuMessage('')
+    }
 
     try {
       const response = await listFriends()
@@ -77,7 +79,7 @@ export function useFriendMenuState() {
         setFriendMenuMessage(getApiErrorMessage(error, 'Unable to load friends.'))
       }
     } finally {
-      if (requestId === refreshRequestIdRef.current) {
+      if (!silent && requestId === refreshRequestIdRef.current) {
         setIsFriendMenuLoading(false)
       }
     }
@@ -173,19 +175,25 @@ export function useFriendMenuState() {
       return
     }
 
-    setIsFriendMenuLoading(true)
-    setFriendMenuMessage('')
+    const acceptedFriend = normalizeFriend({
+      ...request,
+      friendUserId: request.id,
+      status: 'accepted',
+    })
 
     try {
-      await acceptFriendRequest(request.friendshipId)
       setSelectedRequest(null)
       setSearchedUser(null)
-      await refreshFriendMenu()
+      setIncomingRequests((currentRequests) => removeByFriendshipId(currentRequests, request.friendshipId))
+      setFriends((currentFriends) => addByFriendshipId(currentFriends, acceptedFriend))
       setFriendMenuMessage(`${request.username} is now your friend.`)
+
+      await acceptFriendRequest(request.friendshipId)
+      await refreshFriendMenu({ silent: true })
     } catch (error) {
+      setFriends((currentFriends) => removeByFriendshipId(currentFriends, request.friendshipId))
+      setIncomingRequests((currentRequests) => addByFriendshipId(currentRequests, request))
       setFriendMenuMessage(getApiErrorMessage(error, 'Unable to accept friend request.'))
-    } finally {
-      setIsFriendMenuLoading(false)
     }
   }
 
@@ -194,21 +202,19 @@ export function useFriendMenuState() {
       return
     }
 
-    setIsFriendMenuLoading(true)
-    setFriendMenuMessage('')
-
     try {
-      await removeFriend(request.friendshipId)
       setSelectedRequest(null)
       setSearchedUser((currentUser) => (
         currentUser?.friendshipId === request.friendshipId ? null : currentUser
       ))
-      await refreshFriendMenu()
+      setIncomingRequests((currentRequests) => removeByFriendshipId(currentRequests, request.friendshipId))
       setFriendMenuMessage(`Declined ${request.username}'s friend request.`)
+
+      await removeFriend(request.friendshipId)
+      await refreshFriendMenu({ silent: true })
     } catch (error) {
+      setIncomingRequests((currentRequests) => addByFriendshipId(currentRequests, request))
       setFriendMenuMessage(getApiErrorMessage(error, 'Unable to decline friend request.'))
-    } finally {
-      setIsFriendMenuLoading(false)
     }
   }
 
@@ -242,18 +248,16 @@ export function useFriendMenuState() {
       return
     }
 
-    setIsFriendMenuLoading(true)
-    setFriendMenuMessage('')
-
     try {
-      await removeFriend(friend.friendshipId)
       setSelectedFriend(null)
-      await refreshFriendMenu()
+      setFriends((currentFriends) => removeByFriendshipId(currentFriends, friend.friendshipId))
       setFriendMenuMessage(`${friend.username} was removed from your friends.`)
+
+      await removeFriend(friend.friendshipId)
+      await refreshFriendMenu({ silent: true })
     } catch (error) {
+      setFriends((currentFriends) => addByFriendshipId(currentFriends, friend))
       setFriendMenuMessage(getApiErrorMessage(error, 'Unable to remove friend.'))
-    } finally {
-      setIsFriendMenuLoading(false)
     }
   }
 
@@ -322,6 +326,18 @@ function normalizeSentRequest(request) {
 
 function sortByCreatedAt(left, right) {
   return new Date(left.createdAt || 0).getTime() - new Date(right.createdAt || 0).getTime()
+}
+
+function addByFriendshipId(items, item) {
+  if (items.some((currentItem) => currentItem.friendshipId === item.friendshipId)) {
+    return items
+  }
+
+  return [...items, item].sort(sortByCreatedAt)
+}
+
+function removeByFriendshipId(items, friendshipId) {
+  return items.filter((item) => item.friendshipId !== friendshipId)
 }
 
 function sameUsername(left, right) {

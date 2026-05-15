@@ -166,6 +166,7 @@ export function useFriendYards({
       return
     }
     try {
+      audioManager.playSfx(SOUND_KEYS.EATING)
       const feedResult = await feedFriendSlimeOnlineFirst({
         friendUserId,
         slimeId,

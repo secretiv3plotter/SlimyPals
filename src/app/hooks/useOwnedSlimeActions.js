@@ -1,5 +1,6 @@
 import audioManager from '../../audio/audioManager'
 import { SOUND_KEYS } from '../../audio/soundFiles'
+import { canFeedSlime } from '../../domain/slimes/management'
 import { getSlimeDisplayName } from '../../domain/slimes/slimeText'
 import {
   feedOwnedSlime,
@@ -101,17 +102,27 @@ export function useOwnedSlimeActions({
     }
 
     const previousSlime = slimes.find((currentSlime) => currentSlime.id === slimeId)
+    const feedRule = canFeedSlime({
+      foodStock: { quantity: foodQuantity },
+      slime: previousSlime,
+    })
+
+    if (!feedRule.allowed) {
+      addNotification(feedRule.message || 'Unable to feed slime.')
+      return
+    }
+
     pendingLocalFeedSlimeIdsRef.current.add(slimeId)
     window.setTimeout(() => {
       pendingLocalFeedSlimeIdsRef.current.delete(slimeId)
     }, 5000)
 
     try {
+      audioManager.playSfx(SOUND_KEYS.EATING)
       const { foodFactoryStock, slime } = await feedOwnedSlime({
         slimeId,
         userId: offlineUser.id,
       })
-      audioManager.playSfx(SOUND_KEYS.EATING)
 
       setFoodQuantity(foodFactoryStock.quantity)
       setSlimes((currentSlimes) => (
