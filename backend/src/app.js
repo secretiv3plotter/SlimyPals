@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
+const domainRoutes = require('./routes/domainRoutes');
 const slimeRoutes = require('./routes/slimeRoutes');
 const foodFactoryRoutes = require('./routes/foodFactoryRoutes');
 const friendsRoutes = require('./routes/friendsRoutes');
@@ -46,6 +47,7 @@ app.use('/api/', limiter);
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api', domainRoutes);
 app.use('/api', slimeRoutes);
 app.use('/api', foodFactoryRoutes);
 app.use('/api', friendsRoutes);

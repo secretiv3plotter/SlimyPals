@@ -14,6 +14,7 @@ import { loginAuthSession, logoutAuthSession, registerAuthSession } from './serv
 import { getFriendDomain } from './services/slimyPalsApi'
 import {
   feedOwnedSlime,
+  feedFriendSlimeOnlineFirst,
   getFoodProductionAllowed,
   getMockFriendFeedResult,
   produceOwnedFood,
@@ -21,7 +22,6 @@ import {
   summonOwnedSlime,
 } from './services/slimyPalsDomain'
 import { GAME_LIMITS, SLIME_RARITIES } from './services/slimyPalsDb/constants'
-import { queueFeedFriendSlime } from './services/offlineSync'
 import { SERVER_REALTIME_EVENTS, websocketClient } from './services/websockets'
 
 const GAME_BACKGROUND_LAYERS = [
@@ -350,15 +350,37 @@ function App() {
       addNotification(result.message || `${friendUsername}'s ${slimeName} slime is not hungry yet.`)
       return
     }
-    setFoodQuantity((currentQuantity) => Math.max(0, currentQuantity - 1))
-    await queueFriendFeedAction({
-      friendUserId,
-      slimeId,
-      userId: offlineUser.id,
-    })
-    addNotification(`You fed ${friendUsername}'s slime.`)
-    console.info(`Friend POV notification: ${offlineUser.username} fed your ${slimeName} slime.`)
-    console.info(`Mock fed ${friendUsername}'s ${slimeName} slime.`)
+    try {
+      const feedResult = await feedFriendSlimeOnlineFirst({
+        friendUserId,
+        slimeId,
+        userId: offlineUser.id,
+      })
+
+      setFoodQuantity((currentQuantity) => (
+        feedResult?.foodFactoryStock
+          ? feedResult.foodFactoryStock.quantity
+          : Math.max(0, currentQuantity - 1)
+      ))
+
+      const fedSlime = feedResult?.slime || feedResult?.data?.slime
+      if (fedSlime) {
+        setFriendYards((currentYards) => currentYards.map((yard) => (
+          yard.id === friendUserId
+            ? {
+              ...yard,
+              slimes: yard.slimes.map((slime) => (
+                slime.id === slimeId ? fedSlime : slime
+              )),
+            }
+            : yard
+        )))
+      }
+
+      addNotification(`You fed ${friendUsername}'s slime.`)
+    } catch (error) {
+      notifyActionFailure(`Unable to feed ${friendUsername}'s slime.`, error)
+    }
   }
 
   async function handleRemoveSlime(slimeId) {
@@ -387,14 +409,6 @@ function App() {
     setDyingSlimeIds((currentIds) => (
       currentIds.filter((currentId) => currentId !== slimeId)
     ))
-  }
-
-  async function queueFriendFeedAction({ friendUserId, slimeId, userId }) {
-    try {
-      await queueFeedFriendSlime({ friendUserId, slimeId, userId })
-    } catch (error) {
-      console.warn('Unable to queue friend feed action:', error)
-    }
   }
 
   function handleLogin(credentials) {
