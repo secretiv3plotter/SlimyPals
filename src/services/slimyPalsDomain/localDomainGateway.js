@@ -57,7 +57,11 @@ export async function getFoodProductionAllowed(userId) {
 
 export async function summonOwnedSlime(userId) {
   const result = await summonSlime(userId)
-  await queueSafely(() => queueSummonSlime({ slimeId: result.slime.id, userId }))
+  await queueSafely(() => queueSummonSlime({
+    slime: result.slime,
+    slimeId: result.slime.id,
+    userId,
+  }))
 
   return result
 }

@@ -10,10 +10,10 @@ export function queueAction({ payload = {}, type }) {
   })
 }
 
-export function queueSummonSlime({ userId, slimeId }) {
+export function queueSummonSlime({ userId, slime, slimeId }) {
   return queueAction({
     type: SYNC_ACTION_TYPES.SUMMON_SLIME,
-    payload: { slimeId, userId },
+    payload: { slime, slimeId, userId },
   })
 }
 

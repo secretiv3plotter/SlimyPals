@@ -1,9 +1,28 @@
-export function toApiSyncAction(action) {
+import {
+  slimesRepository,
+  SYNC_ACTION_TYPES,
+} from '../slimyPalsDb'
+
+export async function toApiSyncAction(action) {
   return {
     clientActionId: action.id,
     type: action.type,
-    payload: action.payload,
+    payload: await getActionPayload(action),
     createdAt: action.created_at,
+  }
+}
+
+async function getActionPayload(action) {
+  if (action.type !== SYNC_ACTION_TYPES.SUMMON_SLIME || action.payload?.slime) {
+    return action.payload
+  }
+
+  const slimeId = action.payload?.slimeId
+  const slime = slimeId ? await slimesRepository.getById(slimeId) : null
+
+  return {
+    ...action.payload,
+    slime: slime || undefined,
   }
 }
 

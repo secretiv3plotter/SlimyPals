@@ -27,6 +27,17 @@ const Slime = {
     return result.rows[0];
   },
 
+  async createWithId({ id, userId, rarity, type, color, level, createdAt, lastFedAt = null }) {
+    const result = await db.query(
+      `INSERT INTO slimes (id, user_id, rarity, type, color, level, last_fed_at, created_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8, NOW()))
+       ON CONFLICT (id) DO NOTHING
+       RETURNING *`,
+      [id, userId, rarity, type, color, level || 1, lastFedAt, createdAt]
+    );
+    return result.rows[0] || this.findById(id);
+  },
+
   async update(id, { level, last_fed_at }) {
     const fields = [];
     const values = [];

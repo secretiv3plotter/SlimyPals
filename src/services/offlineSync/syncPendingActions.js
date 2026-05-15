@@ -20,8 +20,9 @@ export async function syncPendingActions({ clientId } = {}) {
   await Promise.all(pendingActions.map(markSyncing))
 
   try {
+    const actions = await Promise.all(pendingActions.map(toApiSyncAction))
     const response = await syncActions({
-      actions: pendingActions.map(toApiSyncAction),
+      actions,
       clientId,
     })
     return applySyncResults(response, pendingActions)
