@@ -4,8 +4,8 @@ Concept:
 Users raise slime pets.
 When friends are online, you can see their domain with their own pets and interact with them. 
 Interactions: 
-    poke (triggers slime bounce or color contrast change)
-    feed (friends can help feed your slimes and vice versa)
+    poke (triggers slime bounce) realtime
+    feed (friends can help feed your slimes and vice versa) realtime
 A user can only have 4 friends.
 
 To raise slime pets you have to:

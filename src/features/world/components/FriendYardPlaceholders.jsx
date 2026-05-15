@@ -11,7 +11,13 @@ const HORIZONTAL_FRIEND_YARD_GAP_TILES = 4
 const VERTICAL_FRIEND_YARD_GAP_TILES = 2
 const FRIEND_YARD_POSITIONS = Object.freeze(['top', 'right', 'bottom', 'left'])
 
-function FriendYardPlaceholders({ fencePosition, fenceTiles, friends = [], onPokeFriendSlime }) {
+function FriendYardPlaceholders({
+  fencePosition,
+  fenceTiles,
+  friends = [],
+  onPokeFriendSlime,
+  pokedSlimeIds = [],
+}) {
   return (
     <>
       {friends.slice(0, FRIEND_YARD_POSITIONS.length).map((friend, index) => {
@@ -36,6 +42,7 @@ function FriendYardPlaceholders({ fencePosition, fenceTiles, friends = [], onPok
               feedTargetOwnerId={friend.id}
               feedTargetType="friend"
               onPokeFriendSlime={onPokeFriendSlime}
+              pokedSlimeIds={pokedSlimeIds}
               slimeYardPosition={getSlimeYardPosition(friendFencePosition)}
             />
             <FenceOverlay

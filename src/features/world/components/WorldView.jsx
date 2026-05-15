@@ -21,6 +21,7 @@ function WorldView({
   onFeedSlime,
   onPokeFriendSlime,
   onRemoveSlime,
+  pokedSlimeIds,
   onSlimeDeathAnimationEnd,
   onSlimeSummon,
   onSummoningOrbAnimationEnd,
@@ -190,6 +191,7 @@ function WorldView({
           onFeedSlime={onFeedSlime}
           onPokeFriendSlime={onPokeFriendSlime}
           onRemoveSlime={onRemoveSlime}
+          pokedSlimeIds={pokedSlimeIds}
           onSlimeDeathAnimationEnd={onSlimeDeathAnimationEnd}
           onSlimeSummon={onSlimeSummon}
           onSpritePointerDown={handleSpriteButtonPointerDown}

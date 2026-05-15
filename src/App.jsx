@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import menuButtonSprite from './assets/buttons/menu button.png'
 import audioManager from './audio/audioManager'
 import { SOUND_KEYS } from './audio/soundFiles'
@@ -59,6 +59,7 @@ function App() {
   const [offlineUser, setOfflineUser] = useState(null)
   const [friendYards, setFriendYards] = useState([])
   const [friendYardRefreshRun, setFriendYardRefreshRun] = useState(0)
+  const [pokedSlimeIds, setPokedSlimeIds] = useState([])
   const [appearingSlimeIds, setAppearingSlimeIds] = useState([])
   const [dyingSlimeIds, setDyingSlimeIds] = useState([])
   const [pendingDeleteSlime, setPendingDeleteSlime] = useState(null)
@@ -105,6 +106,8 @@ function App() {
         setFriendYardRefreshRun((run) => run + 1)
       }
 
+      handleRealtimeDomainEvent(event, user?.id)
+
       const notificationMessage = getRealtimeNotificationMessage(event, user?.id)
       if (notificationMessage) {
         addNotification(notificationMessage)
@@ -115,7 +118,7 @@ function App() {
       unsubscribe()
       websocketClient.disconnect()
     }
-  }, [authSession?.accessToken, user?.id])
+  }, [authSession?.accessToken, handleRealtimeDomainEvent, user?.id])
 
   useEffect(() => {
     let isDisposed = false
@@ -389,6 +392,48 @@ function App() {
     }
   }
 
+  const triggerPokedSlime = useCallback((slimeId) => {
+    if (!slimeId) {
+      return
+    }
+
+    setPokedSlimeIds((currentIds) => [...currentIds, slimeId])
+    window.setTimeout(() => {
+      setPokedSlimeIds((currentIds) => (
+        currentIds.filter((currentId) => currentId !== slimeId)
+      ))
+    }, 800)
+  }, [])
+
+  const handleRealtimeDomainEvent = useCallback((event, currentUserId) => {
+    const payload = event?.payload || {}
+
+    if (event?.type === SERVER_REALTIME_EVENTS.INTERACTION_CREATED) {
+      if (payload.actionType === 'poke') {
+        triggerPokedSlime(payload.slimeId)
+      }
+
+      return
+    }
+
+    if (payload.userId !== currentUserId) {
+      return
+    }
+
+    if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_UPDATED && payload.slime) {
+      setSlimes((currentSlimes) => currentSlimes.map((slime) => (
+        slime.id === payload.slime.id ? payload.slime : slime
+      )))
+      return
+    }
+
+    if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_DELETED && payload.slimeId) {
+      setSlimes((currentSlimes) => (
+        currentSlimes.filter((slime) => slime.id !== payload.slimeId)
+      ))
+    }
+  }, [triggerPokedSlime])
+
   async function handlePokeFriendSlime({ friendUserId, friendUsername, slimeId, slimeName }) {
     if (!offlineUser) {
       return
@@ -502,6 +547,7 @@ function App() {
         onFeedSlime={handleFeedSlime}
         onPokeFriendSlime={handlePokeFriendSlime}
         onRemoveSlime={setPendingDeleteSlime}
+        pokedSlimeIds={pokedSlimeIds}
         onSlimeDeathAnimationEnd={handleSlimeDeathAnimationEnd}
         onSlimeSummon={handleSummonSlime}
         onSummoningOrbAnimationEnd={() => setSummoningOrbAnimationRun(0)}

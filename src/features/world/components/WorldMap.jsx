@@ -37,6 +37,7 @@ function WorldMap({
   onFeedSlime,
   onPokeFriendSlime,
   onRemoveSlime,
+  pokedSlimeIds = [],
   onSlimeDeathAnimationEnd,
   onSlimeSummon,
   onSpritePointerDown,
@@ -151,6 +152,7 @@ function WorldMap({
           fenceTiles={fenceTiles}
           friends={friendYards}
           onPokeFriendSlime={onPokeFriendSlime}
+          pokedSlimeIds={pokedSlimeIds}
         />
       )}
       <SlimeYard
@@ -159,6 +161,7 @@ function WorldMap({
         dyingSlimeIds={dyingSlimeIds}
         onDeathAnimationEnd={onSlimeDeathAnimationEnd}
         onRemoveSlime={onRemoveSlime}
+        pokedSlimeIds={pokedSlimeIds}
         slimeYardPosition={slimeYardPosition}
       />
       <FenceOverlay fencePosition={fencePosition} fenceTiles={fenceTiles} />

@@ -80,6 +80,7 @@ function SlimeYard({
   onDeathAnimationEnd,
   onPokeFriendSlime,
   onRemoveSlime,
+  pokedSlimeIds = [],
   slimeYardPosition,
 }) {
   return (
@@ -122,6 +123,7 @@ function SlimeYard({
             onDeathAnimationEnd={onDeathAnimationEnd}
             onPokeFriendSlime={onPokeFriendSlime}
             onRemoveSlime={onRemoveSlime}
+            pokeRun={pokedSlimeIds.filter((pokedSlimeId) => pokedSlimeId === slime.id).length}
             slimeDepthOffsetY={slimeYardPosition.y}
             slime={slime}
           />
@@ -142,6 +144,7 @@ function YardSlime({
   onDeathAnimationEnd,
   onPokeFriendSlime,
   onRemoveSlime,
+  pokeRun,
   slimeDepthOffsetY,
   slime,
 }) {
@@ -172,6 +175,18 @@ function YardSlime({
   useEffect(() => {
     return () => window.clearTimeout(levelTimerRef.current)
   }, [])
+
+  useEffect(() => {
+    if (pokeRun > 0 && !isDying) {
+      const animationFrameId = window.requestAnimationFrame(() => {
+        setJumpRun((run) => run + 1)
+      })
+
+      return () => window.cancelAnimationFrame(animationFrameId)
+    }
+
+    return undefined
+  }, [isDying, pokeRun])
 
   useEffect(() => {
     const slimeElement = slimeRef.current
