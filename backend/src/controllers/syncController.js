@@ -3,6 +3,7 @@ const Friendship = require('../models/friendshipModel');
 const Interaction = require('../models/interactionModel');
 const Slime = require('../models/slimeModel');
 const SyncAction = require('../models/syncActionModel');
+const presenceManager = require('../sockets/presenceManager');
 const db = require('../config/db');
 
 const SYNC_ACTION_TYPES = Object.freeze({
@@ -53,9 +54,10 @@ async function applySyncAction(action, user) {
   }
 
   try {
-    await applyActionByType({ payload, type, user });
+    const realtimeEvents = await applyActionByType({ payload, type, user });
     await SyncAction.create({ clientActionId, status: 'accepted', userId: user.id });
-    return acceptedResult(clientActionId);
+    emitSyncRealtimeEvents(realtimeEvents);
+    return acceptedResult(clientActionId, realtimeEvents);
   } catch (error) {
     const errorCode = error.code || 'SYNC_ACTION_FAILED';
     await SyncAction.create({
@@ -74,33 +76,27 @@ async function applyActionByType({ payload, type, user }) {
   }
 
   if (type === SYNC_ACTION_TYPES.SUMMON_SLIME) {
-    await syncSummonSlime({ payload, user });
-    return;
+    return syncSummonSlime({ payload, user });
   }
 
   if (type === SYNC_ACTION_TYPES.PRODUCE_FOOD) {
-    await syncProduceFood({ payload, user });
-    return;
+    return syncProduceFood({ payload, user });
   }
 
   if (type === SYNC_ACTION_TYPES.FEED_OWN_SLIME) {
-    await syncFeedOwnSlime({ payload, user });
-    return;
+    return syncFeedOwnSlime({ payload, user });
   }
 
   if (type === SYNC_ACTION_TYPES.DELETE_OWN_SLIME) {
-    await syncDeleteOwnSlime({ payload, user });
-    return;
+    return syncDeleteOwnSlime({ payload, user });
   }
 
   if (type === SYNC_ACTION_TYPES.FEED_FRIEND_SLIME) {
-    await syncFeedFriendSlime({ payload, user });
-    return;
+    return syncFeedFriendSlime({ payload, user });
   }
 
   if (type === SYNC_ACTION_TYPES.POKE_FRIEND_SLIME) {
-    await syncPokeFriendSlime({ payload, user });
-    return;
+    return syncPokeFriendSlime({ payload, user });
   }
 
   throw syncError('UNKNOWN_SYNC_ACTION_TYPE');
@@ -120,9 +116,11 @@ async function syncSummonSlime({ payload, user }) {
       throw syncError('SLIME_OWNER_MISMATCH');
     }
 
-    return;
+    return [];
   }
 
+  let createdSlime = null;
+  let updatedUser = null;
   const client = await db.pool.connect();
   try {
     await client.query('BEGIN');
@@ -145,14 +143,19 @@ async function syncSummonSlime({ payload, user }) {
       throw syncError('DOMAIN_CAPACITY_REACHED');
     }
 
-    await client.query(
-      'UPDATE users SET daily_summons_left = GREATEST(daily_summons_left - 1, 0) WHERE id = $1',
+    const updatedUserResult = await client.query(
+      `UPDATE users
+       SET daily_summons_left = GREATEST(daily_summons_left - 1, 0)
+       WHERE id = $1
+       RETURNING id, username, daily_summons_left, max_slime_capacity, created_at`,
       [user.id]
     );
-    await client.query(
+    updatedUser = updatedUserResult.rows[0];
+    const slimeResult = await client.query(
       `INSERT INTO slimes (id, user_id, rarity, type, color, level, last_fed_at, created_at)
        VALUES ($1, $2, $3, $4, $5, $6, $7, COALESCE($8, NOW()))
-       ON CONFLICT (id) DO NOTHING`,
+       ON CONFLICT (id) DO NOTHING
+       RETURNING *`,
       [
         slimeId,
         user.id,
@@ -164,6 +167,15 @@ async function syncSummonSlime({ payload, user }) {
         slime.created_at || slime.createdAt || payload.createdAt || null,
       ]
     );
+    if (slimeResult.rows[0]) {
+      createdSlime = slimeResult.rows[0];
+    } else {
+      const existingSlimeResult = await client.query(
+        'SELECT * FROM slimes WHERE id = $1 AND deleted_at IS NULL',
+        [slimeId]
+      );
+      createdSlime = existingSlimeResult.rows[0];
+    }
     await client.query('COMMIT');
   } catch (error) {
     await client.query('ROLLBACK');
@@ -171,6 +183,13 @@ async function syncSummonSlime({ payload, user }) {
   } finally {
     client.release();
   }
+
+  return [
+    createDomainEvent(user.id, 'domain.slime.created', {
+      slime: createdSlime,
+      user: updatedUser,
+    }),
+  ];
 }
 
 async function syncProduceFood({ payload, user }) {
@@ -186,7 +205,14 @@ async function syncProduceFood({ payload, user }) {
   }
 
   const amount = Math.min(producedQuantity, activeSlimeCount);
-  await FoodFactory.produce(user.id, amount);
+  const foodFactoryStock = await FoodFactory.produce(user.id, amount);
+
+  return [
+    createOwnerEvent(user.id, 'domain.food.updated', {
+      foodFactoryStock,
+      producedQuantity: amount,
+    }),
+  ];
 }
 
 async function syncFeedOwnSlime({ payload, user }) {
@@ -204,17 +230,26 @@ async function syncFeedOwnSlime({ payload, user }) {
     throw syncError('NO_FOOD_AVAILABLE');
   }
 
-  await FoodFactory.updateStock(user.id, -1);
-  await Slime.update(slime.id, {
+  const foodFactoryStock = await FoodFactory.updateStock(user.id, -1);
+  const updatedSlime = await Slime.update(slime.id, {
     level: slime.level + 1,
     last_fed_at: new Date(),
   });
+
+  return [
+    createOwnerEvent(user.id, 'domain.food.updated', {
+      foodFactoryStock,
+    }),
+    createDomainEvent(user.id, 'domain.slime.updated', {
+      slime: updatedSlime,
+    }),
+  ];
 }
 
 async function syncDeleteOwnSlime({ payload, user }) {
   const slime = await Slime.findById(payload.slimeId);
   if (!slime) {
-    return;
+    return [];
   }
 
   if (slime.user_id !== user.id) {
@@ -222,6 +257,12 @@ async function syncDeleteOwnSlime({ payload, user }) {
   }
 
   await Slime.delete(slime.id);
+
+  return [
+    createDomainEvent(user.id, 'domain.slime.deleted', {
+      slimeId: slime.id,
+    }),
+  ];
 }
 
 async function syncFeedFriendSlime({ payload, user }) {
@@ -242,16 +283,33 @@ async function syncFeedFriendSlime({ payload, user }) {
     throw syncError('NO_FOOD_AVAILABLE');
   }
 
-  await FoodFactory.updateStock(user.id, -1);
-  await Slime.update(slime.id, {
+  const foodFactoryStock = await FoodFactory.updateStock(user.id, -1);
+  const updatedSlime = await Slime.update(slime.id, {
     level: slime.level + 1,
     last_fed_at: new Date(),
   });
-  await Interaction.log({
+  const interaction = await Interaction.log({
     actionType: 'feed',
     senderId: user.id,
     targetSlimeId: slime.id,
   });
+
+  return [
+    createOwnerEvent(user.id, 'domain.food.updated', {
+      foodFactoryStock,
+    }),
+    createDomainEvent(friendUserId, 'domain.slime.updated', {
+      slime: updatedSlime,
+    }),
+    createDomainEvent(friendUserId, 'interaction.created', {
+      actionType: 'feed',
+      interaction,
+      ownerUserId: friendUserId,
+      senderId: user.id,
+      senderUsername: user.username,
+      slimeId: slime.id,
+    }),
+  ];
 }
 
 async function syncPokeFriendSlime({ payload, user }) {
@@ -263,11 +321,22 @@ async function syncPokeFriendSlime({ payload, user }) {
     throw syncError('SLIME_UNAVAILABLE');
   }
 
-  await Interaction.log({
+  const interaction = await Interaction.log({
     actionType: 'poke',
     senderId: user.id,
     targetSlimeId: slime.id,
   });
+
+  return [
+    createDomainEvent(friendUserId, 'interaction.created', {
+      actionType: 'poke',
+      interaction,
+      ownerUserId: friendUserId,
+      senderId: user.id,
+      senderUsername: user.username,
+      slimeId: slime.id,
+    }),
+  ];
 }
 
 async function assertAcceptedFriendship(userId, friendUserId) {
@@ -277,8 +346,15 @@ async function assertAcceptedFriendship(userId, friendUserId) {
   }
 }
 
-function acceptedResult(clientActionId) {
-  return { clientActionId, status: 'accepted' };
+function acceptedResult(clientActionId, realtimeEvents = []) {
+  return {
+    clientActionId,
+    realtimeEvents: realtimeEvents.map((event) => ({
+      payload: event.payload,
+      type: event.type,
+    })),
+    status: 'accepted',
+  };
 }
 
 function rejectedResult(clientActionId, errorCode) {
@@ -293,4 +369,45 @@ function syncError(code) {
   const error = new Error(code);
   error.code = code;
   return error;
+}
+
+function createDomainEvent(userId, type, payload = {}) {
+  return {
+    audience: 'domain',
+    type,
+    userId,
+    payload: {
+      ...payload,
+      userId,
+    },
+  };
+}
+
+function createOwnerEvent(userId, type, payload = {}) {
+  return {
+    audience: 'owner',
+    type,
+    userId,
+    payload: {
+      ...payload,
+      userId,
+    },
+  };
+}
+
+function emitSyncRealtimeEvents(events = []) {
+  events.forEach((event) => {
+    if (!event) return;
+
+    const message = {
+      type: event.type,
+      payload: event.payload,
+    };
+
+    presenceManager.sendToUser(event.userId, message);
+
+    if (event.audience === 'domain') {
+      presenceManager.broadcastToFriends(event.userId, message);
+    }
+  });
 }

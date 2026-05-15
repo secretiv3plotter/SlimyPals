@@ -37,3 +37,9 @@ export function getActionResultStatus(result) {
 export function getActionResultErrorCode(result) {
   return result?.error?.code || result?.errorCode || result?.error_code || null
 }
+
+export function getActionResultRealtimeEvents(result) {
+  return Array.isArray(result?.realtimeEvents)
+    ? result.realtimeEvents
+    : []
+}

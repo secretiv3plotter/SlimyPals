@@ -12,6 +12,7 @@ import { getSlimeDisplayName } from './game/slimeText'
 import { getMaximizedWorldView, getScreenViewSize } from './game/worldLayout'
 import { loginAuthSession, logoutAuthSession, registerAuthSession } from './services/authSession'
 import { getNetworkStatus } from './services/networkStatus'
+import { SYNC_REALTIME_EVENT } from './services/offlineSync'
 import { getFriendDomain } from './services/slimyPalsApi'
 import {
   feedOwnedSlime,
@@ -105,6 +106,7 @@ function AuthenticatedGame({ authSession, user }) {
   const pendingLocalFeedSlimeIdsRef = useRef(new Set())
   const pendingLocalFoodProductionCountRef = useRef(0)
   const pendingLocalSummonCountRef = useRef(0)
+  const processedRealtimeEventKeysRef = useRef(new Set())
   const realtimeHandledDeleteSlimeIdsRef = useRef(new Set())
   const realtimeNotificationKeysRef = useRef(new Set())
   const websocketNotificationTimeoutsRef = useRef(new Map())
@@ -229,6 +231,18 @@ function AuthenticatedGame({ authSession, user }) {
 
   const handleRealtimeDomainEvent = useCallback((event, currentUserId) => {
     const payload = event?.payload || {}
+    const realtimeEventKey = getRealtimeEventKey(event)
+
+    if (realtimeEventKey) {
+      if (processedRealtimeEventKeysRef.current.has(realtimeEventKey)) {
+        return
+      }
+
+      processedRealtimeEventKeysRef.current.add(realtimeEventKey)
+      window.setTimeout(() => {
+        processedRealtimeEventKeysRef.current.delete(realtimeEventKey)
+      }, 5000)
+    }
 
     if (event?.type === SERVER_REALTIME_EVENTS.INTERACTION_CREATED) {
       if (payload.actionType === 'poke') {
@@ -385,6 +399,18 @@ function AuthenticatedGame({ authSession, user }) {
       websocketClient.disconnect()
     }
   }, [addNotification, authSession?.accessToken, handleRealtimeDomainEvent, user?.id])
+
+  useEffect(() => {
+    function handleSyncRealtimeEvent(event) {
+      handleRealtimeDomainEvent(event.detail, user?.id)
+    }
+
+    window.addEventListener(SYNC_REALTIME_EVENT, handleSyncRealtimeEvent)
+
+    return () => {
+      window.removeEventListener(SYNC_REALTIME_EVENT, handleSyncRealtimeEvent)
+    }
+  }, [handleRealtimeDomainEvent, user?.id])
 
   useEffect(() => () => {
     websocketNotificationTimeoutsRef.current.forEach((timeoutId) => {
@@ -878,6 +904,51 @@ function getRealtimeNotificationMessage(event, currentUserId) {
 
   if (action === 'friend.request.removed' || action === 'friend.removed') {
     return 'Friend list updated.'
+  }
+
+  return null
+}
+
+function getRealtimeEventKey(event) {
+  const payload = event?.payload || {}
+
+  if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_CREATED && payload.slime?.id) {
+    return `${event.type}:${payload.slime.id}`
+  }
+
+  if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_UPDATED && payload.slime?.id) {
+    return [
+      event.type,
+      payload.slime.id,
+      payload.slime.level,
+      payload.slime.last_fed_at || payload.slime.lastFedAt || '',
+    ].join(':')
+  }
+
+  if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_DELETED && payload.slimeId) {
+    return `${event.type}:${payload.slimeId}`
+  }
+
+  if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_FOOD_UPDATED) {
+    const foodFactoryStock = payload.foodFactoryStock || payload.factory
+
+    return [
+      event.type,
+      payload.userId || '',
+      foodFactoryStock?.quantity ?? '',
+      foodFactoryStock?.last_produced_at || foodFactoryStock?.lastProducedAt || '',
+      payload.producedQuantity || '',
+    ].join(':')
+  }
+
+  if (event?.type === SERVER_REALTIME_EVENTS.INTERACTION_CREATED && payload.slimeId) {
+    return [
+      event.type,
+      payload.actionType,
+      payload.senderId,
+      payload.slimeId,
+      payload.interaction?.id || payload.interaction?.created_at || '',
+    ].join(':')
   }
 
   return null

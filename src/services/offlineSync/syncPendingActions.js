@@ -5,10 +5,13 @@ import {
 } from '../slimyPalsDb'
 import {
   getActionResultErrorCode,
+  getActionResultRealtimeEvents,
   getActionResultId,
   getActionResultStatus,
   toApiSyncAction,
 } from './actionPayloads'
+
+export const SYNC_REALTIME_EVENT = 'slimy-pals:sync-realtime-event'
 
 export async function syncPendingActions({ clientId } = {}) {
   const pendingActions = await pendingSyncActionsRepository.listPending()
@@ -54,6 +57,7 @@ async function applySyncResults(response, pendingActions) {
     }
 
     if (status === SYNC_ACTION_STATUSES.ACCEPTED) {
+      emitSyncRealtimeEvents(getActionResultRealtimeEvents(result))
       accepted.push(await markAccepted(action))
       return
     }
@@ -62,6 +66,18 @@ async function applySyncResults(response, pendingActions) {
   }))
 
   return { accepted, rejected, synced: [...accepted, ...rejected] }
+}
+
+function emitSyncRealtimeEvents(events = []) {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  events.forEach((event) => {
+    if (event?.type) {
+      window.dispatchEvent(new CustomEvent(SYNC_REALTIME_EVENT, { detail: event }))
+    }
+  })
 }
 
 function getResponseActionResults(response) {
