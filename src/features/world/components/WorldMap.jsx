@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import foodSprite from '../../../assets/foodfactory/food.png'
-import { runtimeConfig } from '../../../config'
 import { createFenceTiles, createTileGrid, getGridSizeStyle } from '../../../game/mapTiles'
 import {
   FOOD_OVERLAY_HEIGHT,
@@ -28,6 +27,7 @@ function WorldMap({
   displayedSlimes,
   dyingSlimeIds,
   foodFactoryAnimationRun,
+  friendYards = [],
   foodQuantity,
   onFoodFactoryAnimationEnd,
   onFoodFactoryClick,
@@ -144,10 +144,11 @@ function WorldMap({
           draggable="false"
         />
       ))}
-      {runtimeConfig.enableMockFriends && (
+      {friendYards.length > 0 && (
         <FriendYardPlaceholders
           fencePosition={fencePosition}
           fenceTiles={fenceTiles}
+          friends={friendYards}
         />
       )}
       <SlimeYard

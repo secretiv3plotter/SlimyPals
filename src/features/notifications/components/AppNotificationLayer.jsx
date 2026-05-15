@@ -1,6 +1,4 @@
 import { useCallback } from 'react'
-import { runtimeConfig } from '../../../config'
-import MockFriendOnlineNotifications from './MockFriendOnlineNotifications'
 import NetworkStatusNotifier from './NetworkStatusNotifier'
 import NotificationStack from './NotificationStack'
 
@@ -22,9 +20,6 @@ function AppNotificationLayer({ notifications, onDismiss, setNotifications }) {
         onDismiss={onDismiss}
       />
       <NetworkStatusNotifier addNotification={addNotification} />
-      {runtimeConfig.enableMockFriendNotifications && (
-        <MockFriendOnlineNotifications setNotifications={setNotifications} />
-      )}
     </>
   )
 }

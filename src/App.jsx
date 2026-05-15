@@ -11,6 +11,7 @@ import { WorldView } from './features/world'
 import { getSlimeDisplayName } from './game/slimeText'
 import { getMaximizedWorldView, getScreenViewSize } from './game/worldLayout'
 import { loginAuthSession, logoutAuthSession, registerAuthSession } from './services/authSession'
+import { getFriendDomain } from './services/slimyPalsApi'
 import {
   feedOwnedSlime,
   getFoodProductionAllowed,
@@ -55,6 +56,7 @@ function App() {
   const [menuMode, setMenuMode] = useState('main')
   const [notifications, setNotifications] = useState([])
   const [offlineUser, setOfflineUser] = useState(null)
+  const [friendYards, setFriendYards] = useState([])
   const [appearingSlimeIds, setAppearingSlimeIds] = useState([])
   const [dyingSlimeIds, setDyingSlimeIds] = useState([])
   const [pendingDeleteSlime, setPendingDeleteSlime] = useState(null)
@@ -90,10 +92,16 @@ function App() {
     }
 
     websocketClient.connect({ token: authSession.accessToken })
+    refreshFriendMenuRef.current()
 
     const unsubscribe = websocketClient.subscribe((event) => {
       if (shouldRefreshFriendMenu(event)) {
         refreshFriendMenuRef.current()
+      }
+
+      const notificationMessage = getRealtimeNotificationMessage(event, user?.id)
+      if (notificationMessage) {
+        addNotification(notificationMessage)
       }
     })
 
@@ -101,7 +109,50 @@ function App() {
       unsubscribe()
       websocketClient.disconnect()
     }
-  }, [authSession?.accessToken])
+  }, [authSession?.accessToken, user?.id])
+
+  useEffect(() => {
+    let isDisposed = false
+    const onlineFriends = isAuthenticated
+      ? friendMenu.friends.filter((friend) => friend.online).slice(0, 4)
+      : []
+
+    async function loadFriendYards() {
+      await Promise.resolve()
+
+      const loadedYards = onlineFriends.length === 0
+        ? []
+        : await Promise.all(onlineFriends.map(async (friend) => {
+          try {
+            const response = await getFriendDomain(friend.id)
+            const payload = response?.data || response || {}
+
+            return {
+              id: friend.id,
+              username: friend.username,
+              slimes: payload.slimes || [],
+            }
+          } catch (error) {
+            console.warn(`Unable to load ${friend.username}'s yard:`, error)
+            return {
+              id: friend.id,
+              username: friend.username,
+              slimes: [],
+            }
+          }
+        }))
+
+      if (!isDisposed) {
+        setFriendYards(loadedYards)
+      }
+    }
+
+    loadFriendYards()
+
+    return () => {
+      isDisposed = true
+    }
+  }, [friendMenu.friends, isAuthenticated])
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -406,6 +457,7 @@ function App() {
         displayedSlimes={displayedSlimes}
         dyingSlimeIds={dyingSlimeIds}
         foodFactoryAnimationRun={foodFactoryAnimationRun}
+        friendYards={friendYards}
         foodQuantity={foodQuantity}
         onFoodFactoryAnimationEnd={handleFoodFactoryAnimationEnd}
         onFoodFactoryClick={handleFoodFactoryClick}
@@ -429,6 +481,39 @@ function shouldRefreshFriendMenu(event) {
     SERVER_REALTIME_EVENTS.FRIEND_OFFLINE,
     SERVER_REALTIME_EVENTS.INITIAL_PRESENCE,
   ].includes(event?.type)
+}
+
+function getRealtimeNotificationMessage(event, currentUserId) {
+  if (event?.type === SERVER_REALTIME_EVENTS.FRIEND_ONLINE) {
+    const username = event.payload?.username
+    return username ? `${username} is online.` : null
+  }
+
+  if (event?.type !== SERVER_REALTIME_EVENTS.FRIEND_LIST_CHANGED) {
+    return null
+  }
+
+  const { action, receiverId, receiverUsername, senderId, senderUsername } = event.payload || {}
+
+  if (action === 'friend.request.received') {
+    if (receiverId === currentUserId && senderUsername) {
+      return `${senderUsername} sent you a friend request.`
+    }
+
+    if (senderId === currentUserId && receiverUsername) {
+      return `Friend request sent to ${receiverUsername}.`
+    }
+  }
+
+  if (action === 'friend.request.auto_accepted' || action === 'friend.request.accepted') {
+    return 'Friend list updated.'
+  }
+
+  if (action === 'friend.request.removed' || action === 'friend.removed') {
+    return 'Friend list updated.'
+  }
+
+  return null
 }
 
 export default App

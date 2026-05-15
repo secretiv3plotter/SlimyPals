@@ -13,6 +13,7 @@ function WorldView({
   displayedSlimes,
   dyingSlimeIds,
   foodFactoryAnimationRun,
+  friendYards,
   foodQuantity,
   onFoodFactoryAnimationEnd,
   onFoodFactoryClick,
@@ -178,6 +179,7 @@ function WorldView({
           displayedSlimes={displayedSlimes}
           dyingSlimeIds={dyingSlimeIds}
           foodFactoryAnimationRun={foodFactoryAnimationRun}
+          friendYards={friendYards}
           foodQuantity={foodQuantity}
           onFoodFactoryAnimationEnd={onFoodFactoryAnimationEnd}
           onFoodFactoryClick={onFoodFactoryClick}
