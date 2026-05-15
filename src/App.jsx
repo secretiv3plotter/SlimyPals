@@ -17,6 +17,7 @@ import {
   feedFriendSlimeOnlineFirst,
   getFoodProductionAllowed,
   getMockFriendFeedResult,
+  pokeFriendSlimeOnlineFirst,
   produceOwnedFood,
   removeOwnedSlime,
   summonOwnedSlime,
@@ -57,6 +58,7 @@ function App() {
   const [notifications, setNotifications] = useState([])
   const [offlineUser, setOfflineUser] = useState(null)
   const [friendYards, setFriendYards] = useState([])
+  const [friendYardRefreshRun, setFriendYardRefreshRun] = useState(0)
   const [appearingSlimeIds, setAppearingSlimeIds] = useState([])
   const [dyingSlimeIds, setDyingSlimeIds] = useState([])
   const [pendingDeleteSlime, setPendingDeleteSlime] = useState(null)
@@ -97,6 +99,10 @@ function App() {
     const unsubscribe = websocketClient.subscribe((event) => {
       if (shouldRefreshFriendMenu(event)) {
         refreshFriendMenuRef.current()
+      }
+
+      if (shouldRefreshFriendYards(event)) {
+        setFriendYardRefreshRun((run) => run + 1)
       }
 
       const notificationMessage = getRealtimeNotificationMessage(event, user?.id)
@@ -152,7 +158,7 @@ function App() {
     return () => {
       isDisposed = true
     }
-  }, [friendMenu.friends, isAuthenticated])
+  }, [friendMenu.friends, friendYardRefreshRun, isAuthenticated])
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -383,6 +389,23 @@ function App() {
     }
   }
 
+  async function handlePokeFriendSlime({ friendUserId, friendUsername, slimeId, slimeName }) {
+    if (!offlineUser) {
+      return
+    }
+
+    try {
+      await pokeFriendSlimeOnlineFirst({
+        friendUserId,
+        slimeId,
+        userId: offlineUser.id,
+      })
+      addNotification(`You poked ${friendUsername}'s ${slimeName} slime.`)
+    } catch (error) {
+      notifyActionFailure(`Unable to poke ${friendUsername}'s slime.`, error)
+    }
+  }
+
   async function handleRemoveSlime(slimeId) {
     if (!offlineUser) {
       return
@@ -477,6 +500,7 @@ function App() {
         onFoodFactoryClick={handleFoodFactoryClick}
         onFeedFriendSlime={handleFeedFriendSlime}
         onFeedSlime={handleFeedSlime}
+        onPokeFriendSlime={handlePokeFriendSlime}
         onRemoveSlime={setPendingDeleteSlime}
         onSlimeDeathAnimationEnd={handleSlimeDeathAnimationEnd}
         onSlimeSummon={handleSummonSlime}
@@ -497,10 +521,31 @@ function shouldRefreshFriendMenu(event) {
   ].includes(event?.type)
 }
 
+function shouldRefreshFriendYards(event) {
+  return [
+    SERVER_REALTIME_EVENTS.DOMAIN_SLIME_CREATED,
+    SERVER_REALTIME_EVENTS.DOMAIN_SLIME_UPDATED,
+    SERVER_REALTIME_EVENTS.DOMAIN_SLIME_DELETED,
+    SERVER_REALTIME_EVENTS.INTERACTION_CREATED,
+  ].includes(event?.type)
+}
+
 function getRealtimeNotificationMessage(event, currentUserId) {
   if (event?.type === SERVER_REALTIME_EVENTS.FRIEND_ONLINE) {
     const username = event.payload?.username
     return username ? `${username} is online.` : null
+  }
+
+  if (event?.type === SERVER_REALTIME_EVENTS.INTERACTION_CREATED) {
+    const { actionType, ownerUserId, senderId, senderUsername } = event.payload || {}
+
+    if (ownerUserId === currentUserId && senderId !== currentUserId && senderUsername) {
+      return actionType === 'feed'
+        ? `${senderUsername} fed one of your slimes.`
+        : `${senderUsername} poked one of your slimes.`
+    }
+
+    return null
   }
 
   if (event?.type !== SERVER_REALTIME_EVENTS.FRIEND_LIST_CHANGED) {

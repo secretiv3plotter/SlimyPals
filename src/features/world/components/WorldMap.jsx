@@ -35,6 +35,7 @@ function WorldMap({
   onFoodDragMove,
   onFeedFriendSlime,
   onFeedSlime,
+  onPokeFriendSlime,
   onRemoveSlime,
   onSlimeDeathAnimationEnd,
   onSlimeSummon,
@@ -149,6 +150,7 @@ function WorldMap({
           fencePosition={fencePosition}
           fenceTiles={fenceTiles}
           friends={friendYards}
+          onPokeFriendSlime={onPokeFriendSlime}
         />
       )}
       <SlimeYard

@@ -276,7 +276,7 @@ exports.feedFriendSlime = async (req, res, next) => {
         last_fed_at: new Date()
       });
       
-      await Interaction.log({
+      const interaction = await Interaction.log({
         senderId: req.user.id,
         targetSlimeId: slimeId,
         actionType: 'feed'
@@ -284,15 +284,32 @@ exports.feedFriendSlime = async (req, res, next) => {
 
       await db.query('COMMIT');
 
+      presenceManager.broadcastToFriends(friendUserId, {
+        type: 'domain.slime.updated',
+        payload: {
+          slime: updatedSlime,
+          userId: friendUserId
+        }
+      });
+
       // Emit WebSocket event to friendUserId
       presenceManager.sendToUser(friendUserId, {
-        type: 'SLIME_FED',
+        type: 'domain.slime.updated',
         payload: {
+          slime: updatedSlime,
           slimeId,
           senderId: req.user.id,
           senderUsername: req.user.username,
+          userId: friendUserId,
           newLevel: updatedSlime.level
         }
+      });
+      notifyInteractionCreated(friendUserId, {
+        actionType: 'feed',
+        interaction,
+        senderId: req.user.id,
+        senderUsername: req.user.username,
+        slimeId
       });
       
       res.status(200).json({
@@ -321,27 +338,44 @@ exports.pokeFriendSlime = async (req, res, next) => {
       return res.status(403).json({ error: { message: 'You can only poke slimes of accepted friends.' } });
     }
 
-    await Interaction.log({
+    const slime = await Slime.findById(slimeId);
+    if (!slime || slime.user_id !== friendUserId) {
+      return res.status(404).json({ error: { message: 'Slime not found' } });
+    }
+
+    const interaction = await Interaction.log({
       senderId: req.user.id,
       targetSlimeId: slimeId,
       actionType: 'poke'
     });
 
-    // Emit WebSocket event to friendUserId
-    presenceManager.sendToUser(friendUserId, {
-      type: 'SLIME_POKED',
-      payload: {
-        slimeId,
-        senderId: req.user.id,
-        senderUsername: req.user.username
-      }
+    notifyInteractionCreated(friendUserId, {
+      actionType: 'poke',
+      interaction,
+      senderId: req.user.id,
+      senderUsername: req.user.username,
+      slimeId
     });
 
     res.status(200).json({
       status: 'success',
+      data: { interaction },
       message: 'Poked!'
     });
   } catch (err) {
     next(err);
   }
 };
+
+function notifyInteractionCreated(ownerUserId, payload) {
+  const event = {
+    type: 'interaction.created',
+    payload: {
+      ...payload,
+      ownerUserId
+    }
+  };
+
+  presenceManager.sendToUser(ownerUserId, event);
+  presenceManager.broadcastToFriends(ownerUserId, event);
+}

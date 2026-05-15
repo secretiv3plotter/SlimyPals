@@ -1,11 +1,12 @@
 import { hasAuthSession } from '../authSession'
 import { getNetworkStatus } from '../networkStatus'
-import { queueFeedFriendSlime } from '../offlineSync'
+import { queueFeedFriendSlime, queuePokeFriendSlime } from '../offlineSync'
 import {
   deleteMySlime,
   feedFriendSlime as feedFriendSlimeApi,
   feedMySlime,
   getTimers,
+  pokeFriendSlime,
   produceFood,
   summonSlime,
 } from '../slimyPalsApi'
@@ -105,6 +106,19 @@ export async function feedFriendSlimeOnlineFirst({ friendUserId, slimeId, userId
     },
     async () => {
       await queueFeedFriendSlime({ friendUserId, slimeId, userId })
+      return null
+    },
+  )
+}
+
+export async function pokeFriendSlimeOnlineFirst({ friendUserId, slimeId, userId }) {
+  return runOnlineFirst(
+    async () => {
+      const response = await pokeFriendSlime({ friendUserId, slimeId })
+      return getPayload(response)
+    },
+    async () => {
+      await queuePokeFriendSlime({ friendUserId, slimeId, userId })
       return null
     },
   )

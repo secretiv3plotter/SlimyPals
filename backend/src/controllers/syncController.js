@@ -256,17 +256,25 @@ async function syncFeedFriendSlime({ payload, user }) {
   }
 
   await FoodFactory.updateStock(user.id, -1);
-  await Slime.update(slime.id, {
+  const updatedSlime = await Slime.update(slime.id, {
     level: slime.level + 1,
     last_fed_at: new Date(),
   });
-  await Interaction.log({
+  const interaction = await Interaction.log({
     actionType: 'feed',
     senderId: user.id,
     targetSlimeId: slime.id,
   });
   notifyFriendsDomainChanged(friendUserId, {
     action: 'domain.slime.updated',
+    slime: updatedSlime,
+    slimeId: slime.id,
+  });
+  notifyInteractionCreated(friendUserId, {
+    actionType: 'feed',
+    interaction,
+    senderId: user.id,
+    senderUsername: user.username,
     slimeId: slime.id,
   });
 }
@@ -280,10 +288,17 @@ async function syncPokeFriendSlime({ payload, user }) {
     throw syncError('SLIME_UNAVAILABLE');
   }
 
-  await Interaction.log({
+  const interaction = await Interaction.log({
     actionType: 'poke',
     senderId: user.id,
     targetSlimeId: slime.id,
+  });
+  notifyInteractionCreated(friendUserId, {
+    actionType: 'poke',
+    interaction,
+    senderId: user.id,
+    senderUsername: user.username,
+    slimeId: slime.id,
   });
 }
 
@@ -296,9 +311,22 @@ async function assertAcceptedFriendship(userId, friendUserId) {
 
 function notifyFriendsDomainChanged(userId, payload) {
   presenceManager.broadcastToFriends(userId, {
-    type: 'friend.list.changed',
+    type: payload.action || 'friend.list.changed',
     payload,
   });
+}
+
+function notifyInteractionCreated(ownerUserId, payload) {
+  const event = {
+    type: 'interaction.created',
+    payload: {
+      ...payload,
+      ownerUserId,
+    },
+  };
+
+  presenceManager.sendToUser(ownerUserId, event);
+  presenceManager.broadcastToFriends(ownerUserId, event);
 }
 
 function acceptedResult(clientActionId) {

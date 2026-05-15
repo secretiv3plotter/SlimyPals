@@ -3,6 +3,7 @@ const User = require('../models/userModel');
 const FoodFactory = require('../models/foodFactoryModel');
 const slimeService = require('../services/slimeService');
 const db = require('../config/db');
+const presenceManager = require('../sockets/presenceManager');
 
 exports.listMySlimes = async (req, res, next) => {
   try {
@@ -54,6 +55,9 @@ exports.summonSlime = async (req, res, next) => {
       });
       
       await db.query('COMMIT');
+      broadcastSlimeDomainEvent(req.user.id, 'domain.slime.created', {
+        slime: newSlime
+      });
       
       res.status(201).json({
         status: 'success',
@@ -113,6 +117,9 @@ exports.feedSlime = async (req, res, next) => {
       });
       
       await db.query('COMMIT');
+      broadcastSlimeDomainEvent(req.user.id, 'domain.slime.updated', {
+        slime: updatedSlime
+      });
       
       res.status(200).json({
         status: 'success',
@@ -140,8 +147,21 @@ exports.deleteSlime = async (req, res, next) => {
     }
 
     await Slime.delete(id);
+    broadcastSlimeDomainEvent(req.user.id, 'domain.slime.deleted', {
+      slimeId: id
+    });
     res.status(204).send();
   } catch (err) {
     next(err);
   }
 };
+
+function broadcastSlimeDomainEvent(userId, type, payload = {}) {
+  presenceManager.broadcastToFriends(userId, {
+    type,
+    payload: {
+      ...payload,
+      userId
+    }
+  });
+}

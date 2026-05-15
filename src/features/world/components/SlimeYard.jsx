@@ -78,6 +78,7 @@ function SlimeYard({
   feedTargetType = 'own',
   isFeedTarget = true,
   onDeathAnimationEnd,
+  onPokeFriendSlime,
   onRemoveSlime,
   slimeYardPosition,
 }) {
@@ -119,6 +120,7 @@ function SlimeYard({
             isFeedTarget={isFeedTarget}
             isDying={dyingSlimeIds.includes(slime.id)}
             onDeathAnimationEnd={onDeathAnimationEnd}
+            onPokeFriendSlime={onPokeFriendSlime}
             onRemoveSlime={onRemoveSlime}
             slimeDepthOffsetY={slimeYardPosition.y}
             slime={slime}
@@ -138,6 +140,7 @@ function YardSlime({
   isFeedTarget,
   isDying,
   onDeathAnimationEnd,
+  onPokeFriendSlime,
   onRemoveSlime,
   slimeDepthOffsetY,
   slime,
@@ -224,6 +227,14 @@ function YardSlime({
     event.stopPropagation()
     setJumpRun((run) => run + 1)
     setIsLevelPinned(true)
+    if (feedTargetType === 'friend' && feedTargetOwnerId) {
+      onPokeFriendSlime?.({
+        friendUserId: feedTargetOwnerId,
+        friendUsername: feedTargetOwner,
+        slimeId: slime.id,
+        slimeName: getSlimeDisplayName(slime),
+      })
+    }
     window.clearTimeout(levelTimerRef.current)
     levelTimerRef.current = window.setTimeout(() => {
       setIsLevelPinned(false)

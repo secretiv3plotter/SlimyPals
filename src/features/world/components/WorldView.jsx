@@ -19,6 +19,7 @@ function WorldView({
   onFoodFactoryClick,
   onFeedFriendSlime,
   onFeedSlime,
+  onPokeFriendSlime,
   onRemoveSlime,
   onSlimeDeathAnimationEnd,
   onSlimeSummon,
@@ -187,6 +188,7 @@ function WorldView({
           onFoodDragMove={handleFoodDragMove}
           onFeedFriendSlime={onFeedFriendSlime}
           onFeedSlime={onFeedSlime}
+          onPokeFriendSlime={onPokeFriendSlime}
           onRemoveSlime={onRemoveSlime}
           onSlimeDeathAnimationEnd={onSlimeDeathAnimationEnd}
           onSlimeSummon={onSlimeSummon}
