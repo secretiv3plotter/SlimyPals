@@ -456,9 +456,10 @@ function App() {
       return
     }
 
+    setPendingDeleteSlime(null)
+
     try {
       await removeOwnedSlime({ slimeId, userId: offlineUser.id })
-      setPendingDeleteSlime(null)
       setDyingSlimeIds((currentIds) => (
         currentIds.includes(slimeId) ? currentIds : [...currentIds, slimeId]
       ))
