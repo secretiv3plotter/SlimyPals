@@ -87,10 +87,18 @@ async function saveCachedFriend(friend, userId) {
     return null
   }
 
-  return friendshipsRepository.upsert({
+  const existingFriendship = await friendshipsRepository.getByUserPair(userId, friend.id)
+  const friendship = {
     id: friend.friendshipId,
     user_id: userId,
     friend_user_id: friend.id,
     status: friend.status,
-  })
+    deleted_at: null,
+  }
+
+  if (existingFriendship) {
+    return friendshipsRepository.update(existingFriendship.id, friendship)
+  }
+
+  return friendshipsRepository.upsert(friendship)
 }
