@@ -210,6 +210,12 @@ function App() {
         refreshFriendMenuRef.current()
       }
 
+      if (event?.type === SERVER_REALTIME_EVENTS.FRIEND_OFFLINE) {
+        setFriendYards((currentYards) => (
+          currentYards.filter((yard) => yard.id !== event.payload?.userId)
+        ))
+      }
+
       if (shouldRefreshFriendYards(event)) {
         setFriendYardRefreshRun((run) => run + 1)
       }
