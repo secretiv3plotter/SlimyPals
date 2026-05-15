@@ -32,9 +32,7 @@ export function useBackgroundMusic(
       try {
         const bgmStarted = await audioManager.playBgm(soundKey)
         if (!shouldPlay()) {
-          audioManager.suspend().catch(() => {
-            // Some browsers reject suspension during page lifecycle changes.
-          })
+          audioManager.suspend().catch(() => undefined)
           return
         }
         await Promise.all(loopingSfx.map((loopingSfxConfig) => {
@@ -50,13 +48,12 @@ export function useBackgroundMusic(
           isPlayingRef.current = true
         }
       } catch {
-        // If it failed, we allow another attempt on the next interaction
+        isPlayingRef.current = false
       } finally {
         isStartingRef.current = false
       }
     }
 
-    // Initial attempt
     startBackgroundMusic()
 
     const interactionEvents = ['pointerdown', 'keydown', 'touchstart', 'click']
@@ -69,14 +66,10 @@ export function useBackgroundMusic(
       isStartingRef.current = false
     }
     const pauseBackgroundMusic = () => {
-      audioManager.suspend().catch(() => {
-        // Some browsers reject suspension during page lifecycle changes.
-      })
+      audioManager.suspend().catch(() => undefined)
     }
     const resumeBackgroundMusic = () => {
-      audioManager.resume().catch(() => {
-        // The next user interaction can unlock audio again if the browser requires it.
-      })
+      audioManager.resume().catch(() => undefined)
       startBackgroundMusic()
     }
     const handleVisibilityChange = () => {

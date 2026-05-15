@@ -1,19 +1,19 @@
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import foodSprite from '../../../assets/foodfactory/food.png'
-import { createFenceTiles, createTileGrid, getGridSizeStyle } from '../../../game/mapTiles'
+import { createFenceTiles, createTileGrid, getGridSizeStyle } from '../layout/mapTiles'
 import {
   FOOD_OVERLAY_HEIGHT,
   FOOD_OVERLAY_WIDTH,
   TILE_SIZE,
-} from '../../../game/worldConstants'
+} from '../layout/worldConstants'
 import {
   getFencePosition,
   getFoodFactoryPosition,
   getFoodOverlayPosition,
   getSlimeYardPosition,
   getSummoningGroundPosition,
-} from '../../../game/worldLayout'
+} from '../layout/worldLayout'
 import FenceOverlay from './FenceOverlay'
 import FoodFactory from './FoodFactory'
 import FriendYardPlaceholders from './FriendYardPlaceholders'

@@ -5,7 +5,6 @@ import App from './App.jsx'
 import audioManager from './audio/audioManager'
 import { SOUND_KEYS } from './audio/soundFiles'
 
-// Unlock audio on first interaction so music can start immediately after login
 const unlockAudio = () => {
   audioManager.unlock()
   window.removeEventListener('pointerdown', unlockAudio)
@@ -19,17 +18,13 @@ window.addEventListener('touchstart', unlockAudio)
 
 const pauseAudioWhenPageIsHidden = () => {
   if (document.visibilityState === 'hidden') {
-    audioManager.suspend().catch(() => {
-      // Some browsers reject suspension during page lifecycle changes.
-    })
+    audioManager.suspend().catch(() => undefined)
   }
 }
 
 document.addEventListener('visibilitychange', pauseAudioWhenPageIsHidden)
 window.addEventListener('pagehide', () => {
-  audioManager.suspend().catch(() => {
-    // The browser may already be tearing down the page.
-  })
+  audioManager.suspend().catch(() => undefined)
 })
 window.addEventListener('beforeunload', () => {
   audioManager.stopAllAudio()
@@ -43,7 +38,6 @@ if ('serviceWorker' in navigator) {
   })
 }
 
-// Global click listener for buttons (using capture phase to bypass stopPropagation)
 document.addEventListener('click', (e) => {
   const button = e.target.closest('button, [role="button"], a');
   if (button) {

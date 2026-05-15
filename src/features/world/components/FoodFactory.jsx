@@ -5,7 +5,7 @@ import {
   FOOD_FACTORY_FRAME_HEIGHT,
   FOOD_FACTORY_FRAME_WIDTH,
   FOOD_FACTORY_SCALE,
-} from '../../../game/worldConstants'
+} from '../layout/worldConstants'
 
 function FoodFactory({
   animationRun,
@@ -42,7 +42,6 @@ function FoodFactory({
       className="food-factory-container"
       style={styleProps}
     >
-      {/* 1. The Shadow */}
       <div
         className={`food-factory-shadow${isAnimating ? ' food-factory-shadow--active' : ''}`}
         style={{
@@ -51,7 +50,6 @@ function FoodFactory({
         }}
       />
 
-      {/* 2. The Visual Building (Handles full animation without clipping) */}
       <div
         key={`food-factory-visual-${animationRun}`}
         className={`food-factory-visual${isAnimating ? ' food-factory-visual--active' : ''}${isReady ? ' food-factory-visual--ready' : ''}${!canProduce && !isAnimating ? ' food-factory-visual--disabled' : ''}`}
@@ -62,7 +60,6 @@ function FoodFactory({
         }}
       />
 
-      {/* 3. The Invisible Hitbox (Handles alpha-aware clicks) */}
       <button
         className="food-factory-hitbox"
         type="button"

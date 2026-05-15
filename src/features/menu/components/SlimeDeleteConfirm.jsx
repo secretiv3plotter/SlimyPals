@@ -1,6 +1,6 @@
-import { getSlimeBaseSprite, getSlimeOverlaySprite } from '../../../game/slimeSprites'
-import { getSlimeColorFilter } from '../../../game/slimePresentation'
-import { SLIME_FRAME_HEIGHT, SLIME_FRAME_WIDTH } from '../../../game/worldConstants'
+import { getSlimeBaseSprite, getSlimeOverlaySprite } from '../../../domain/slimes/slimeSprites'
+import { getSlimeColorFilter } from '../../../domain/slimes/slimePresentation'
+import { SLIME_FRAME_HEIGHT, SLIME_FRAME_WIDTH } from '../../world/layout/worldConstants'
 
 const SLIME_PREVIEW_FRAME = Object.freeze({
   width: SLIME_FRAME_WIDTH,

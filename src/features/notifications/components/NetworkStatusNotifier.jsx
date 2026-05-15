@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { subscribeToNetworkStatus } from '../../../services/networkStatus'
+import { subscribeToNetworkStatus } from '../../../infrastructure/networkStatus'
 
 function NetworkStatusNotifier({ addNotification }) {
   useEffect(() => subscribeToNetworkStatus(({ isOnline }) => {

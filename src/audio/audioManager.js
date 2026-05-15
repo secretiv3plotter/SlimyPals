@@ -19,13 +19,9 @@ class AudioManager {
     this.loopingSfxGains = new Map()
     this.sfxGain = null
 
-    // Start loading and decoding in the background immediately
     this.preloadPromise = this.preloadAll()
   }
 
-  /**
-   * Initialize the AudioContext with a fixed sample rate for performance.
-   */
   async init() {
     if (this.ctx) return
     
@@ -177,7 +173,7 @@ class AudioManager {
     if (!this.bgmSource) return
 
     try { this.bgmSource.stop() } catch {
-      // The source may already be stopped by the browser.
+      this.bgmSource = null
     }
     this.bgmSource = null
     this.bgmKey = null
@@ -241,7 +237,7 @@ class AudioManager {
     const source = this.loopingSfxSources.get(soundKey)
     if (source) {
       try { source.stop() } catch {
-        // The source may already be stopped by the browser.
+        this.loopingSfxSources.delete(soundKey)
       }
       this.loopingSfxSources.delete(soundKey)
       this.loopingSfxGains.delete(soundKey)
@@ -251,7 +247,7 @@ class AudioManager {
   stopAllLoopingSfx() {
     this.loopingSfxSources.forEach((source) => {
       try { source.stop() } catch {
-        // The source may already be stopped by the browser.
+        return undefined
       }
     })
     this.loopingSfxSources.clear()

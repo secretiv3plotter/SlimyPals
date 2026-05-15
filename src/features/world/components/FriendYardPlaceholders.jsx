@@ -2,8 +2,8 @@ import {
   FENCE_COLUMNS,
   FENCE_ROWS,
   TILE_SIZE,
-} from '../../../game/worldConstants'
-import { getSlimeYardPosition } from '../../../game/worldLayout'
+} from '../layout/worldConstants'
+import { getSlimeYardPosition } from '../layout/worldLayout'
 import FenceOverlay from './FenceOverlay'
 import SlimeYard from './SlimeYard'
 

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { mockOnlineFriends } from '../../../game/mockOnlineFriends'
+import { mockOnlineFriends } from '../../../domain/mockOnlineFriends'
 
 function MockFriendOnlineNotifications({ setNotifications }) {
   useEffect(() => {

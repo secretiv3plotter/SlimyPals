@@ -12,7 +12,7 @@ import {
   SUMMONING_ORB_FRAME_HEIGHT,
   SUMMONING_ORB_FRAME_WIDTH,
   SUMMONING_ORB_SCALE,
-} from '../../../game/worldConstants'
+} from '../layout/worldConstants'
 
 function SummoningGround({
   canSummon,
@@ -49,13 +49,11 @@ function SummoningGround({
         height: `${SUMMONING_GROUND_FRAME_HEIGHT * SUMMONING_GROUND_SCALE}px`,
       }}
     >
-      {/* Layer 5: groundshadow (bottom) */}
       <span
         className="summoning-layer summoning-ground-shadow"
         style={{ ...commonVars, backgroundImage: `url(${groundShadowSprite})` }}
       />
 
-      {/* Layer 4: orbshadow (activated only) */}
       {isActivated && (
         <span
           key={`orb-shadow-${summoningOrbAnimationRun}`}
@@ -64,19 +62,16 @@ function SummoningGround({
         />
       )}
 
-      {/* Layer 3: summoningground */}
       <span
         className="summoning-layer summoning-ground-base"
         style={{ ...commonVars, backgroundImage: `url(${summoningGroundSprite})` }}
       />
 
-      {/* Layer 2: fire */}
       <span
         className="summoning-layer summoning-fire"
         style={{ ...commonVars, backgroundImage: `url(${fireSprite})` }}
       />
 
-      {/* Layer 1: summoningorb (top, activated only) */}
       {isActivated && (
         <span
           key={`orb-${summoningOrbAnimationRun}`}
@@ -86,7 +81,6 @@ function SummoningGround({
         />
       )}
 
-      {/* Hitbox Overlay */}
       <button
         className={`summoning-hitbox${canSummon ? '' : ' summoning-hitbox--disabled'}`}
         type="button"

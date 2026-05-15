@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { FRIEND_SLOTS } from '../../../game/worldConstants'
+import { FRIEND_SLOTS } from '../../world/layout/worldConstants'
 import {
   acceptFriendRequest,
   getApiErrorMessage,
@@ -7,7 +7,7 @@ import {
   removeFriend,
   searchUser,
   sendFriendRequest,
-} from '../../../services/slimyPalsApi'
+} from '../../../infrastructure/api'
 
 export function useFriendMenuState() {
   const [friends, setFriends] = useState([])
