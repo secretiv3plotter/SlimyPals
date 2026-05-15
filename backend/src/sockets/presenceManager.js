@@ -31,14 +31,14 @@ const presenceManager = {
 
       // Notify friends that this user is online
       this.broadcastToFriends(userId, {
-        type: 'FRIEND_ONLINE',
+        type: 'friend.online',
         payload: { userId, username: user.username }
       });
 
       // Send initial presence list to the connected user
       const onlineFriendIds = friendIds.filter(id => onlineUsers.has(id));
       ws.send(JSON.stringify({
-        type: 'INITIAL_PRESENCE',
+        type: 'presence.initial',
         payload: { onlineFriendIds }
       }));
 
@@ -46,7 +46,7 @@ const presenceManager = {
         console.log(`User disconnected: ${user.username}`);
         onlineUsers.delete(userId);
         this.broadcastToFriends(userId, {
-          type: 'FRIEND_OFFLINE',
+          type: 'friend.offline',
           payload: { userId }
         });
       });
@@ -79,6 +79,33 @@ const presenceManager = {
     if (userData && userData.ws.readyState === 1) {
       userData.ws.send(JSON.stringify(message));
     }
+  },
+
+  isUserOnline(userId) {
+    return onlineUsers.has(userId);
+  },
+
+  async refreshUserFriends(userId) {
+    const userData = onlineUsers.get(userId);
+    if (!userData) return;
+
+    const friends = await Friendship.findFriends(userId);
+    userData.friendIds = friends.map(f => f.friend_id);
+  },
+
+  async refreshUsersFriends(userIds) {
+    await Promise.all(userIds.map(userId => this.refreshUserFriends(userId)));
+  },
+
+  sendFriendListChanged(userId, payload = {}) {
+    this.sendToUser(userId, {
+      type: 'friend.list.changed',
+      payload
+    });
+  },
+
+  sendFriendListChangedToUsers(userIds, payload = {}) {
+    userIds.forEach(userId => this.sendFriendListChanged(userId, payload));
   }
 };
 

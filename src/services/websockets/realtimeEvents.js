@@ -13,8 +13,10 @@ export const CLIENT_REALTIME_EVENTS = Object.freeze({
 })
 
 export const SERVER_REALTIME_EVENTS = Object.freeze({
+  INITIAL_PRESENCE: 'presence.initial',
   FRIEND_ONLINE: 'friend.online',
   FRIEND_OFFLINE: 'friend.offline',
+  FRIEND_LIST_CHANGED: 'friend.list.changed',
   DOMAIN_SLIME_CREATED: 'domain.slime.created',
   DOMAIN_SLIME_UPDATED: 'domain.slime.updated',
   DOMAIN_SLIME_DELETED: 'domain.slime.deleted',

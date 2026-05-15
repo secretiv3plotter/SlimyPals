@@ -10,15 +10,29 @@ const slimeRoutes = require('./routes/slimeRoutes');
 const foodFactoryRoutes = require('./routes/foodFactoryRoutes');
 const friendsRoutes = require('./routes/friendsRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const usersRoutes = require('./routes/usersRoutes');
 
 const app = express();
 
-// Middleware
-app.use(helmet());
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+const allowedOrigins = (process.env.CORS_ORIGIN || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+  },
   credentials: true
-}));
+};
+
+// Middleware
+app.use(cors(corsOptions));
+app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 
@@ -35,6 +49,7 @@ app.use('/api', slimeRoutes);
 app.use('/api', foodFactoryRoutes);
 app.use('/api', friendsRoutes);
 app.use('/api', notificationRoutes);
+app.use('/api', usersRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

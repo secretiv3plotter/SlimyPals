@@ -25,7 +25,7 @@ wss.on('connection', (ws, req) => {
 });
 
 // Start server
-server.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on port ${port}`);
   console.log(`WebSocket server is attached to HTTP server`);
 });

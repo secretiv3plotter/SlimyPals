@@ -8,7 +8,6 @@ const router = express.Router();
 router.use(protect);
 router.use(gameActionLimiter);
 
-router.get('/users/search', friendsController.searchUser);
 router.get('/me/friends', friendsController.listFriends);
 router.post('/me/friends', friendsController.sendFriendRequest);
 router.post('/me/friends/:id/accept', friendsController.acceptFriendRequest);

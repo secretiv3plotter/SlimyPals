@@ -12,6 +12,7 @@ export class WebsocketClient {
     this.socket = null
     this.status = REALTIME_CONNECTION_STATUSES.CLOSED
     this.statusListeners = new Set()
+    this.token = null
     this.url = url
   }
 
@@ -20,9 +21,10 @@ export class WebsocketClient {
       return
     }
 
+    this.token = token || this.token
     this.shouldReconnect = true
     this.setStatus(REALTIME_CONNECTION_STATUSES.CONNECTING)
-    this.socket = new WebSocket(getRealtimeUrl(this.url, token))
+    this.socket = new WebSocket(getRealtimeUrl(this.url, this.token))
     this.socket.addEventListener('open', () => this.setStatus(REALTIME_CONNECTION_STATUSES.OPEN))
     this.socket.addEventListener('message', (event) => this.handleMessage(event))
     this.socket.addEventListener('close', () => this.handleClose())
@@ -31,6 +33,7 @@ export class WebsocketClient {
 
   disconnect() {
     this.shouldReconnect = false
+    this.token = null
     window.clearTimeout(this.reconnectTimerId)
     this.socket?.close()
     this.socket = null
@@ -76,7 +79,7 @@ export class WebsocketClient {
     }
 
     this.setStatus(REALTIME_CONNECTION_STATUSES.RECONNECTING)
-    this.reconnectTimerId = window.setTimeout(() => this.connect(), this.reconnectDelayMs)
+    this.reconnectTimerId = window.setTimeout(() => this.connect({ token: this.token }), this.reconnectDelayMs)
   }
 
   setStatus(status) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import menuButtonSprite from './assets/buttons/menu button.png'
 import audioManager from './audio/audioManager'
 import { SOUND_KEYS } from './audio/soundFiles'
@@ -21,6 +21,7 @@ import {
 } from './services/slimyPalsDomain'
 import { GAME_LIMITS, SLIME_RARITIES } from './services/slimyPalsDb/constants'
 import { queueFeedFriendSlime } from './services/offlineSync'
+import { SERVER_REALTIME_EVENTS, websocketClient } from './services/websockets'
 
 const GAME_BACKGROUND_LAYERS = [
   {
@@ -42,7 +43,7 @@ const SUMMON_RARITY_SOUND_KEYS = Object.freeze({
 })
 
 function App() {
-  const { isAuthenticated, user } = useAuthSession()
+  const { authSession, isAuthenticated, user } = useAuthSession()
 
   useBackgroundMusic(SOUND_KEYS.BGM_LOOP, isAuthenticated ? GAME_BACKGROUND_LAYERS : [])
 
@@ -60,6 +61,7 @@ function App() {
   const [slimes, setSlimes] = useState([])
   const [summoningOrbAnimationRun, setSummoningOrbAnimationRun] = useState(0)
   const friendMenu = useFriendMenuState()
+  const refreshFriendMenuRef = useRef(friendMenu.refreshFriendMenu)
   const maxSlimeCapacity = offlineUser?.max_slime_capacity ?? GAME_LIMITS.MAX_SLIMES
   const canProduceFromFactory = canProduceFood && foodQuantity < GAME_LIMITS.MAX_FOOD_STOCK
   const canSummonFromGround = (
@@ -76,6 +78,30 @@ function App() {
     setOfflineUser,
     setSlimes,
   })
+
+  useEffect(() => {
+    refreshFriendMenuRef.current = friendMenu.refreshFriendMenu
+  }, [friendMenu.refreshFriendMenu])
+
+  useEffect(() => {
+    if (!authSession?.accessToken) {
+      websocketClient.disconnect()
+      return undefined
+    }
+
+    websocketClient.connect({ token: authSession.accessToken })
+
+    const unsubscribe = websocketClient.subscribe((event) => {
+      if (shouldRefreshFriendMenu(event)) {
+        refreshFriendMenuRef.current()
+      }
+    })
+
+    return () => {
+      unsubscribe()
+      websocketClient.disconnect()
+    }
+  }, [authSession?.accessToken])
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -394,6 +420,15 @@ function App() {
       />
     </main>
   )
+}
+
+function shouldRefreshFriendMenu(event) {
+  return [
+    SERVER_REALTIME_EVENTS.FRIEND_LIST_CHANGED,
+    SERVER_REALTIME_EVENTS.FRIEND_ONLINE,
+    SERVER_REALTIME_EVENTS.FRIEND_OFFLINE,
+    SERVER_REALTIME_EVENTS.INITIAL_PRESENCE,
+  ].includes(event?.type)
 }
 
 export default App

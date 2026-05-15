@@ -28,18 +28,21 @@ const User = {
     return result.rows[0];
   },
 
-  async findById(id) {
+  async findPublicByUsername(username) {
     const result = await db.query(
-      'SELECT id, username, daily_summons_left, max_slime_capacity, created_at FROM users WHERE id = $1 AND deleted_at IS NULL',
-      [id]
+      `SELECT id, username, created_at
+       FROM users
+       WHERE username = $1
+       AND deleted_at IS NULL`,
+      [username]
     );
     return result.rows[0];
   },
 
-  async findPublicByUsername(username) {
+  async findById(id) {
     const result = await db.query(
-      'SELECT id, username, created_at FROM users WHERE username = $1 AND deleted_at IS NULL',
-      [username]
+      'SELECT id, username, daily_summons_left, max_slime_capacity, created_at FROM users WHERE id = $1 AND deleted_at IS NULL',
+      [id]
     );
     return result.rows[0];
   },
