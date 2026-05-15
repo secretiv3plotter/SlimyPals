@@ -100,6 +100,10 @@ function AuthenticatedGame({ authSession, user }) {
   const [summoningOrbAnimationRun, setSummoningOrbAnimationRun] = useState(0)
   const friendMenu = useFriendMenuState()
   const refreshFriendMenuRef = useRef(friendMenu.refreshFriendMenu)
+  const pendingLocalDeleteSlimeIdsRef = useRef(new Set())
+  const pendingLocalFoodProductionCountRef = useRef(0)
+  const pendingLocalSummonCountRef = useRef(0)
+  const realtimeHandledDeleteSlimeIdsRef = useRef(new Set())
   const maxSlimeCapacity = offlineUser?.max_slime_capacity ?? GAME_LIMITS.MAX_SLIMES
   const canProduceFromFactory = canProduceFood && foodQuantity < GAME_LIMITS.MAX_FOOD_STOCK
   const canSummonFromGround = (
@@ -117,6 +121,21 @@ function AuthenticatedGame({ authSession, user }) {
     setOfflineUser,
     setSlimes,
   })
+
+  const triggerAppearingSlime = useCallback((slimeId) => {
+    if (!slimeId) {
+      return
+    }
+
+    setAppearingSlimeIds((currentIds) => (
+      currentIds.includes(slimeId) ? currentIds : [...currentIds, slimeId]
+    ))
+    window.setTimeout(() => {
+      setAppearingSlimeIds((currentIds) => (
+        currentIds.filter((currentId) => currentId !== slimeId)
+      ))
+    }, 1000)
+  }, [])
 
   const triggerPokedSlime = useCallback((slimeId) => {
     if (!slimeId) {
@@ -211,19 +230,24 @@ function AuthenticatedGame({ authSession, user }) {
     }
 
     if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_CREATED && payload.slime) {
+      const isLocalEcho = pendingLocalSummonCountRef.current > 0
+      if (isLocalEcho) {
+        pendingLocalSummonCountRef.current -= 1
+      } else {
+        audioManager.playSfx(SOUND_KEYS.SUMMON_2)
+        setSummoningOrbAnimationRun((run) => run + 1)
+        const raritySoundKey = getSummonRaritySoundKey(payload.slime)
+        if (raritySoundKey) {
+          audioManager.playSfx(raritySoundKey)
+        }
+        triggerAppearingSlime(payload.slime.id)
+      }
+
       setSlimes((currentSlimes) => (
         currentSlimes.some((slime) => slime.id === payload.slime.id)
           ? currentSlimes
           : [...currentSlimes, payload.slime]
       ))
-      setAppearingSlimeIds((currentIds) => (
-        currentIds.includes(payload.slime.id) ? currentIds : [...currentIds, payload.slime.id]
-      ))
-      window.setTimeout(() => {
-        setAppearingSlimeIds((currentIds) => (
-          currentIds.filter((currentId) => currentId !== payload.slime.id)
-        ))
-      }, 1000)
       if (payload.user) {
         setOfflineUser(payload.user)
       }
@@ -238,9 +262,16 @@ function AuthenticatedGame({ authSession, user }) {
     }
 
     if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_DELETED && payload.slimeId) {
+      const isLocalDeleteEcho = pendingLocalDeleteSlimeIdsRef.current.has(payload.slimeId)
+      if (isLocalDeleteEcho) {
+        pendingLocalDeleteSlimeIdsRef.current.delete(payload.slimeId)
+        realtimeHandledDeleteSlimeIdsRef.current.add(payload.slimeId)
+      }
+
       setDyingSlimeIds((currentIds) => (
         currentIds.includes(payload.slimeId) ? currentIds : [...currentIds, payload.slimeId]
       ))
+      audioManager.playSfx(SOUND_KEYS.KILL)
       return
     }
 
@@ -249,8 +280,17 @@ function AuthenticatedGame({ authSession, user }) {
       if (foodFactoryStock) {
         setFoodQuantity(foodFactoryStock.quantity)
       }
+
+      if (payload.producedQuantity > 0) {
+        if (pendingLocalFoodProductionCountRef.current > 0) {
+          pendingLocalFoodProductionCountRef.current -= 1
+        } else {
+          audioManager.playSfx(SOUND_KEYS.FACTORY)
+          setFoodFactoryAnimationRun((run) => run + 1)
+        }
+      }
     }
-  }, [handleRealtimeFriendYardEvent, triggerPokedSlime])
+  }, [handleRealtimeFriendYardEvent, triggerAppearingSlime, triggerPokedSlime])
 
   useEffect(() => {
     refreshFriendMenuRef.current = friendMenu.refreshFriendMenu
@@ -423,6 +463,10 @@ function AuthenticatedGame({ authSession, user }) {
 
     audioManager.playSfx(SOUND_KEYS.SUMMON_2)
     setSummoningOrbAnimationRun((run) => run + 1)
+    pendingLocalSummonCountRef.current += 1
+    window.setTimeout(() => {
+      pendingLocalSummonCountRef.current = Math.max(0, pendingLocalSummonCountRef.current - 1)
+    }, 5000)
 
     try {
       const { slime, user } = await summonOwnedSlime(offlineUser.id)
@@ -437,17 +481,11 @@ function AuthenticatedGame({ authSession, user }) {
       if (raritySoundKey) {
         audioManager.playSfx(raritySoundKey)
       }
-      setAppearingSlimeIds((currentIds) => (
-        currentIds.includes(slime.id) ? currentIds : [...currentIds, slime.id]
-      ))
-      window.setTimeout(() => {
-        setAppearingSlimeIds((currentIds) => (
-          currentIds.filter((currentId) => currentId !== slime.id)
-        ))
-      }, 1000)
+      triggerAppearingSlime(slime.id)
       addNotification(`You summoned a ${getSlimeDisplayName(slime)} slime.`)
       await refreshFoodProductionReadiness(user.id)
     } catch (error) {
+      pendingLocalSummonCountRef.current = Math.max(0, pendingLocalSummonCountRef.current - 1)
       notifyActionFailure('Unable to summon slime.', error)
     }
   }
@@ -480,6 +518,13 @@ function AuthenticatedGame({ authSession, user }) {
 
     audioManager.playSfx(SOUND_KEYS.FACTORY)
     setFoodFactoryAnimationRun((run) => run + 1)
+    pendingLocalFoodProductionCountRef.current += 1
+    window.setTimeout(() => {
+      pendingLocalFoodProductionCountRef.current = Math.max(
+        0,
+        pendingLocalFoodProductionCountRef.current - 1,
+      )
+    }, 5000)
 
     try {
       const { foodFactoryStock, producedQuantity } = await produceOwnedFood(offlineUser.id)
@@ -487,6 +532,10 @@ function AuthenticatedGame({ authSession, user }) {
       setFoodQuantity(foodFactoryStock.quantity)
       addNotification(`Your factory produced ${producedQuantity} food.`)
     } catch (error) {
+      pendingLocalFoodProductionCountRef.current = Math.max(
+        0,
+        pendingLocalFoodProductionCountRef.current - 1,
+      )
       notifyActionFailure('Unable to produce slime food.', error)
       await refreshFoodProductionReadiness(offlineUser.id)
     }
@@ -601,15 +650,26 @@ function AuthenticatedGame({ authSession, user }) {
     }
 
     setPendingDeleteSlime(null)
+    pendingLocalDeleteSlimeIdsRef.current.add(slimeId)
+    window.setTimeout(() => {
+      pendingLocalDeleteSlimeIdsRef.current.delete(slimeId)
+    }, 5000)
 
     try {
       await removeOwnedSlime({ slimeId, userId: offlineUser.id })
-      setDyingSlimeIds((currentIds) => (
-        currentIds.includes(slimeId) ? currentIds : [...currentIds, slimeId]
-      ))
-      audioManager.playSfx(SOUND_KEYS.KILL)
+      if (realtimeHandledDeleteSlimeIdsRef.current.has(slimeId)) {
+        realtimeHandledDeleteSlimeIdsRef.current.delete(slimeId)
+      } else {
+        pendingLocalDeleteSlimeIdsRef.current.delete(slimeId)
+        setDyingSlimeIds((currentIds) => (
+          currentIds.includes(slimeId) ? currentIds : [...currentIds, slimeId]
+        ))
+        audioManager.playSfx(SOUND_KEYS.KILL)
+      }
       await refreshFoodProductionReadiness(offlineUser.id)
     } catch (error) {
+      pendingLocalDeleteSlimeIdsRef.current.delete(slimeId)
+      realtimeHandledDeleteSlimeIdsRef.current.delete(slimeId)
       notifyActionFailure('Unable to remove slime.', error)
     }
   }
