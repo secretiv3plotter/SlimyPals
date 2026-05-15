@@ -11,6 +11,7 @@ import { WorldView } from './features/world'
 import { getSlimeDisplayName } from './game/slimeText'
 import { getMaximizedWorldView, getScreenViewSize } from './game/worldLayout'
 import { loginAuthSession, logoutAuthSession, registerAuthSession } from './services/authSession'
+import { getNetworkStatus } from './services/networkStatus'
 import { getFriendDomain } from './services/slimyPalsApi'
 import {
   feedOwnedSlime,
@@ -105,6 +106,8 @@ function AuthenticatedGame({ authSession, user }) {
   const pendingLocalFoodProductionCountRef = useRef(0)
   const pendingLocalSummonCountRef = useRef(0)
   const realtimeHandledDeleteSlimeIdsRef = useRef(new Set())
+  const realtimeNotificationKeysRef = useRef(new Set())
+  const websocketNotificationTimeoutsRef = useRef(new Map())
   const maxSlimeCapacity = offlineUser?.max_slime_capacity ?? GAME_LIMITS.MAX_SLIMES
   const canProduceFromFactory = canProduceFood && foodQuantity < GAME_LIMITS.MAX_FOOD_STOCK
   const canSummonFromGround = (
@@ -244,6 +247,7 @@ function AuthenticatedGame({ authSession, user }) {
       const isLocalEcho = pendingLocalSummonCountRef.current > 0
       if (isLocalEcho) {
         pendingLocalSummonCountRef.current -= 1
+        clearWebsocketNotificationTimeout(websocketNotificationTimeoutsRef, `summon:${payload.slime.id}`)
       } else {
         audioManager.playSfx(SOUND_KEYS.SUMMON_2)
         setSummoningOrbAnimationRun((run) => run + 1)
@@ -252,8 +256,12 @@ function AuthenticatedGame({ authSession, user }) {
           audioManager.playSfx(raritySoundKey)
         }
         triggerAppearingSlime(payload.slime.id)
-        addNotification(`You summoned a ${getSlimeDisplayName(payload.slime)} slime.`)
       }
+      addRealtimeNotification({
+        callback: () => addNotification(`You summoned a ${getSlimeDisplayName(payload.slime)} slime.`),
+        key: `summon:${payload.slime.id}`,
+        handledKeysRef: realtimeNotificationKeysRef,
+      })
 
       setSlimes((currentSlimes) => (
         currentSlimes.some((slime) => slime.id === payload.slime.id)
@@ -270,14 +278,19 @@ function AuthenticatedGame({ authSession, user }) {
       const isLocalFeedEcho = pendingLocalFeedSlimeIdsRef.current.has(payload.slime.id)
       if (isLocalFeedEcho) {
         pendingLocalFeedSlimeIdsRef.current.delete(payload.slime.id)
+        clearWebsocketNotificationTimeout(websocketNotificationTimeoutsRef, `feed:${payload.slime.id}`)
       }
 
       setSlimes((currentSlimes) => currentSlimes.map((slime) => (
         slime.id === payload.slime.id ? payload.slime : slime
       )))
 
-      if (!isLocalFeedEcho && !payload.senderId) {
-        addNotification(`Your ${getSlimeDisplayName(payload.slime)} slime has leveled up!`)
+      if (!payload.senderId) {
+        addRealtimeNotification({
+          callback: () => addNotification(`Your ${getSlimeDisplayName(payload.slime)} slime has leveled up!`),
+          key: `feed:${payload.slime.id}`,
+          handledKeysRef: realtimeNotificationKeysRef,
+        })
       }
       return
     }
@@ -287,15 +300,18 @@ function AuthenticatedGame({ authSession, user }) {
       if (isLocalDeleteEcho) {
         pendingLocalDeleteSlimeIdsRef.current.delete(payload.slimeId)
         realtimeHandledDeleteSlimeIdsRef.current.add(payload.slimeId)
+        clearWebsocketNotificationTimeout(websocketNotificationTimeoutsRef, `delete:${payload.slimeId}`)
       }
 
       setDyingSlimeIds((currentIds) => (
         currentIds.includes(payload.slimeId) ? currentIds : [...currentIds, payload.slimeId]
       ))
       audioManager.playSfx(SOUND_KEYS.KILL)
-      if (!isLocalDeleteEcho) {
-        addNotification('One of your slimes disappeared.')
-      }
+      addRealtimeNotification({
+        callback: () => addNotification('One of your slimes disappeared.'),
+        key: `delete:${payload.slimeId}`,
+        handledKeysRef: realtimeNotificationKeysRef,
+      })
       return
     }
 
@@ -308,11 +324,16 @@ function AuthenticatedGame({ authSession, user }) {
       if (payload.producedQuantity > 0) {
         if (pendingLocalFoodProductionCountRef.current > 0) {
           pendingLocalFoodProductionCountRef.current -= 1
+          clearWebsocketNotificationTimeout(websocketNotificationTimeoutsRef, 'food-production')
         } else {
           audioManager.playSfx(SOUND_KEYS.FACTORY)
           setFoodFactoryAnimationRun((run) => run + 1)
-          addNotification(`Your factory produced ${payload.producedQuantity} food.`)
         }
+        addRealtimeNotification({
+          callback: () => addNotification(`Your factory produced ${payload.producedQuantity} food.`),
+          key: 'food-production',
+          handledKeysRef: realtimeNotificationKeysRef,
+        })
       }
     }
   }, [addNotification, handleRealtimeFriendYardEvent, triggerAppearingSlime, triggerPokedSlime])
@@ -364,6 +385,13 @@ function AuthenticatedGame({ authSession, user }) {
       websocketClient.disconnect()
     }
   }, [addNotification, authSession?.accessToken, handleRealtimeDomainEvent, user?.id])
+
+  useEffect(() => () => {
+    websocketNotificationTimeoutsRef.current.forEach((timeoutId) => {
+      window.clearTimeout(timeoutId)
+    })
+    websocketNotificationTimeoutsRef.current.clear()
+  }, [])
 
   useEffect(() => {
     let isDisposed = false
@@ -497,7 +525,12 @@ function AuthenticatedGame({ authSession, user }) {
         audioManager.playSfx(raritySoundKey)
       }
       triggerAppearingSlime(slime.id)
-      addNotification(`You summoned a ${getSlimeDisplayName(slime)} slime.`)
+      addWebsocketNotificationFallback({
+        callback: () => addNotification(`You summoned a ${getSlimeDisplayName(slime)} slime.`),
+        handledKeysRef: realtimeNotificationKeysRef,
+        key: `summon:${slime.id}`,
+        timeoutsRef: websocketNotificationTimeoutsRef,
+      })
       await refreshFoodProductionReadiness(user.id)
     } catch (error) {
       pendingLocalSummonCountRef.current = Math.max(0, pendingLocalSummonCountRef.current - 1)
@@ -545,7 +578,12 @@ function AuthenticatedGame({ authSession, user }) {
       const { foodFactoryStock, producedQuantity } = await produceOwnedFood(offlineUser.id)
 
       setFoodQuantity(foodFactoryStock.quantity)
-      addNotification(`Your factory produced ${producedQuantity} food.`)
+      addWebsocketNotificationFallback({
+        callback: () => addNotification(`Your factory produced ${producedQuantity} food.`),
+        handledKeysRef: realtimeNotificationKeysRef,
+        key: 'food-production',
+        timeoutsRef: websocketNotificationTimeoutsRef,
+      })
     } catch (error) {
       pendingLocalFoodProductionCountRef.current = Math.max(
         0,
@@ -589,9 +627,12 @@ function AuthenticatedGame({ authSession, user }) {
       if (previousSlime && slime.level > previousSlime.level) {
         audioManager.playSfx(SOUND_KEYS.LEVEL_UP)
       }
-      addNotification(
-        `Your ${getSlimeDisplayName(slime)} slime has leveled up!`,
-      )
+      addWebsocketNotificationFallback({
+        callback: () => addNotification(`Your ${getSlimeDisplayName(slime)} slime has leveled up!`),
+        handledKeysRef: realtimeNotificationKeysRef,
+        key: `feed:${slime.id}`,
+        timeoutsRef: websocketNotificationTimeoutsRef,
+      })
       await refreshFoodProductionReadiness(offlineUser.id)
     } catch (error) {
       pendingLocalFeedSlimeIdsRef.current.delete(slimeId)
@@ -685,6 +726,12 @@ function AuthenticatedGame({ authSession, user }) {
           currentIds.includes(slimeId) ? currentIds : [...currentIds, slimeId]
         ))
         audioManager.playSfx(SOUND_KEYS.KILL)
+        addWebsocketNotificationFallback({
+          callback: () => addNotification('One of your slimes disappeared.'),
+          handledKeysRef: realtimeNotificationKeysRef,
+          key: `delete:${slimeId}`,
+          timeoutsRef: websocketNotificationTimeoutsRef,
+        })
       }
       await refreshFoodProductionReadiness(offlineUser.id)
     } catch (error) {
@@ -834,6 +881,48 @@ function getRealtimeNotificationMessage(event, currentUserId) {
   }
 
   return null
+}
+
+function addRealtimeNotification({ callback, handledKeysRef, key }) {
+  handledKeysRef.current.add(key)
+  callback()
+  window.setTimeout(() => {
+    handledKeysRef.current.delete(key)
+  }, 5000)
+}
+
+function addWebsocketNotificationFallback({ callback, handledKeysRef, key, timeoutsRef }) {
+  if (!getNetworkStatus().isOnline) {
+    callback()
+    return
+  }
+
+  if (handledKeysRef.current.has(key)) {
+    handledKeysRef.current.delete(key)
+    return
+  }
+
+  clearWebsocketNotificationTimeout(timeoutsRef, key)
+  const timeoutId = window.setTimeout(() => {
+    timeoutsRef.current.delete(key)
+    if (handledKeysRef.current.has(key)) {
+      handledKeysRef.current.delete(key)
+      return
+    }
+    callback()
+  }, 800)
+
+  timeoutsRef.current.set(key, timeoutId)
+}
+
+function clearWebsocketNotificationTimeout(timeoutsRef, key) {
+  const timeoutId = timeoutsRef.current.get(key)
+  if (!timeoutId) {
+    return
+  }
+
+  window.clearTimeout(timeoutId)
+  timeoutsRef.current.delete(key)
 }
 
 export default App
