@@ -4,7 +4,6 @@ const Interaction = require('../models/interactionModel');
 const Slime = require('../models/slimeModel');
 const SyncAction = require('../models/syncActionModel');
 const db = require('../config/db');
-const presenceManager = require('../sockets/presenceManager');
 
 const SYNC_ACTION_TYPES = Object.freeze({
   DELETE_OWN_SLIME: 'deleteOwnSlime',
@@ -166,10 +165,6 @@ async function syncSummonSlime({ payload, user }) {
       ]
     );
     await client.query('COMMIT');
-    notifyFriendsDomainChanged(user.id, {
-      action: 'domain.slime.created',
-      slimeId,
-    });
   } catch (error) {
     await client.query('ROLLBACK');
     throw error;
@@ -214,10 +209,6 @@ async function syncFeedOwnSlime({ payload, user }) {
     level: slime.level + 1,
     last_fed_at: new Date(),
   });
-  notifyFriendsDomainChanged(user.id, {
-    action: 'domain.slime.updated',
-    slimeId: slime.id,
-  });
 }
 
 async function syncDeleteOwnSlime({ payload, user }) {
@@ -231,10 +222,6 @@ async function syncDeleteOwnSlime({ payload, user }) {
   }
 
   await Slime.delete(slime.id);
-  notifyFriendsDomainChanged(user.id, {
-    action: 'domain.slime.deleted',
-    slimeId: slime.id,
-  });
 }
 
 async function syncFeedFriendSlime({ payload, user }) {
@@ -256,26 +243,14 @@ async function syncFeedFriendSlime({ payload, user }) {
   }
 
   await FoodFactory.updateStock(user.id, -1);
-  const updatedSlime = await Slime.update(slime.id, {
+  await Slime.update(slime.id, {
     level: slime.level + 1,
     last_fed_at: new Date(),
   });
-  const interaction = await Interaction.log({
+  await Interaction.log({
     actionType: 'feed',
     senderId: user.id,
     targetSlimeId: slime.id,
-  });
-  notifyFriendsDomainChanged(friendUserId, {
-    action: 'domain.slime.updated',
-    slime: updatedSlime,
-    slimeId: slime.id,
-  });
-  notifyInteractionCreated(friendUserId, {
-    actionType: 'feed',
-    interaction,
-    senderId: user.id,
-    senderUsername: user.username,
-    slimeId: slime.id,
   });
 }
 
@@ -288,17 +263,10 @@ async function syncPokeFriendSlime({ payload, user }) {
     throw syncError('SLIME_UNAVAILABLE');
   }
 
-  const interaction = await Interaction.log({
+  await Interaction.log({
     actionType: 'poke',
     senderId: user.id,
     targetSlimeId: slime.id,
-  });
-  notifyInteractionCreated(friendUserId, {
-    actionType: 'poke',
-    interaction,
-    senderId: user.id,
-    senderUsername: user.username,
-    slimeId: slime.id,
   });
 }
 
@@ -307,26 +275,6 @@ async function assertAcceptedFriendship(userId, friendUserId) {
   if (!friendship || friendship.status !== 'accepted') {
     throw syncError('FRIENDSHIP_UNAVAILABLE');
   }
-}
-
-function notifyFriendsDomainChanged(userId, payload) {
-  presenceManager.broadcastToFriends(userId, {
-    type: payload.action || 'friend.list.changed',
-    payload,
-  });
-}
-
-function notifyInteractionCreated(ownerUserId, payload) {
-  const event = {
-    type: 'interaction.created',
-    payload: {
-      ...payload,
-      ownerUserId,
-    },
-  };
-
-  presenceManager.sendToUser(ownerUserId, event);
-  presenceManager.broadcastToFriends(ownerUserId, event);
 }
 
 function acceptedResult(clientActionId) {

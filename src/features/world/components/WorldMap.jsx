@@ -27,6 +27,8 @@ function WorldMap({
   displayedSlimes,
   dyingSlimeIds,
   foodFactoryAnimationRun,
+  friendAppearingSlimeIds = [],
+  friendDyingSlimeIds = [],
   friendYards = [],
   foodQuantity,
   onFoodFactoryAnimationEnd,
@@ -35,6 +37,7 @@ function WorldMap({
   onFoodDragMove,
   onFeedFriendSlime,
   onFeedSlime,
+  onFriendSlimeDeathAnimationEnd,
   onPokeFriendSlime,
   onRemoveSlime,
   pokedSlimeIds = [],
@@ -148,9 +151,12 @@ function WorldMap({
       ))}
       {friendYards.length > 0 && (
         <FriendYardPlaceholders
+          appearingSlimeIds={friendAppearingSlimeIds}
+          dyingSlimeIds={friendDyingSlimeIds}
           fencePosition={fencePosition}
           fenceTiles={fenceTiles}
           friends={friendYards}
+          onDeathAnimationEnd={onFriendSlimeDeathAnimationEnd}
           onPokeFriendSlime={onPokeFriendSlime}
           pokedSlimeIds={pokedSlimeIds}
         />

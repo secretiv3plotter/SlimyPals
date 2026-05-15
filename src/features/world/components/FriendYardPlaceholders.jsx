@@ -12,9 +12,12 @@ const VERTICAL_FRIEND_YARD_GAP_TILES = 2
 const FRIEND_YARD_POSITIONS = Object.freeze(['top', 'right', 'bottom', 'left'])
 
 function FriendYardPlaceholders({
+  appearingSlimeIds = [],
+  dyingSlimeIds = [],
   fencePosition,
   fenceTiles,
   friends = [],
+  onDeathAnimationEnd,
   onPokeFriendSlime,
   pokedSlimeIds = [],
 }) {
@@ -36,11 +39,14 @@ function FriendYardPlaceholders({
               {friend.username}'s yard
             </div>
             <SlimeYard
+              appearingSlimeIds={appearingSlimeIds}
               canRemoveSlimes={false}
               displayedSlimes={friend.slimes ?? []}
+              dyingSlimeIds={dyingSlimeIds}
               feedTargetOwner={friend.username}
               feedTargetOwnerId={friend.id}
               feedTargetType="friend"
+              onDeathAnimationEnd={onDeathAnimationEnd}
               onPokeFriendSlime={onPokeFriendSlime}
               pokedSlimeIds={pokedSlimeIds}
               slimeYardPosition={getSlimeYardPosition(friendFencePosition)}

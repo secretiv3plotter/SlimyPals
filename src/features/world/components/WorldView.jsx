@@ -13,12 +13,15 @@ function WorldView({
   displayedSlimes,
   dyingSlimeIds,
   foodFactoryAnimationRun,
+  friendAppearingSlimeIds,
+  friendDyingSlimeIds,
   friendYards,
   foodQuantity,
   onFoodFactoryAnimationEnd,
   onFoodFactoryClick,
   onFeedFriendSlime,
   onFeedSlime,
+  onFriendSlimeDeathAnimationEnd,
   onPokeFriendSlime,
   onRemoveSlime,
   pokedSlimeIds,
@@ -181,6 +184,8 @@ function WorldView({
           displayedSlimes={displayedSlimes}
           dyingSlimeIds={dyingSlimeIds}
           foodFactoryAnimationRun={foodFactoryAnimationRun}
+          friendAppearingSlimeIds={friendAppearingSlimeIds}
+          friendDyingSlimeIds={friendDyingSlimeIds}
           friendYards={friendYards}
           foodQuantity={foodQuantity}
           onFoodFactoryAnimationEnd={onFoodFactoryAnimationEnd}
@@ -189,6 +194,7 @@ function WorldView({
           onFoodDragMove={handleFoodDragMove}
           onFeedFriendSlime={onFeedFriendSlime}
           onFeedSlime={onFeedSlime}
+          onFriendSlimeDeathAnimationEnd={onFriendSlimeDeathAnimationEnd}
           onPokeFriendSlime={onPokeFriendSlime}
           onRemoveSlime={onRemoveSlime}
           pokedSlimeIds={pokedSlimeIds}

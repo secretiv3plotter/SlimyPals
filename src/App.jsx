@@ -59,6 +59,8 @@ function App() {
   const [offlineUser, setOfflineUser] = useState(null)
   const [friendYards, setFriendYards] = useState([])
   const [friendYardRefreshRun, setFriendYardRefreshRun] = useState(0)
+  const [friendAppearingSlimeIds, setFriendAppearingSlimeIds] = useState([])
+  const [friendDyingSlimeIds, setFriendDyingSlimeIds] = useState([])
   const [pokedSlimeIds, setPokedSlimeIds] = useState([])
   const [appearingSlimeIds, setAppearingSlimeIds] = useState([])
   const [dyingSlimeIds, setDyingSlimeIds] = useState([])
@@ -97,6 +99,69 @@ function App() {
     }, 800)
   }, [])
 
+  const triggerFriendAppearingSlime = useCallback((slimeId) => {
+    if (!slimeId) {
+      return
+    }
+
+    setFriendAppearingSlimeIds((currentIds) => [...currentIds, slimeId])
+    window.setTimeout(() => {
+      setFriendAppearingSlimeIds((currentIds) => (
+        currentIds.filter((currentId) => currentId !== slimeId)
+      ))
+    }, 1000)
+  }, [])
+
+  const handleRealtimeFriendYardEvent = useCallback((event) => {
+    const { slime, slimeId, userId } = event.payload || {}
+
+    if (event.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_CREATED) {
+      if (!slime) {
+        setFriendYardRefreshRun((run) => run + 1)
+        return
+      }
+
+      setFriendYards((currentYards) => currentYards.map((yard) => (
+        yard.id === userId
+          ? {
+            ...yard,
+            slimes: yard.slimes.some((currentSlime) => currentSlime.id === slime.id)
+              ? yard.slimes
+              : [...yard.slimes, slime],
+          }
+          : yard
+      )))
+      triggerFriendAppearingSlime(slime.id)
+      return
+    }
+
+    if (event.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_UPDATED) {
+      if (!slime) {
+        setFriendYardRefreshRun((run) => run + 1)
+        return
+      }
+
+      setFriendYards((currentYards) => currentYards.map((yard) => (
+        yard.id === userId
+          ? {
+            ...yard,
+            slimes: yard.slimes.map((currentSlime) => (
+              currentSlime.id === slime.id ? slime : currentSlime
+            )),
+          }
+          : yard
+      )))
+      return
+    }
+
+    if (event.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_DELETED && slimeId) {
+      setFriendDyingSlimeIds((currentIds) => (
+        currentIds.includes(slimeId) ? currentIds : [...currentIds, slimeId]
+      ))
+      audioManager.playSfx(SOUND_KEYS.KILL)
+    }
+  }, [triggerFriendAppearingSlime])
+
   const handleRealtimeDomainEvent = useCallback((event, currentUserId) => {
     const payload = event?.payload || {}
 
@@ -108,7 +173,8 @@ function App() {
       return
     }
 
-    if (payload.userId !== currentUserId) {
+    if (payload.userId && payload.userId !== currentUserId) {
+      handleRealtimeFriendYardEvent(event)
       return
     }
 
@@ -124,7 +190,7 @@ function App() {
         currentSlimes.filter((slime) => slime.id !== payload.slimeId)
       ))
     }
-  }, [triggerPokedSlime])
+  }, [handleRealtimeFriendYardEvent, triggerPokedSlime])
 
   useEffect(() => {
     refreshFriendMenuRef.current = friendMenu.refreshFriendMenu
@@ -479,6 +545,16 @@ function App() {
     ))
   }
 
+  function handleFriendSlimeDeathAnimationEnd(slimeId) {
+    setFriendYards((currentYards) => currentYards.map((yard) => ({
+      ...yard,
+      slimes: yard.slimes.filter((slime) => slime.id !== slimeId),
+    })))
+    setFriendDyingSlimeIds((currentIds) => (
+      currentIds.filter((currentId) => currentId !== slimeId)
+    ))
+  }
+
   function handleLogin(credentials) {
     return loginAuthSession({
       password: credentials.password,
@@ -538,6 +614,8 @@ function App() {
         appearingSlimeIds={appearingSlimeIds}
         displayedSlimes={displayedSlimes}
         dyingSlimeIds={dyingSlimeIds}
+        friendAppearingSlimeIds={friendAppearingSlimeIds}
+        friendDyingSlimeIds={friendDyingSlimeIds}
         foodFactoryAnimationRun={foodFactoryAnimationRun}
         friendYards={friendYards}
         foodQuantity={foodQuantity}
@@ -545,6 +623,7 @@ function App() {
         onFoodFactoryClick={handleFoodFactoryClick}
         onFeedFriendSlime={handleFeedFriendSlime}
         onFeedSlime={handleFeedSlime}
+        onFriendSlimeDeathAnimationEnd={handleFriendSlimeDeathAnimationEnd}
         onPokeFriendSlime={handlePokeFriendSlime}
         onRemoveSlime={setPendingDeleteSlime}
         pokedSlimeIds={pokedSlimeIds}
@@ -571,8 +650,6 @@ function shouldRefreshFriendYards(event) {
   return [
     SERVER_REALTIME_EVENTS.DOMAIN_SLIME_CREATED,
     SERVER_REALTIME_EVENTS.DOMAIN_SLIME_UPDATED,
-    SERVER_REALTIME_EVENTS.DOMAIN_SLIME_DELETED,
-    SERVER_REALTIME_EVENTS.INTERACTION_CREATED,
   ].includes(event?.type)
 }
 
