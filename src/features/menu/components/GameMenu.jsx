@@ -230,13 +230,19 @@ function GameMenu({
                   <p className="friend-menu-message">{friendMenuMessage}</p>
                 )}
                 <button
-                  className="menu-modal-action menu-modal-action--med"
+                  className="menu-modal-action menu-modal-action--med friend-requests-button"
                   type="button"
                   onClick={() => {
                     onSetMenuMode('friend-requests')
                     refreshFriendMenu()
                   }}
                 >
+                  {incomingRequests.length > 0 && (
+                    <span
+                      className="friend-requests-indicator"
+                      aria-label={`${incomingRequests.length} pending friend request${incomingRequests.length === 1 ? '' : 's'}`}
+                    />
+                  )}
                   VIEW FRIEND REQUESTS
                 </button>
               </div>

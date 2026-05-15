@@ -62,6 +62,22 @@
   padding-right: 6px;
 }
 
+.friend-requests-button {
+  position: relative;
+}
+
+.friend-requests-indicator {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 16px;
+  height: 16px;
+  border: 3px solid #000000;
+  border-radius: 50%;
+  background: #ff2d2d;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
+}
+
 .friend-slot {
   display: grid;
   min-height: 44px;

@@ -456,14 +456,13 @@ function App() {
       return
     }
 
-    audioManager.playSfx(SOUND_KEYS.KILL)
-
     try {
       await removeOwnedSlime({ slimeId, userId: offlineUser.id })
       setPendingDeleteSlime(null)
       setDyingSlimeIds((currentIds) => (
         currentIds.includes(slimeId) ? currentIds : [...currentIds, slimeId]
       ))
+      audioManager.playSfx(SOUND_KEYS.KILL)
       await refreshFoodProductionReadiness(offlineUser.id)
     } catch (error) {
       notifyActionFailure('Unable to remove slime.', error)
