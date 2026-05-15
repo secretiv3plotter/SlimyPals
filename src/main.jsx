@@ -35,6 +35,14 @@ window.addEventListener('beforeunload', () => {
   audioManager.stopAllAudio()
 })
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((error) => {
+      console.warn('Unable to register offline service worker:', error)
+    })
+  })
+}
+
 // Global click listener for buttons (using capture phase to bypass stopPropagation)
 document.addEventListener('click', (e) => {
   const button = e.target.closest('button, [role="button"], a');
