@@ -299,18 +299,6 @@ function GameMenu({
                 </div>
               </div>
             )}
-            {menuMode === 'logged-out' && (
-              <div className="menu-panel">
-                <h2 className="menu-panel-title">LOGGED OUT</h2>
-                <button
-                  className="menu-modal-action menu-modal-action--small"
-                  type="button"
-                  onClick={onClose}
-                >
-                  OK
-                </button>
-              </div>
-            )}
             {menuMode === 'friend-requests' && (
               <div className="menu-panel">
                 <button

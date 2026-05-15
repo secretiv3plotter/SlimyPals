@@ -299,7 +299,7 @@ function App() {
 
   async function confirmLogout() {
     await logoutAuthSession()
-    setMenuMode('logged-out')
+    closeMenu()
   }
 
   function addNotification(message) {
