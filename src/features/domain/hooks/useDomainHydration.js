@@ -4,6 +4,7 @@ import { subscribeToNetworkStatus } from '../../../services/networkStatus'
 import { hydrateDomain, refreshDailyTimers as refreshDomainDailyTimers } from '../../../services/slimyPalsDomain'
 
 export function useDomainHydration({
+  authUserId,
   offlineUserId,
   setCanProduceFood,
   setFoodQuantity,
@@ -38,7 +39,7 @@ export function useDomainHydration({
       isCancelled = true
       unsubscribe()
     }
-  }, [setCanProduceFood, setFoodQuantity, setOfflineUser, setSlimes])
+  }, [authUserId, setCanProduceFood, setFoodQuantity, setOfflineUser, setSlimes])
 
   useEffect(() => {
     if (!offlineUserId) {

@@ -12,12 +12,19 @@ export async function saveRemoteDomainToCache(domain) {
     return null
   }
 
+  const remoteSlimes = domain.slimes || []
+  const remoteSlimeIds = new Set(remoteSlimes.map((slime) => slime.id))
+  const existingSlimes = await slimesRepository.listByUserId(user.id, { includeDeleted: true })
+
   await Promise.all([
     usersRepository.upsert(toCachedUser(user, domain.serverTime)),
     domain.foodFactoryStock
       ? foodFactoryStockRepository.upsert(toCachedFoodStock(domain.foodFactoryStock, user.id))
       : Promise.resolve(null),
-    ...((domain.slimes || []).map((slime) => slimesRepository.upsert(toCachedSlime(slime, user.id)))),
+    ...(remoteSlimes.map((slime) => slimesRepository.upsert(toCachedSlime(slime, user.id)))),
+    ...(existingSlimes
+      .filter((slime) => !remoteSlimeIds.has(slime.id) && !slime.deleted_at)
+      .map((slime) => slimesRepository.softDelete(slime.id))),
     ...((domain.friends || []).map((friend) => saveCachedFriend(friend, user.id))),
   ])
 

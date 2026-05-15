@@ -49,6 +49,37 @@ function App() {
 
   useBackgroundMusic(SOUND_KEYS.BGM_LOOP, isAuthenticated ? GAME_BACKGROUND_LAYERS : [])
 
+  function handleLogin(credentials) {
+    return loginAuthSession({
+      password: credentials.password,
+      username: credentials.identifier,
+    })
+  }
+
+  function handleRegister(credentials) {
+    return registerAuthSession(credentials)
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <AuthScreen
+        onLogin={handleLogin}
+        onRegister={handleRegister}
+      />
+    )
+  }
+
+  return (
+    <AuthenticatedGame
+      key={user?.id || authSession?.accessToken}
+      authSession={authSession}
+      user={user}
+    />
+  )
+}
+
+function AuthenticatedGame({ authSession, user }) {
+  const isAuthenticated = true
   const [worldView] = useState(() => getMaximizedWorldView(getScreenViewSize()))
   const [foodFactoryAnimationRun, setFoodFactoryAnimationRun] = useState(0)
   const [canProduceFood, setCanProduceFood] = useState(false)
@@ -79,6 +110,7 @@ function App() {
   const offlineUserId = offlineUser?.id
 
   useDomainHydration({
+    authUserId: user?.id,
     offlineUserId,
     setCanProduceFood,
     setFoodQuantity,
@@ -559,26 +591,6 @@ function App() {
     setFriendDyingSlimeIds((currentIds) => (
       currentIds.filter((currentId) => currentId !== slimeId)
     ))
-  }
-
-  function handleLogin(credentials) {
-    return loginAuthSession({
-      password: credentials.password,
-      username: credentials.identifier,
-    })
-  }
-
-  function handleRegister(credentials) {
-    return registerAuthSession(credentials)
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <AuthScreen
-        onLogin={handleLogin}
-        onRegister={handleRegister}
-      />
-    )
   }
 
   return (

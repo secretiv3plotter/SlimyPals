@@ -15,6 +15,7 @@ import {
 import {
   foodFactoryStockRepository,
   slimesRepository,
+  usersRepository,
 } from '../slimyPalsDb'
 import {
   queueDeleteOwnSlime,
@@ -23,8 +24,15 @@ import {
   queueSummonSlime,
 } from '../offlineSync'
 
-export async function loadDomain() {
-  const loadedUser = await getOrCreateOfflineUser()
+export async function loadDomain(userId) {
+  const loadedUser = userId
+    ? await usersRepository.getById(userId)
+    : await getOrCreateOfflineUser()
+
+  if (!loadedUser || loadedUser.deleted_at) {
+    return createEmptyDomain(null)
+  }
+
   const user = isSameLocalDay(loadedUser.last_login)
     ? loadedUser
     : await resetDailySummonsForToday(loadedUser.id)
@@ -38,6 +46,15 @@ export async function loadDomain() {
     canProduceFood,
     foodQuantity: foodFactoryStock?.quantity ?? 0,
     slimes,
+    user,
+  }
+}
+
+export function createEmptyDomain(user) {
+  return {
+    canProduceFood: false,
+    foodQuantity: 0,
+    slimes: [],
     user,
   }
 }
