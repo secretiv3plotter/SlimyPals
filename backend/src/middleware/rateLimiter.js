@@ -3,7 +3,7 @@ const rateLimit = require('express-rate-limit');
 // General API Limiter (already applied globally but can be used specifically)
 exports.apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per 15 mins
+  max: 1000, // normal gameplay does frequent small reads and websocket-triggered refreshes
   message: {
     error: {
       message: 'Too many requests from this IP, please try again after 15 minutes',
@@ -31,7 +31,7 @@ exports.authLimiter = rateLimit({
 // Game Action Limiter (Summoning, Feeding, etc.)
 exports.gameActionLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 20, // limit each IP to 20 game actions per minute
+  max: 60, // limit each IP to 60 game actions per minute
   message: {
     error: {
       message: 'Take it slow! You are clicking too fast.',

@@ -6,9 +6,8 @@ const { gameActionLimiter } = require('../middleware/rateLimiter');
 const router = express.Router();
 
 router.use(protect);
-router.use(gameActionLimiter);
 
 router.get('/me/food-factory', foodFactoryController.getFoodFactory);
-router.post('/me/food-factory/produce', foodFactoryController.produceFood);
+router.post('/me/food-factory/produce', gameActionLimiter, foodFactoryController.produceFood);
 
 module.exports = router;

@@ -40,8 +40,11 @@ exports.summonSlime = async (req, res, next) => {
     // Transaction to update user limit and create slime
     await db.query('BEGIN');
     try {
-      await db.query(
-        'UPDATE users SET daily_summons_left = daily_summons_left - 1 WHERE id = $1',
+      const userResult = await db.query(
+        `UPDATE users
+         SET daily_summons_left = daily_summons_left - 1
+         WHERE id = $1
+         RETURNING id, username, daily_summons_left, max_slime_capacity, created_at`,
         [req.user.id]
       );
       
@@ -54,7 +57,10 @@ exports.summonSlime = async (req, res, next) => {
       
       res.status(201).json({
         status: 'success',
-        data: { slime: newSlime }
+        data: {
+          slime: newSlime,
+          user: userResult.rows[0]
+        }
       });
     } catch (err) {
       await db.query('ROLLBACK');
@@ -99,7 +105,7 @@ exports.feedSlime = async (req, res, next) => {
     // Transaction to consume food and level up slime
     await db.query('BEGIN');
     try {
-      await FoodFactory.updateStock(req.user.id, -1);
+      const updatedFactory = await FoodFactory.updateStock(req.user.id, -1);
       
       const updatedSlime = await Slime.update(id, {
         level: slime.level + 1,
@@ -110,7 +116,10 @@ exports.feedSlime = async (req, res, next) => {
       
       res.status(200).json({
         status: 'success',
-        data: { slime: updatedSlime }
+        data: {
+          factory: updatedFactory,
+          slime: updatedSlime
+        }
       });
     } catch (err) {
       await db.query('ROLLBACK');

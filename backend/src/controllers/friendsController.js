@@ -270,7 +270,7 @@ exports.feedFriendSlime = async (req, res, next) => {
 
     await db.query('BEGIN');
     try {
-      await FoodFactory.updateStock(req.user.id, -1);
+      const updatedFactory = await FoodFactory.updateStock(req.user.id, -1);
       const updatedSlime = await Slime.update(slimeId, {
         level: slime.level + 1,
         last_fed_at: new Date()
@@ -297,7 +297,10 @@ exports.feedFriendSlime = async (req, res, next) => {
       
       res.status(200).json({
         status: 'success',
-        data: { slime: updatedSlime }
+        data: {
+          factory: updatedFactory,
+          slime: updatedSlime
+        }
       });
     } catch (err) {
       await db.query('ROLLBACK');

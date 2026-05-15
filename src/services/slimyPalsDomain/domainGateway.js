@@ -5,12 +5,11 @@ import {
   deleteMySlime,
   feedFriendSlime as feedFriendSlimeApi,
   feedMySlime,
+  getTimers,
   produceFood,
   summonSlime,
 } from '../slimyPalsApi'
 import * as localGateway from './localDomainGateway'
-import { saveRemoteDomainToCache, toUiDomain } from './remoteDomainCache'
-import { loadRemoteDomain as fetchRemoteDomain } from './remoteDomainGateway'
 
 export { hydrateDomain } from './domainHydration'
 export const getMockFriendFeedResult = localGateway.getMockFriendFeedResult
@@ -29,8 +28,10 @@ export {
 export async function getFoodProductionAllowed(userId) {
   return runOnlineFirst(
     async () => {
-      const domain = await loadRemoteUiDomain()
-      return domain?.canProduceFood ?? false
+      const response = await getTimers()
+      const payload = getPayload(response)
+
+      return payload.foodProductionReadiness?.allowed ?? false
     },
     () => localGateway.getFoodProductionAllowed(userId),
   )
@@ -40,12 +41,11 @@ export async function summonOwnedSlime(userId) {
   return runOnlineFirst(
     async () => {
       const response = await summonSlime()
-      const remoteSlime = getPayload(response).slime
-      const domain = await loadRemoteUiDomain()
+      const payload = getPayload(response)
 
       return {
-        slime: domain.slimes.find((slime) => slime.id === remoteSlime?.id) || remoteSlime,
-        user: domain.user,
+        slime: payload.slime,
+        user: payload.user,
       }
     },
     () => localGateway.summonOwnedSlime(userId),
@@ -57,13 +57,9 @@ export async function produceOwnedFood(userId) {
     async () => {
       const response = await produceFood()
       const payload = getPayload(response)
-      const domain = await loadRemoteUiDomain()
 
       return {
-        foodFactoryStock: {
-          quantity: domain.foodQuantity,
-          user_id: userId,
-        },
+        foodFactoryStock: payload.factory || payload.foodFactoryStock,
         producedQuantity: payload.producedAmount || payload.producedQuantity || 0,
       }
     },
@@ -75,15 +71,11 @@ export async function feedOwnedSlime({ slimeId, userId }) {
   return runOnlineFirst(
     async () => {
       const response = await feedMySlime(slimeId)
-      const remoteSlime = getPayload(response).slime
-      const domain = await loadRemoteUiDomain()
+      const payload = getPayload(response)
 
       return {
-        foodFactoryStock: {
-          quantity: domain.foodQuantity,
-          user_id: userId,
-        },
-        slime: domain.slimes.find((slime) => slime.id === remoteSlime?.id) || remoteSlime,
+        foodFactoryStock: payload.factory || payload.foodFactoryStock,
+        slime: payload.slime,
       }
     },
     () => localGateway.feedOwnedSlime({ slimeId, userId }),
@@ -94,7 +86,7 @@ export async function removeOwnedSlime({ slimeId, userId }) {
   return runOnlineFirst(
     async () => {
       await deleteMySlime(slimeId)
-      return loadRemoteUiDomain()
+      return { slimeId }
     },
     () => localGateway.removeOwnedSlime({ slimeId, userId }),
   )
@@ -104,14 +96,11 @@ export async function feedFriendSlimeOnlineFirst({ friendUserId, slimeId, userId
   return runOnlineFirst(
     async () => {
       const response = await feedFriendSlimeApi({ friendUserId, slimeId })
-      const domain = await loadRemoteUiDomain()
+      const payload = getPayload(response)
 
       return {
-        ...getPayload(response),
-        foodFactoryStock: {
-          quantity: domain.foodQuantity,
-          user_id: userId,
-        },
+        ...payload,
+        foodFactoryStock: payload.factory || payload.foodFactoryStock,
       }
     },
     async () => {
@@ -119,14 +108,6 @@ export async function feedFriendSlimeOnlineFirst({ friendUserId, slimeId, userId
       return null
     },
   )
-}
-
-async function loadRemoteUiDomain() {
-  const remoteDomain = await fetchRemoteDomain()
-
-  await saveRemoteDomainToCache(remoteDomain)
-
-  return toUiDomain(remoteDomain)
 }
 
 async function runOnlineFirst(remoteOperation, localOperation) {
