@@ -84,6 +84,48 @@ function App() {
     setSlimes,
   })
 
+  const triggerPokedSlime = useCallback((slimeId) => {
+    if (!slimeId) {
+      return
+    }
+
+    setPokedSlimeIds((currentIds) => [...currentIds, slimeId])
+    window.setTimeout(() => {
+      setPokedSlimeIds((currentIds) => (
+        currentIds.filter((currentId) => currentId !== slimeId)
+      ))
+    }, 800)
+  }, [])
+
+  const handleRealtimeDomainEvent = useCallback((event, currentUserId) => {
+    const payload = event?.payload || {}
+
+    if (event?.type === SERVER_REALTIME_EVENTS.INTERACTION_CREATED) {
+      if (payload.actionType === 'poke') {
+        triggerPokedSlime(payload.slimeId)
+      }
+
+      return
+    }
+
+    if (payload.userId !== currentUserId) {
+      return
+    }
+
+    if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_UPDATED && payload.slime) {
+      setSlimes((currentSlimes) => currentSlimes.map((slime) => (
+        slime.id === payload.slime.id ? payload.slime : slime
+      )))
+      return
+    }
+
+    if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_DELETED && payload.slimeId) {
+      setSlimes((currentSlimes) => (
+        currentSlimes.filter((slime) => slime.id !== payload.slimeId)
+      ))
+    }
+  }, [triggerPokedSlime])
+
   useEffect(() => {
     refreshFriendMenuRef.current = friendMenu.refreshFriendMenu
   }, [friendMenu.refreshFriendMenu])
@@ -391,48 +433,6 @@ function App() {
       notifyActionFailure(`Unable to feed ${friendUsername}'s slime.`, error)
     }
   }
-
-  const triggerPokedSlime = useCallback((slimeId) => {
-    if (!slimeId) {
-      return
-    }
-
-    setPokedSlimeIds((currentIds) => [...currentIds, slimeId])
-    window.setTimeout(() => {
-      setPokedSlimeIds((currentIds) => (
-        currentIds.filter((currentId) => currentId !== slimeId)
-      ))
-    }, 800)
-  }, [])
-
-  const handleRealtimeDomainEvent = useCallback((event, currentUserId) => {
-    const payload = event?.payload || {}
-
-    if (event?.type === SERVER_REALTIME_EVENTS.INTERACTION_CREATED) {
-      if (payload.actionType === 'poke') {
-        triggerPokedSlime(payload.slimeId)
-      }
-
-      return
-    }
-
-    if (payload.userId !== currentUserId) {
-      return
-    }
-
-    if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_UPDATED && payload.slime) {
-      setSlimes((currentSlimes) => currentSlimes.map((slime) => (
-        slime.id === payload.slime.id ? payload.slime : slime
-      )))
-      return
-    }
-
-    if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_DELETED && payload.slimeId) {
-      setSlimes((currentSlimes) => (
-        currentSlimes.filter((slime) => slime.id !== payload.slimeId)
-      ))
-    }
-  }, [triggerPokedSlime])
 
   async function handlePokeFriendSlime({ friendUserId, friendUsername, slimeId, slimeName }) {
     if (!offlineUser) {

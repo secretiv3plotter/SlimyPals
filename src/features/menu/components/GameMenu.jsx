@@ -263,8 +263,8 @@ function GameMenu({
                     className="menu-modal-action menu-modal-action--small"
                     type="button"
                     onClick={() => {
-                      handleRemoveFriend(selectedFriend.id)
                       onSetMenuMode('friends')
+                      handleRemoveFriend(selectedFriend.id)
                     }}
                   >
                     YES
@@ -394,9 +394,9 @@ function GameMenu({
                     className="menu-modal-action menu-modal-action--small"
                     type="button"
                     disabled={!canAcceptFriendRequest || isFriendMenuLoading}
-                    onClick={async () => {
-                      await handleAcceptFriendRequest()
+                    onClick={() => {
                       onSetMenuMode(requestReturnMode)
+                      handleAcceptFriendRequest()
                     }}
                   >
                     YES
@@ -426,9 +426,9 @@ function GameMenu({
                     className="menu-modal-action menu-modal-action--small"
                     type="button"
                     disabled={isFriendMenuLoading}
-                    onClick={async () => {
-                      await handleDeclineFriendRequest()
+                    onClick={() => {
                       onSetMenuMode(requestReturnMode)
+                      handleDeclineFriendRequest()
                     }}
                   >
                     YES
