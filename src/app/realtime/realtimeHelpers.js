@@ -51,14 +51,6 @@ export function getRealtimeNotificationMessage(event, currentUserId) {
     }
   }
 
-  if (action === 'friend.request.auto_accepted' || action === 'friend.request.accepted') {
-    return 'Friend list updated.'
-  }
-
-  if (action === 'friend.request.removed' || action === 'friend.removed') {
-    return 'Friend list updated.'
-  }
-
   return null
 }
 

@@ -199,7 +199,7 @@ export function useFriendYards({
     }
   }
 
-  async function handlePokeFriendSlime({ friendUserId, friendUsername, slimeId, slimeName }) {
+  async function handlePokeFriendSlime({ friendUserId, friendUsername, slimeId }) {
     if (!offlineUser) {
       return
     }
@@ -210,7 +210,6 @@ export function useFriendYards({
         slimeId,
         userId: offlineUser.id,
       })
-      addNotification(`You poked ${friendUsername}'s ${slimeName} slime.`)
     } catch (error) {
       notifyActionFailure(`Unable to poke ${friendUsername}'s slime.`, error)
     }
