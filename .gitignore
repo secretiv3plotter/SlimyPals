@@ -12,11 +12,30 @@ dist
 dist-ssr
 *.local
 
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Vite local output
+.vite-dev.err
+.vite-dev.log
+
+# Test/coverage output
+coverage
+
+# Lint cache
+.eslintcache
+
+# Deployment/local service metadata
+.vercel
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
