@@ -101,6 +101,7 @@ function AuthenticatedGame({ authSession, user }) {
   const friendMenu = useFriendMenuState()
   const refreshFriendMenuRef = useRef(friendMenu.refreshFriendMenu)
   const pendingLocalDeleteSlimeIdsRef = useRef(new Set())
+  const pendingLocalFeedSlimeIdsRef = useRef(new Set())
   const pendingLocalFoodProductionCountRef = useRef(0)
   const pendingLocalSummonCountRef = useRef(0)
   const realtimeHandledDeleteSlimeIdsRef = useRef(new Set())
@@ -112,6 +113,16 @@ function AuthenticatedGame({ authSession, user }) {
   )
   const displayedSlimes = slimes.slice(0, 25)
   const offlineUserId = offlineUser?.id
+
+  const addNotification = useCallback((message) => {
+    setNotifications((currentNotifications) => [
+      ...currentNotifications,
+      {
+        id: crypto.randomUUID(),
+        message,
+      },
+    ].slice(-3))
+  }, [])
 
   useDomainHydration({
     authUserId: user?.id,
@@ -241,6 +252,7 @@ function AuthenticatedGame({ authSession, user }) {
           audioManager.playSfx(raritySoundKey)
         }
         triggerAppearingSlime(payload.slime.id)
+        addNotification(`You summoned a ${getSlimeDisplayName(payload.slime)} slime.`)
       }
 
       setSlimes((currentSlimes) => (
@@ -255,9 +267,18 @@ function AuthenticatedGame({ authSession, user }) {
     }
 
     if (event?.type === SERVER_REALTIME_EVENTS.DOMAIN_SLIME_UPDATED && payload.slime) {
+      const isLocalFeedEcho = pendingLocalFeedSlimeIdsRef.current.has(payload.slime.id)
+      if (isLocalFeedEcho) {
+        pendingLocalFeedSlimeIdsRef.current.delete(payload.slime.id)
+      }
+
       setSlimes((currentSlimes) => currentSlimes.map((slime) => (
         slime.id === payload.slime.id ? payload.slime : slime
       )))
+
+      if (!isLocalFeedEcho && !payload.senderId) {
+        addNotification(`Your ${getSlimeDisplayName(payload.slime)} slime has leveled up!`)
+      }
       return
     }
 
@@ -272,6 +293,9 @@ function AuthenticatedGame({ authSession, user }) {
         currentIds.includes(payload.slimeId) ? currentIds : [...currentIds, payload.slimeId]
       ))
       audioManager.playSfx(SOUND_KEYS.KILL)
+      if (!isLocalDeleteEcho) {
+        addNotification('One of your slimes disappeared.')
+      }
       return
     }
 
@@ -287,10 +311,11 @@ function AuthenticatedGame({ authSession, user }) {
         } else {
           audioManager.playSfx(SOUND_KEYS.FACTORY)
           setFoodFactoryAnimationRun((run) => run + 1)
+          addNotification(`Your factory produced ${payload.producedQuantity} food.`)
         }
       }
     }
-  }, [handleRealtimeFriendYardEvent, triggerAppearingSlime, triggerPokedSlime])
+  }, [addNotification, handleRealtimeFriendYardEvent, triggerAppearingSlime, triggerPokedSlime])
 
   useEffect(() => {
     refreshFriendMenuRef.current = friendMenu.refreshFriendMenu
@@ -338,7 +363,7 @@ function AuthenticatedGame({ authSession, user }) {
       unsubscribeStatus()
       websocketClient.disconnect()
     }
-  }, [authSession?.accessToken, handleRealtimeDomainEvent, user?.id])
+  }, [addNotification, authSession?.accessToken, handleRealtimeDomainEvent, user?.id])
 
   useEffect(() => {
     let isDisposed = false
@@ -412,16 +437,6 @@ function AuthenticatedGame({ authSession, user }) {
   async function confirmLogout() {
     await logoutAuthSession()
     closeMenu()
-  }
-
-  function addNotification(message) {
-    setNotifications((currentNotifications) => [
-      ...currentNotifications,
-      {
-        id: crypto.randomUUID(),
-        message,
-      },
-    ].slice(-3))
   }
 
   function dismissNotification(notificationId) {
@@ -553,6 +568,10 @@ function AuthenticatedGame({ authSession, user }) {
     }
 
     const previousSlime = slimes.find((currentSlime) => currentSlime.id === slimeId)
+    pendingLocalFeedSlimeIdsRef.current.add(slimeId)
+    window.setTimeout(() => {
+      pendingLocalFeedSlimeIdsRef.current.delete(slimeId)
+    }, 5000)
 
     try {
       const { foodFactoryStock, slime } = await feedOwnedSlime({
@@ -575,6 +594,7 @@ function AuthenticatedGame({ authSession, user }) {
       )
       await refreshFoodProductionReadiness(offlineUser.id)
     } catch (error) {
+      pendingLocalFeedSlimeIdsRef.current.delete(slimeId)
       notifyActionFailure(error.message || 'Unable to feed slime.', error)
     }
   }
